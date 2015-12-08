@@ -36,11 +36,14 @@ sig =
 
                 ],
     constants = [
+--       constant "True" (True :: Bool),
+--       constant "False" (False :: Bool),
        constant "insert" (isert :: Int -> [Int] -> [Int]),
        constant "[]" ([] :: [Int]),
        constant ":" ((:) :: Int -> [Int] -> [Int]),
        constant "x" (x :: Greater -> Int),
        constant "y" (y :: Greater -> Int)
+ --      constant "sorted" (isSorted :: [Int] -> Bool)
 --       constant "x'" (x' :: GreaterOrEqual -> Int),
 --       constant "y'" (y' :: GreaterOrEqual -> Int)
     ]

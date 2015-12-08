@@ -46,6 +46,10 @@
                     Figuring this out would allow quickspec to find like:
                     x > y && y > 0 => x > 1
 
+                In the insert example, if you add sorted, true, and false. You get some strange behavior.
+                It would be good to investigate if inserting the sorted list predicate type here would improve
+                the quality of the output.
+
 
          ~Comparison of Type encoding and Function encoding:
 
