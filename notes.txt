@@ -1,5 +1,3 @@
-~Generating Contrained Random data with Uniform Distribution
-
 ~Conditional Lemma Discovery and Resurcion Induction in Hipster
 
 ~people.mpi-inf.mpg.de/~dwand/datasup/draft.pdf
@@ -23,7 +21,7 @@
                 The problem is that adding max and min to describe the relationship (x >= y)
                 means that we end up with a theory for max and min
 
-            How would we express x Greater than y and y positive in function encoding?
+            How would we express "x Greater than y and y positive" in FE?
 
         ~Type encoding: (TE)
 
@@ -45,7 +43,7 @@
                 If we have the type Greater and the type Pos, how do we express:
                     x Greater than y and y Pos ?
 
-                    Figuring this out would let us express things like:
+                    Figuring this out would allow quickspec to find like:
                     x > y && y > 0 => x > 1
 
 
