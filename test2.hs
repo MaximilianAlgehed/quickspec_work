@@ -31,8 +31,6 @@ sig =
     instances = [
                  baseType (undefined::Greater),
                  names (NamesFor ["p"] :: NamesFor Greater),
-                 baseType (undefined::Different),
-                 names (NamesFor ["q"] :: NamesFor Different),
                  baseType (undefined::GreaterOrEqual),
                  names (NamesFor ["p'"] :: NamesFor GreaterOrEqual)
 
