@@ -1,0 +1,63 @@
+~Generating Contrained Random data with Uniform Distribution
+
+~Conditional Lemma Discovery and Resurcion Induction in Hipster
+
+~people.mpi-inf.mpg.de/~dwand/datasup/draft.pdf
+    Automatic Induction inside Superposition
+
+-- Pros and cons of different methods for encoding constraints --
+
+    ~Two possible methods:
+
+        ~Function encoding: (FE)
+
+            Make a function that converts data to a format where a predicate always holds
+            
+            Questions:
+
+                What does this approach really mean?
+
+            Possible problems:
+                Adding more functions that work over the same type as the rest of the program
+
+                The problem is that adding max and min to describe the relationship (x >= y)
+                means that we end up with a theory for max and min
+
+            How would we express x Greater than y and y positive in function encoding?
+
+        ~Type encoding: (TE)
+
+            Create types that are instantiated such that the predicate always holds
+
+            Positive result:
+                Giving quickcheck the insert (as in insertion sort) function, a type for 
+                generating a pair of numbers (x, y) where x > y, and the basic list implementation
+                (nil and cons) generates this rather exciting output in almost no time:
+
+                    insert i [] = i:[]
+                    insert x (y:is) = y:(insert x is)
+                    insert y (x:is) = y:x:is
+
+            Possible problems:
+                Complex relationships involving the same variable can be hard to encode
+
+            Question to investigate:
+                If we have the type Greater and the type Pos, how do we express:
+                    x Greater than y and y Pos ?
+
+                    Figuring this out would let us express things like:
+                    x > y && y > 0 => x > 1
+
+
+         ~Comparison of Type encoding and Function encoding:
+
+            In Type encoding (TE) we introduce a new type and a function which simply lifts from that type.
+            In Function encoding (FE) we introduce a function which works on the same type as the rest of the
+            theory. A problem I have encountered when not using any background theory etc is that TE is able to
+            handle a maxTermSize of 10 for smaller theories without problem. However FE fails at size 10 when doing something
+            as simple as encoding (x >= y) using max and min. The reason for this seems to be that quickspec
+            is busy generating the theory for max and min when we are not really interested in that theory.
+
+         ~Problems with these methods:
+            
+            They introduce overhead, quite alot of overhead
