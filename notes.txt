@@ -50,8 +50,11 @@
                 It would be good to investigate if inserting the sorted list predicate type here would improve
                 the quality of the output. Why doesn't this work, what is the problem?
 
+        ~Things to figure out:
+            
+            TE and FE for partial functions, find good examples of this.
 
-         ~Comparison of Type encoding and Function encoding:
+        ~Comparison of Type encoding and Function encoding:
 
             In Type encoding (TE) we introduce a new type and a function which simply lifts from that type.
             In Function encoding (FE) we introduce a function which works on the same type as the rest of the
@@ -70,7 +73,7 @@
 
             A major advantage of the TE scheme is that the predicates are _explicit_.
 
-         ~Problems with these methods:
+        ~Problems with these methods:
             
             They introduce overhead, quite alot of overhead
 
