@@ -79,3 +79,38 @@
             They introduce overhead, quite alot of overhead
 
             They are both bad at modelling complex relationships
+
+        ~Conversion from FE to TE:
+
+            In the predicate logic example we find that replacing the unary predicate valid
+            with the suitable type Tautology we find that we don't get the overhead of the theory of tautologies.
+
+            Similarily we find that the theory of sorted lists can be replaced by a type for sorted lists.
+
+            In fact any unary predicate over some type T:
+                
+                predicate :: T -> Bool
+
+            Can be modelled as a type:
+
+                data Predicate = Predicate T
+
+                instance Arbitrary where
+                    arbitrary = return . Predicate =<< arbitrary `suchThat` predicate
+
+            This gives us a conversion from unary FE to unary TE.
+
+            Similary for a binary predicate over any two types T and T':
+
+                predicate :: T -> T' -> Bool
+
+            Can be modelled as the type:
+
+                data Predicate = Predicate T T'
+
+                instance Arbitrary Predicate where
+                    arbitrary = 
+                                do
+                                    t <- arbitrary
+                                    t' <- arbitrary `suchThat` predicate
+                                    return (Predicate T T')

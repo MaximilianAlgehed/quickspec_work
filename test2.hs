@@ -12,6 +12,7 @@ instance Arbitrary GreaterOrEqual where
             x' <- arbitrary
             y' <- arbitrary `suchThat` (x' >=)
             return (GOE x' y')
+    shrink (GOE a b) = [GOE a' b' | b' <- [b, b-1..], a' <- [a, a-1..], a' >= b'] 
 
 instance Arbitrary Greater where
     arbitrary =
@@ -19,6 +20,8 @@ instance Arbitrary Greater where
             x <- arbitrary
             y <- arbitrary `suchThat` (x>)
             return (G x y)
+
+    shrink (G a b) = [G a' b' | b' <- [b, b-1..], a' <- [a, a-1..], a' > b'] 
 
 instance Arbitrary SList where
     arbitrary = return . SL =<< arbitrary `suchThat` isSorted
@@ -42,17 +45,11 @@ sig =
 
                 ],
     constants = [
---       constant "True" (True :: Bool),
---       constant "False" (False :: Bool),
        constant "insert" (isert :: Int -> [Int] -> [Int]),
        constant "[]" ([] :: [Int]),
        constant ":" ((:) :: Int -> [Int] -> [Int]),
        constant "x" (x :: Greater -> Int),
-       constant "y" (y :: Greater -> Int),
-       constant "as" (as :: SList -> [Int])
- --      constant "sorted" (isSorted :: [Int] -> Bool)
---       constant "x'" (x' :: GreaterOrEqual -> Int),
---       constant "y'" (y' :: GreaterOrEqual -> Int)
+       constant "y" (y :: Greater -> Int)
     ]
    }
 
