@@ -46,9 +46,9 @@
                     Figuring this out would allow quickspec to find like:
                     x > y && y > 0 => x > 1
 
-                In the insert example, if you add sorted, true, and false. You get some strange behavior.
+                In the insert example ("test2.hs"), if you add sorted, true, and false. You get some strange behavior.
                 It would be good to investigate if inserting the sorted list predicate type here would improve
-                the quality of the output.
+                the quality of the output. Why doesn't this work, what is the problem?
 
 
          ~Comparison of Type encoding and Function encoding:
@@ -60,6 +60,18 @@
             as simple as encoding (x >= y) using max and min. The reason for this seems to be that quickspec
             is busy generating the theory for max and min when we are not really interested in that theory.
 
+            FE is in a way less obvious and more obtuse a method to encode predicates than TE. 
+            Say we want to encode the property x < y. We cannot do this with the functions min and max as:
+
+                x <= y -> min x y = x
+                and likewise for max
+
+            However it is very simple to encode both strictly less than and less than or equal in the TE scheme.
+
+            A major advantage of the TE scheme is that the predicates are _explicit_.
+
          ~Problems with these methods:
             
             They introduce overhead, quite alot of overhead
+
+            They are both bad at conveying complex relationships
