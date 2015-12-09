@@ -54,7 +54,7 @@
             
             TE and FE for partial functions, find good examples of this.
 
-        ~Comparison of Type encoding and Function encoding:
+        ~Comparison of TE and FE:
 
             In Type encoding (TE) we introduce a new type and a function which simply lifts from that type.
             In Function encoding (FE) we introduce a function which works on the same type as the rest of the
@@ -70,6 +70,7 @@
                 and likewise for max
 
             However it is very simple to encode both strictly less than and less than or equal in the TE scheme.
+            And importantly it is easy to differentiate between them.
 
             A major advantage of the TE scheme is that the predicates are _explicit_.
 
@@ -77,4 +78,4 @@
             
             They introduce overhead, quite alot of overhead
 
-            They are both bad at conveying complex relationships
+            They are both bad at modelling complex relationships
