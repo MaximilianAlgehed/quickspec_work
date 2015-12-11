@@ -114,3 +114,7 @@
                                     t <- arbitrary
                                     t' <- arbitrary `suchThat` predicate
                                     return (Predicate T T')
+
+            It is important to note that this construction allows encoding of a predicate as a type, in the sense that
+            it let's us constuct propositions like P(x) -> E, or !P(x) -> E, where E is an expression (or in the case of
+            quickspec an equality). However, it does not let us discover neat laws about the predicate.
