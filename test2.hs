@@ -50,7 +50,7 @@ sig =
                  names (NamesFor ["qs"] :: NamesFor SList)
                 ],
     constants = [
-       constant "isort" (isort :: [Int] -> [Int]),
+       --constant "isort" (isort :: [Int] -> [Int]),
        --constant "isort'" (isort' :: [Int] -> [Int] -> [Int]),
        --constant "True" (True :: Bool),
        --constant "False" (False :: Bool),
@@ -59,6 +59,7 @@ sig =
        constant "insert" (isert :: Int -> [Int] -> [Int]),
        constant "[]" ([] :: [Int]),
        constant ":" ((:) :: Int -> [Int] -> [Int]),
+       --constant "max" (max :: Int -> Int -> Int)
        constant "x" (x :: Greater -> Int),
        constant "y" (y :: Greater -> Int)
     ]

@@ -72,8 +72,14 @@
             However it is very simple to encode both strictly less than and less than or equal in the TE scheme.
             And importantly it is easy to differentiate between them.
 
-            A major advantage of the TE scheme is that the predicates are _explicit_.
+            Another issue with FE is that when we introduce functions of higher airity (e.g. max and min) to 
+            encode the predicates we get exponential blowup. Especially as we increase the maxTermSize.
 
+            A comparison of just having max versus having Greater, both in the "foreground" theory:
+                With max for insert with size 7:
+                    1609 events 
+                With Greater for insert with size 7:
+                    990 events
         ~Problems with these methods:
             
             They introduce overhead, quite alot of overhead
