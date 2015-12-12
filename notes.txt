@@ -75,11 +75,16 @@
             Another issue with FE is that when we introduce functions of higher airity (e.g. max and min) to 
             encode the predicates we get exponential blowup. Especially as we increase the maxTermSize.
 
-            A comparison of just having max versus having Greater, both in the "foreground" theory:
+            A comparison of having max versus having Greater for encoding the relation >=, both in the "foreground" theory:
                 With max for insert with size 7:
                     1609 events 
+                with max for insert with size 9:
+                    33000 events
                 With Greater for insert with size 7:
                     990 events
+                With Greater for insert with size 9:
+                    11000 events
+
         ~Problems with these methods:
             
             They introduce overhead, quite alot of overhead
