@@ -42,7 +42,7 @@ isort' (a:as) ys = isort' as (isert a ys)
 
 sig =
   signature {
-    maxTermSize = Just 7,
+    maxTermSize = Just 9,
     instances = [
                  baseType (undefined::Greater),
                  names (NamesFor ["p"] :: NamesFor Greater),
@@ -59,7 +59,7 @@ sig =
        constant "insert" (isert :: Int -> [Int] -> [Int]),
        constant "[]" ([] :: [Int]),
        constant ":" ((:) :: Int -> [Int] -> [Int]),
-       --constant "max" (max :: Int -> Int -> Int)
+    --   constant "max" (max :: Int -> Int -> Int)
        constant "x" (x :: Greater -> Int),
        constant "y" (y :: Greater -> Int)
     ]

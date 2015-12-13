@@ -17,9 +17,10 @@
 
             Possible problems:
                 Adding more functions that work over the same type as the rest of the program
+                means we slow the program down. 
 
-                The problem is that adding max and min to describe the relationship (x >= y)
-                means that we end up with a theory for max and min
+                It is not obvious how to find a good representative of a predicate in FE.
+                
 
             How would we express "x Greater than y and y positive" in FE?
 

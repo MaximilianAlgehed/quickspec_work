@@ -9,7 +9,7 @@ whenSorted xs
 
 sig =
   signature {
-    maxTermSize = Just 7,
+    maxTermSize = Just 8,
     constants = [
        constant "True" (True :: Bool),
        constant "False" (False :: Bool),
