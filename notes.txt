@@ -19,10 +19,8 @@
                 Adding more functions that work over the same type as the rest of the program
                 means we slow the program down. 
 
-                It is not obvious how to find a good representative of a predicate in FE.
-                
-
-            How would we express "x Greater than y and y positive" in FE?
+                It is not obvious how to find a good representative of a predicate in FE that
+                does not result in the whole expression being boolean valued.
 
         ~Type encoding: (TE)
 
@@ -86,6 +84,32 @@
                 With Greater for insert with size 9:
                     11000 events
 
+            FE deals "well" with the conjunction of predicates:
+                
+                P x && Q x => x <*> y = ...
+                gets encoded as
+                (Q'. P') x <*> y = ...
+                where P' and Q' are the functions that compute the "representative" of x
+                under the conditions P and Q.
+                However one would need to be very carefull when construction the functions
+                Q' and P'. To see an example of how difficult this is notice:
+                    
+                    Q = not . null
+                    P = sorted
+
+                The naive implementation of Q' and P' would be:
+
+                    Q' = whenNotNull
+                    whenNotNull [] = [x] -- for some "representative" x
+                    whenNotNull xs = xs
+
+                    P' = whenSorted
+                    whenSorted xs 
+                        | isSorted xs = xs
+                        | otherwise = []
+
+                 Now the behavior of Q' is not independent of the behavior of P'.
+                
         ~Problems with these methods:
             
             They introduce overhead, quite alot of overhead
