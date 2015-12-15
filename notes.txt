@@ -124,7 +124,12 @@
 
                 Now we don't have any implementation of whenNotNull that does not exclude
                 one predicate or the other.
-                
+
+            As for how we can do conjunciton of predicates in TE:
+
+                Just construct more types, one for each combination of predicates.
+                This is also bad, as in we get exponential blowup.
+            
         ~Problems with these methods:
             
             They introduce overhead, quite alot of overhead
