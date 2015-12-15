@@ -33,7 +33,7 @@ sig =
     maxTermSize = Just 7,
     instances = [
                  baseType (undefined::Greater),
-                 names (NamesFor ["p"] :: NamesFor Greater),
+                 names (NamesFor ["p"] :: NamesFor Greater)
                 ],
     constants = [
        constant "isort" (isort :: [Int] -> [Int]),

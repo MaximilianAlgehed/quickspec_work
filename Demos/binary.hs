@@ -29,7 +29,7 @@ sig =
     maxTermSize = Just 4,
     instances = [
                  baseType (undefined::Binary),
-                 names (NamesFor ["b", "w"] :: NamesFor Binary),
+                 names (NamesFor ["b"] :: NamesFor Binary),
                  baseType (undefined::BitSevenZero),
                  names (NamesFor ["p"] :: NamesFor BitSevenZero),
                  baseType (undefined::BitZeroZero),
