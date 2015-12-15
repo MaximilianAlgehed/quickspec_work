@@ -10,7 +10,7 @@
         ~Function encoding: (FE)
 
             Make a function that converts data to a format where a predicate always holds
-            
+
             Questions:
 
                 What does this approach really mean?
@@ -52,6 +52,7 @@
         ~Things to figure out:
             
             TE and FE for partial functions, find good examples of this.
+            Conjunction of predicates in TE.
 
         ~Comparison of TE and FE:
 
@@ -84,7 +85,7 @@
                 With Greater for insert with size 9:
                     11000 events
 
-            FE deals "well" with the conjunction of predicates:
+            FE deals "well" with the conjunction of predicates, but it is a very hard problem!:
                 
                 P x && Q x => x <*> y = ...
                 gets encoded as
@@ -108,7 +109,21 @@
                         | isSorted xs = xs
                         | otherwise = []
 
-                 Now the behavior of Q' is not independent of the behavior of P'.
+                The problem is, what if we were to choose whenNotNull [] = [2, 1].
+                Now we have whenSorted . whenNotNull /= whenNotNull . whenSorted.
+                Also, the result isnt sorted!!!
+
+                This is not a problem with this example, as [2, 1] is a truly bad choice of 
+                representative. But if we have something like:
+
+                    allNumbersInListLessThanZero
+
+                    and
+
+                    allNumersInListGreaterThanZeroOrZero
+
+                Now we don't have any implementation of whenNotNull that does not exclude
+                one predicate or the other.
                 
         ~Problems with these methods:
             
@@ -149,7 +164,7 @@
                                 do
                                     t <- arbitrary
                                     t' <- arbitrary `suchThat` predicate
-                                    return (Predicate T T')
+                                    return (Predicate t t')
 
             It is important to note that this construction allows encoding of a predicate as a type, in the sense that
             it let's us constuct propositions like P(x) -> E, or !P(x) -> E, where E is an expression (or in the case of
