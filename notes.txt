@@ -13,6 +13,11 @@
 
             Tricky for predicates of arity > 1
 
+            One solution for arity > 1 is to do something like:
+                fun :: a -> b -> (a, b)
+            The problem with this is that now we have to add fst and snd to our
+            signature, and it's not very general.
+
             Questions:
 
                 What does this approach really mean?
@@ -41,15 +46,8 @@
                 Complex relationships involving the same variable can be hard to encode
 
             Question to investigate:
-                If we have the type Greater and the type Pos, how do we express:
-                    x Greater than y and y Pos ?
-
-                    Figuring this out would allow quickspec to find like:
-                    x > y && y > 0 => x > 1
-
-                In the insert example ("test2.hs"), if you add sorted, true, and false. You get some strange behavior.
-                It would be good to investigate if inserting the sorted list predicate type here would improve
-                the quality of the output. Why doesn't this work, what is the problem?
+                Conjunction of predicates!
+                Disjunction of predicates is the same as getting multiple equations? yes/no?
 
         ~Things to figure out:
             
