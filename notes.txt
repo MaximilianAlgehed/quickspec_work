@@ -11,6 +11,8 @@
 
             Make a function that converts data to a format where a predicate always holds
 
+            Tricky for predicates of arity > 1
+
             Questions:
 
                 What does this approach really mean?
