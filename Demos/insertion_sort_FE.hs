@@ -23,7 +23,8 @@ sig =
        constant "isert" (isert :: Int -> [Int] -> [Int]),
        constant "[]" ([] :: [Int]),
        constant ":" ((:) :: Int -> [Int] -> [Int]),
-       constant "max" (max :: Int -> Int -> Int)
+       constant "max" (max :: Int -> Int -> Int),
+       constant "min" (min :: Int -> Int -> Int)
     ]
    }
 

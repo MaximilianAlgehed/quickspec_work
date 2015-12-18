@@ -27,7 +27,7 @@ setSize :: Set -> Int
 setSize (S xs) = length xs
 
 disjoint :: Set -> Set -> (Set, Set)
-disjoint (S xs) (S ys) = (S xs, S [y | y <- ys, not (elem y xs)])
+disjoint (S xs) (S ys) = if [y | y <- ys, not (elem y xs)] == ys then (S xs, S ys) else (S [], S [0])
 
 sig =
   signature {
@@ -42,11 +42,7 @@ sig =
        constant "singleton" (singleton :: Int -> Set),
        constant "size" (setSize :: Set -> Int),
        constant "+" ((+) :: Int -> Int -> Int),
-       constant "1" (1 :: Int),
-       constant "0" (0 :: Int),
-       constant "disjoint" (disjoint :: Set -> Set -> (Set, Set)),
-       constant "fst" (fst :: (Set, Set) -> Set),
-       constant "snd" (snd :: (Set, Set) -> Set)
+       constant "snddisj" ((snd .) . disjoint :: Set -> Set -> Set)
     ]
    }
 

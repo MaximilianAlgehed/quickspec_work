@@ -17,7 +17,7 @@ sig =
        constant "==" ((==) :: Int -> Int -> Bool),
        constant "[]" ([] :: [Int]),
        constant ":" ((:) :: Int -> [Int] -> [Int]),
-       constant "max" (max :: Int -> Int -> Int),
+--       constant "max" (max :: Int -> Int -> Int),
        constant "whenSorted" (whenSorted :: [Int] -> [Int])
        ]
    }
