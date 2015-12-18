@@ -22,6 +22,12 @@
 
                 What does this approach really mean?
 
+            Negative results:
+                
+                Using the method of adding functions with airty > 1 as:
+                    fun :: a -> b -> (a, b)
+                Doesn't work very well for disjoint sets as an example (as seen in the set_FE demo).
+
             Possible problems:
                 Adding more functions that work over the same type as the rest of the program
                 means we slow the program down. 

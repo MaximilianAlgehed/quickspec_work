@@ -42,7 +42,9 @@ sig =
        constant "singleton" (singleton :: Int -> Set),
        constant "size" (setSize :: Set -> Int),
        constant "+" ((+) :: Int -> Int -> Int),
-       constant "snddisj" ((snd .) . disjoint :: Set -> Set -> Set)
+       constant "snd" (snd :: (Set, Set) -> Set),
+       constant "fst" (fst :: (Set, Set) -> Set),
+       constant "disjoints" (disjoint :: Set -> Set -> (Set, Set))
     ]
    }
 
