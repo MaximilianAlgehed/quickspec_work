@@ -136,6 +136,11 @@
 
                 Just construct more types, one for each combination of predicates.
                 This is also bad, as in we get exponential blowup.
+
+            FE risks losing more soundness as predicates which rarely hold will be replaced by their
+            "representative". As an example consider "reverseSortedAndLongerThan1000" for lists (this is a stupid example I know),
+            this predicate will very rarely hold and if the representative is [] then maybe we discover laws about
+            [] that are not about reverseSorted lists. The solution to this is "more testing".
             
         ~Problems with these methods:
             
