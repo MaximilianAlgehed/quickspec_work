@@ -1,0 +1,11 @@
+-- Todo for the introduction of conditionals in quickSpeck --
+
+~Create an example of predicate derivation.
+
+~Create the predicate derivation from just the predicate using template haskell
+
+~Integrate the predicate derivation into quickspeck
+
+~Find more examples of FE working
+
+~Write something about the issues of choosing good candidates in FE
