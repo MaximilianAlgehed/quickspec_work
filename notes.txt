@@ -52,6 +52,7 @@
         ~Things to figure out:
             
             TE and FE for partial functions, find good examples of this.
+            Generalize TE with types like, BinaryPredicate, UnaryPredicate, etc.
             Conjunction of predicates in TE.
 
         ~Comparison of TE and FE:
@@ -111,7 +112,7 @@
 
                 The problem is, what if we were to choose whenNotNull [] = [2, 1].
                 Now we have whenSorted . whenNotNull /= whenNotNull . whenSorted.
-                Also, the result isnt sorted!!!
+                Also, the result isnt sorted in the second example.
 
                 This is not a problem with this example, as [2, 1] is a truly bad choice of 
                 representative. But if we have something like:
@@ -174,6 +175,25 @@
             It is important to note that this construction allows encoding of a predicate as a type, in the sense that
             it let's us constuct propositions like P(x) -> E, or !P(x) -> E, where E is an expression (or in the case of
             quickspec an equality). However, it does not let us discover neat laws about the predicate.
+
+            More generally what we can do is something hacky like this:
+
+                class Predicatable a where
+                    getPredicate :: a -> Bool
+                
+                predicate :: A -> Bool
+
+                instance Predicatable A where
+                    getPredicate = predicate
+
+            Now we can automagically derive:
+
+                newtype Predicate a = P a
+
+                instance (Predicatable a, Arbitrary a) => Arbitrary (Predicate a) where
+                    arbitrary = return . P =<< arbitrary `suchThat` getPredicate
+
+            An example of this is in the derived_predicate demo.
 
         ~List of topics:
 

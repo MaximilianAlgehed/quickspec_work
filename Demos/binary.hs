@@ -2,12 +2,13 @@
 import Test.QuickCheck
 import QuickSpec
 
--- 8 bit word
+-- One byte
 newtype Binary = B Int deriving (Ord, Eq, Show, Typeable)
 
 instance Arbitrary Binary where
     arbitrary = return . B . (`mod` 256) =<< arbitrary
 
+-- special bytes
 newtype BitSevenZero = BSZ {x::Binary} deriving (Ord, Eq, Show, Typeable)
 
 instance Arbitrary BitSevenZero where
