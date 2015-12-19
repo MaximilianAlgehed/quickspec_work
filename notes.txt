@@ -47,13 +47,17 @@
                     insert i [] = i:[]
                     insert x (y:is) = y:(insert x is)
                     insert y (x:is) = y:x:is
+            
+            Generalization:
+                It would be good to add "predicates" to quickSpec and do all the template-haskell
+                stuff behind the scenes. The problem right now is that it's not "fire and forget" for
+                the user.
 
             Possible problems:
                 Complex relationships involving the same variable can be hard to encode
 
             Question to investigate:
                 Conjunction of predicates!
-                Disjunction of predicates is the same as getting multiple equations? yes/no?
 
         ~Things to figure out:
             
