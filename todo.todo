@@ -4,6 +4,8 @@
 
 ~Create the predicate derivation from just the predicate using template haskell
 
+~Integrate the wrapping of the types into the things that are working in template haskell
+
 ~Integrate the predicate derivation into quickspeck
 
 ~Find more examples of FE working
