@@ -4,24 +4,32 @@ import Test.QuickCheck
 import Data.Coerce
 import QuickSpec
 
+-- Class of arity 2 predicates
 class (Predicatable2 a b) where
-    getPredicate2 :: a -> b -> Bool
+    -- The "user-input" predicate
+    predicate :: (Coercible a a', Coercible b b') => a' -> b' -> Bool
 
+    -- What is actually used internally
+    getPredicate2 :: (Coercible a a', Coercible b b') => a -> b -> Bool
+    getPredicate2 = (\a b -> predicate (coerce a :: a') (coerce b :: b'))
+
+-- A predicate type for arity 2 predicates
 data Predicate2 a b = P {x::a, y::b} deriving (Ord, Eq, Typeable)
 
+-- The general instance for arbitrary predicates of size 2
 instance (Predicatable2 a b, Arbitrary a, Arbitrary b) => Arbitrary (Predicate2 a b) where
     arbitrary = do
                     (x, y) <- arbitrary `suchThat` (\(x, y) -> getPredicate2 x y)
                     return (P x y)
 
+-- A type wrapping ints 
 newtype IntWrapper = IntWrapper Int deriving (Ord, Eq, Typeable)
 
-predicate :: IntWrapper -> IntWrapper -> Bool
-predicate x y = (coerce x :: Int) > (coerce y :: Int)
-
+-- The predicateable instance
 instance Predicatable2 IntWrapper IntWrapper where
-    getPredicate2 = predicate
+    predicate = (>) :: (Int -> Int -> Bool)
 
+-- Arbitrary instance
 instance Arbitrary IntWrapper where
     arbitrary = return . IntWrapper =<< arbitrary
 
@@ -39,20 +47,20 @@ isort [] = []
 isort (x:xs) = isert x (isort xs)
 
 sig =
-  signature {
-    maxTermSize = Just 7,
-    instances = [
-                 baseType (undefined::Predicate2 IntWrapper IntWrapper),
-                 names (NamesFor ["p"] :: NamesFor (Predicate2 IntWrapper IntWrapper))
-                ],
-    constants = [
-       constant "isort" (isort :: [Int] -> [Int]),
-       constant "isert" (isert :: Int -> [Int] -> [Int]),
-       constant "[]" ([] :: [Int]),
-       constant ":" ((:) :: Int -> [Int] -> [Int]),
-       constant "x" (coerce . x :: Predicate2 IntWrapper IntWrapper -> Int),
-       constant "y" (coerce . y :: Predicate2 IntWrapper IntWrapper -> Int)
-    ]
+    signature {
+        maxTermSize = Just 7,
+        instances = [
+                      baseType (undefined::Predicate2 IntWrapper IntWrapper),
+                      names (NamesFor ["p"] :: NamesFor (Predicate2 IntWrapper IntWrapper))
+        ],
+        constants = [
+            constant "isort" (isort :: [Int] -> [Int]),
+            constant "isert" (isert :: Int -> [Int] -> [Int]),
+            constant "[]" ([] :: [Int]),
+            constant ":" ((:) :: Int -> [Int] -> [Int]),
+            constant "x" (coerce . x :: Predicate2 IntWrapper IntWrapper -> Int),
+            constant "y" (coerce . y :: Predicate2 IntWrapper IntWrapper -> Int)
+        ]
    }
 
 main = quickSpec sig
