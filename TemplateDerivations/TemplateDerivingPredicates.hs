@@ -29,7 +29,7 @@ mk_Record_N :: Integer -> Con
 mk_Record_N n = RecC name fields
     where
         name = (mkName ("P"++(show n)))
-        fields = [(mkName ("a"++(show j)), NotStrict, VarT (mkName ("x"++(show j)))) | j <- [1..n]]
+        fields = [(mkName ("a"++(show n)++(show j)), NotStrict, VarT (mkName ("x"++(show j)))) | j <- [1..n]]
 
 -- Creates a predicate datatype with a record
 mk_Predicate_N :: Integer -> Dec
