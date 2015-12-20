@@ -7,15 +7,10 @@ import Test.QuickCheck
 import QuickSpec
 import Data.Coerce
 
-$(mk_Predicate_Types 2)
+gt :: Int -> Int -> Bool
+gt = (>)
 
-newtype IntWrapper = IntWrapper Int deriving (Eq, Ord, Typeable)
-
-instance Predicateable2 IntWrapper IntWrapper where
-    predicate2 (IntWrapper x) (IntWrapper y) = x > y
-
-instance Arbitrary IntWrapper where
-    arbitrary = return . IntWrapper =<< arbitrary
+$(mk_Predicates [[| gt :: Int -> Int -> Bool |]])
 
 -- Insert
 -- Precondition: arg2 is sorted
@@ -34,16 +29,16 @@ sig =
   signature {
     maxTermSize = Just 7,
     instances = [
-                 baseType (undefined::Predicate2 IntWrapper IntWrapper),
-                 names (NamesFor ["p"] :: NamesFor (Predicate2 IntWrapper IntWrapper))
+                 baseType (undefined::Pgt),
+                 names (NamesFor ["p"] :: NamesFor Pgt)
                 ],
     constants = [
        constant "isort" (isort :: [Int] -> [Int]),
        constant "isert" (isert :: Int -> [Int] -> [Int]),
        constant "[]" ([] :: [Int]),
        constant ":" ((:) :: Int -> [Int] -> [Int]),
-       constant "x" (coerce . a21 :: (Predicate2 IntWrapper IntWrapper) -> Int),
-       constant "y" (coerce . a22 :: (Predicate2 IntWrapper IntWrapper) -> Int)
+       constant "x" (coerce . a21 :: Pgt -> Int),
+       constant "y" (coerce . a22 :: Pgt -> Int)
     ]
    }
 
