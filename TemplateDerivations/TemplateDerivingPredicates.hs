@@ -8,7 +8,9 @@ import Data.Typeable
 -- Creates all the plumbing from the function name and signature
 -- example mk_Predicates [[| example :: Int -> Int -> Bool |]]
 -- will generate the following:
+--
 -- type TExample = Predicate2 IntExample IntExample
+-- newtype IntExample = IntExample Int
 --
 -- including all the plumbing in the background (all the predicate type instances etc)
 mk_Predicates :: [ExpQ] -> Q [Dec]

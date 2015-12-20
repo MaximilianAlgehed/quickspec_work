@@ -7,7 +7,7 @@ import Test.QuickCheck
 import QuickSpec
 import Data.Coerce
 
-$(mk_Predicate_Derivations 2)
+$(mk_Predicate_Types 2)
 
 newtype IntWrapper = IntWrapper Int deriving (Eq, Ord, Typeable)
 
