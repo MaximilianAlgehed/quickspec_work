@@ -5,9 +5,18 @@ module TemplateDerivingPredicates where
 import Language.Haskell.TH
 import Data.Typeable
 
+-- Creates all the plumbing from the function name and signature
+-- example mk_Predicates [[| example :: Int -> Int -> Bool |]]
+-- will generate the following:
+-- type TExample = Predicate2 IntExample IntExample
+--
+-- including all the plumbing in the background (all the predicate type instances etc)
+mk_Predicates :: [ExpQ] -> Q [Dec]
+mk_Predicates = undefined
+
 -- Creates the entire predicate derivation structure when spliced
-mk_Predicate_Derivations :: Integer -> Q [Dec]
-mk_Predicate_Derivations n =
+mk_Predicate_Types :: Integer -> Q [Dec]
+mk_Predicate_Types n =
      return [mk_Predicate_N n,
              mk_Predicateable_N n,
              mk_Arbitrary_Instance_Predicate_N n
