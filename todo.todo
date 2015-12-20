@@ -1,15 +1,5 @@
 -- Todo for the introduction of conditionals in quickSpeck --
 
-~Create an example of predicate derivation.
-
-~Create the predicate derivation from just the predicate using template haskell
-
-~Integrate the wrapping of the types into the things that are working in template haskell
-
-~Maybe introduce a template "introducePredicate" which takes a predicate name as a string
-~and does all the plumbing, creating types like: type T"predicate name" = PredicateN (TWrapped) (TWrapped) (TWrapped)
-    This way the user can work with something very simple, like adding simple instances.
-
 ~Integrate the predicate derivation into quickspeck
 
 ~Find more examples of FE working
