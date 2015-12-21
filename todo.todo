@@ -3,3 +3,5 @@
 ~Integrate the predicate derivation into quickspeck
 
 ~Find more examples of FE working
+
+~Integrate conjunction in TE into the template haskell implementation of TE
