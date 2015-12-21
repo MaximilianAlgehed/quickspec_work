@@ -1,92 +1,66 @@
-~Conditional Lemma Discovery and Resurcion Induction in Hipster
+*: Conditional Lemma Discovery and Resurcion Induction in Hipster
 
-~people.mpi-inf.mpg.de/~dwand/datasup/draft.pdf
+*: people.mpi-inf.mpg.de/~dwand/datasup/draft.pdf
     Automatic Induction inside Superposition
 
--- Pros and cons of different methods for encoding constraints --
+-- Pros and cons of different methods for encoding constraints in QuickSpec --
 
-    ~Two possible methods:
+    +: Function encoding (FE)
 
-        ~Function encoding: (FE)
+        Make a function that converts data to a format where some predicate always holds
 
-            Make a function that converts data to a format where a predicate always holds
+        Tricky for predicates of arity > 1
 
-            Tricky for predicates of arity > 1
+        One solution for arity > 1 is to do something like:
+            fun :: a -> b -> (a, b)
+        The problem with this is that now we have to add fst and snd to our
+        signature, and it's not very general.
 
-            One solution for arity > 1 is to do something like:
+        Negative results:
+            
+            Using the method of adding functions with airty > 1 as:
                 fun :: a -> b -> (a, b)
-            The problem with this is that now we have to add fst and snd to our
-            signature, and it's not very general.
+            Doesn't work very well for disjoint sets as an example (as seen in the set_FE demo).
 
-            Questions:
+        Possible problems:
+            Adding more functions that work over the same type as the rest of the program
+            means we slow the program down. 
 
-                What does this approach really mean?
+    +: Type encoding: (TE)
 
-            Negative results:
-                
-                Using the method of adding functions with airty > 1 as:
-                    fun :: a -> b -> (a, b)
-                Doesn't work very well for disjoint sets as an example (as seen in the set_FE demo).
+        Create types that are instantiated such that some predicate always holds
 
-            Possible problems:
-                Adding more functions that work over the same type as the rest of the program
-                means we slow the program down. 
+        Positive result:
+            Giving quickcheck the insert (as in insertion sort) function, a type for 
+            generating a pair of numbers (x, y) where x > y, and the basic list implementation
+            (nil and cons) generates this rather exciting output in almost no time:
 
-                It is not obvious how to find a good representative of a predicate in FE that
-                does not result in the whole expression being boolean valued.
+                insert i [] = i:[]
+                insert x (y:is) = y:(insert x is)
+                insert y (x:is) = y:x:is
+        
+        Possible problems:
+            Complex relationships involving the same variable can be hard to encode
 
-        ~Type encoding: (TE)
+        Question to investigate:
+            Conjunction of predicates!
 
-            Create types that are instantiated such that the predicate always holds
+    +: Things to figure out:
 
-            Positive result:
-                Giving quickcheck the insert (as in insertion sort) function, a type for 
-                generating a pair of numbers (x, y) where x > y, and the basic list implementation
-                (nil and cons) generates this rather exciting output in almost no time:
+        *: Conjunction of predicates in TE.
+        
+        *: Transformation types in TE (types where we generate a predicate that holds after some transform is applied to x)
 
-                    insert i [] = i:[]
-                    insert x (y:is) = y:(insert x is)
-                    insert y (x:is) = y:x:is
-            
-            Generalization:
-                It would be good to add "predicates" to quickSpec and do all the template-haskell
-                stuff behind the scenes. The problem right now is that it's not "fire and forget" for
-                the user.
+    +: Comparison of TE and FE:
 
-            Possible problems:
-                Complex relationships involving the same variable can be hard to encode
-
-            Question to investigate:
-                Conjunction of predicates!
-
-        ~Things to figure out:
-            
-            TE and FE for partial functions, find good examples of this.
-            Generalize TE with types like, BinaryPredicate, UnaryPredicate, etc.
-            Conjunction of predicates in TE.
-
-        ~Comparison of TE and FE:
-
-            In Type encoding (TE) we introduce a new type and a function which simply lifts from that type.
-            In Function encoding (FE) we introduce a function which works on the same type as the rest of the
-            theory. A problem I have encountered when not using any background theory etc is that TE is able to
-            handle a maxTermSize of 10 for smaller theories without problem. However FE fails at size 10 when doing something
-            as simple as encoding (x >= y) using max and min. The reason for this seems to be that quickspec
-            is busy generating the theory for max and min when we are not really interested in that theory.
-
-            FE is in a way less obvious and more obtuse a method to encode predicates than TE. 
-            Say we want to encode the property x < y. We cannot do this with the functions min and max as:
-
-                x <= y -> min x y = x
-                and likewise for max
-
-            However it is very simple to encode both strictly less than and less than or equal in the TE scheme.
-            And importantly it is easy to differentiate between them.
-
-            Another issue with FE is that when we introduce functions of higher airity (e.g. max and min) to 
+        -- Efficiency -- 
+            An issue with FE is that when we introduce functions of higher airity (e.g. max and min) to 
             encode the predicates we get exponential blowup. Especially as we increase the maxTermSize.
 
-            A comparison of having max versus having Greater for encoding the relation >=, both in the "foreground" theory:
+            A comparison of having max (which is not a pure FE encoding) versus having
+            Greater (a TE encoding: newtype P = P {x::Int, y::Int}, (x p) >= (y p))
+            for encoding the relation >=, both in the "foreground" theory:
+
                 With max for insert with size 7:
                     1609 events 
                 with max for insert with size 9:
@@ -96,13 +70,48 @@
                 With Greater for insert with size 9:
                     11000 events
 
-            FE deals "well" with the conjunction of predicates, but it is a very hard problem!:
+        -- Conjunction -- 
+
+            *: In TE we can do conjunction in the following way:
+
+                Let's say we have some binary (this is not a precondition, it simplifies the example)
+                predicate type P.
+        
+                    data P = P {x::A, y::B}
+                    instance Predicateable A B where
+                        predicate = p
+
+                If we introduce a function
+
+                    eq_xy :: P -> P -> Bool
+                    eq_xy p1 p2 = x p1 == y p2
+                
+                And we generate the binary (again, it is only binary for the sake of this example) type Q
+
+                    data Q = Q {x'::P, y'::P}
+                    instance Predicateable P P where
+                        predicate = eq_xy
+
+                Then QuickSpeck can generate laws like:
+
+                    f (y (x' q)) = g (x (y' q))
+
+                which would correspond to:
+
+                    (p a y) && (p x a) => f y = g x
+
+                N-ary Q types would allow for the same variable to exist in several different predicates,
+                creating a conjunction of N terms.
+
+                Furthermore it is conceivable that the Q type does not have to be predicateable over equality.
+                Any relation between terms could be used.
+
+            *: FE deals "well" with the conjunction of predicates: (But it is a very hard problem!)
                 
                 P x && Q x => x <*> y = ...
                 gets encoded as
-                (Q'. P') x <*> y = ...
-                where P' and Q' are the functions that compute the "representative" of x
-                under the conditions P and Q.
+                ((Q'. P') x) <*> y = ...
+                where Q' and P' are the function encodings of P and Q.
                 However one would need to be very carefull when construction the functions
                 Q' and P'. To see an example of how difficult this is notice:
                     
@@ -120,6 +129,8 @@
                         | isSorted xs = xs
                         | otherwise = []
 
+                Which is completely fine (when considering only sorted and (not . null)).
+
                 The problem is, what if we were to choose whenNotNull [] = [2, 1].
                 Now we have whenSorted . whenNotNull /= whenNotNull . whenSorted.
                 Also, the result isnt sorted in the second example.
@@ -136,86 +147,119 @@
                 Now we don't have any implementation of whenNotNull that does not exclude
                 one predicate or the other.
 
-            As for how we can do conjunciton of predicates in TE:
+                One approach for solving this problem would be to construct functions from all predicate functions
+                where the predicate always holds. For an instance:
 
-                Just construct more types, one for each combination of predicates.
-                This is also bad, as in we get exponential blowup.
+                    allNumbersInListLessThanZero_and_notNull
+                
+                This is kind of fine. But we now have an explosion of the size of the signature.
 
+        -- Soundness -- 
             FE risks losing more soundness as predicates which rarely hold will be replaced by their
             "representative". As an example consider "reverseSortedAndLongerThan1000" for lists (this is a stupid example I know),
             this predicate will very rarely hold and if the representative is [] then maybe we discover laws about
             [] that are not about reverseSorted lists. The solution to this is "more testing".
-            
-        ~Problems with these methods:
-            
-            They introduce overhead, quite alot of overhead
 
-            They are both bad at modelling complex relationships
-
-        ~Conversion from FE to TE:
-
-            In the predicate logic example we find that replacing the unary predicate valid
-            with the suitable type Tautology we find that we don't get the overhead of the theory of tautologies.
-
-            Similarily we find that the theory of sorted lists can be replaced by a type for sorted lists.
-
-            In fact any unary predicate over some type T:
+        -- Transforms -- 
+            FE can potentially be more powerfull, as an example it is capable of expressing:
                 
-                predicate :: T -> Bool
+                sorted (reverse xs) => ... xs ... (reverse xs) ...
 
-            Can be modelled as a type:
+            through equations like:
 
-                data Predicate = Predicate T
+                ... xs ... (whenSorted (reverse xs)) 
 
-                instance Arbitrary where
-                    arbitrary = return . Predicate =<< arbitrary `suchThat` predicate
+            However this can also be expressed in TE, but we need to change the type 
+            so that it generates the transformed data and the other data at the same time.
+            This way it would be accesed in this way:
 
-            This gives us a conversion from unary FE to unary TE.
+                (x p) (xt p)
 
-            Similary for a binary predicate over any two types T and T':
+            Where (x p) would give the normal data and (xt p) would give the transformed data.
 
-                predicate :: T -> T' -> Bool
-
-            Can be modelled as the type:
-
-                data Predicate = Predicate T T'
-
-                instance Arbitrary Predicate where
-                    arbitrary = 
-                                do
-                                    t <- arbitrary
-                                    t' <- arbitrary `suchThat` predicate
-                                    return (Predicate t t')
-
-            It is important to note that this construction allows encoding of a predicate as a type, in the sense that
-            it let's us constuct propositions like P(x) -> E, or !P(x) -> E, where E is an expression (or in the case of
-            quickspec an equality). However, it does not let us discover neat laws about the predicate.
-
-            More generally what we can do is something hacky like this:
-
-                class Predicatable a where
-                    getPredicate :: a -> Bool
+            This would however risk giving us annoying transform-types like:
                 
-                predicate :: A -> Bool
+                (xt p) == reverse . reverse 
 
-                instance Predicatable A where
-                    getPredicate = predicate
+            To this end it would now be usefull to run QuickSpec on the signature without the 
+            predicate types in it at first (maybe with some ad-hoc FE to "substitute" TE) and
+            try to prove the equality of transforms.
 
-            Now we can automagically derive:
+            An advantage of FE here is clearly the fact that run-time generation (by QuickSpec)
+            is a "solved" problem while a TE solution would require us to do something more 
+            radical, like introduce a theorem prover at compile time (if we assume that
+            the TE types are generated at compile time by template haskell). However this 
+            theorem prover may not need to be so complex or general.
 
-                newtype Predicate a = P a
+            Transforms are only interesting if the equations contain both x and the transform of x.
 
-                instance (Predicatable a, Arbitrary a) => Arbitrary (Predicate a) where
-                    arbitrary = return . P =<< arbitrary `suchThat` getPredicate
+    +: Automatic generation of TE types from given predicates:
 
-            An example of this is in the derived_predicate demo.
+        We find that the theory of sorted lists can be replaced by a type for sorted lists.
 
-        ~List of topics:
-
-            *TE
+        In fact any unary predicate over some type T:
             
-            *FE
+            predicate :: T -> Bool
 
-            *Conjunction
+        Can be modelled as a type:
 
-            *Disjunction
+            data Predicate = Predicate T
+
+            instance Arbitrary where
+                arbitrary = return . Predicate =<< arbitrary `suchThat` predicate
+
+        This gives us a conversion from unary FE to unary TE.
+
+        Similary for a binary predicate over any two types T and T':
+
+            predicate :: T -> T' -> Bool
+
+        Can be modelled as the type:
+
+            data Predicate = Predicate T T'
+
+            instance Arbitrary Predicate where
+                arbitrary = 
+                            do
+                                t <- arbitrary
+                                t' <- arbitrary `suchThat` predicate
+                                return (Predicate t t')
+
+        It is important to note that this construction allows encoding of a predicate as a type, in the sense that
+        it let's us constuct propositions like P(x) -> E, or !P(x) -> E, where E is an expression (or in the case of
+        quickspec an equality). However, it does not let us discover neat laws about the predicate.
+
+        More generally what we can do is something hacky like this:
+
+            class Predicatable a where
+                getPredicate :: a -> Bool
+            
+            predicate :: A -> Bool
+
+            instance Predicatable A where
+                getPredicate = predicate
+
+        Now we can automagically derive:
+
+            newtype Predicate a = P a
+
+            instance (Predicatable a, Arbitrary a) => Arbitrary (Predicate a) where
+                arbitrary = return . P =<< arbitrary `suchThat` getPredicate
+
+        An example of this is in the derived_predicate demo.
+
+        Even more generally, using template haskell, we can generate these instances for any type.
+
+    +: List of topics:
+
+        *: TE
+        
+        *: FE
+
+        *: Conjunction (disjucntion)
+
+        *: Transforms
+
+        *: Efficiency
+
+        *: Soudness

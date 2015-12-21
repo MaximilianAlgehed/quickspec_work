@@ -10,7 +10,7 @@ import Data.List
 -- Creates all the plumbing given a list of quoted signatures
 mk_Predicates :: [ExpQ] -> Q [Dec]
 mk_Predicates exprs = do
-                        exprs' <- sequence exprs
+                        exprs' <- fmap (filter is_sig) $ sequence exprs
                         predicate_types <- fmap concat $ sequence $ map (mk_Predicate_Types . (\x -> x-1)) $ get_type_counts exprs'
                         newtypes <- fmap concat $ sequence $ map mk_Newtypes $ nub $ get_types_per_expr exprs'
                         synonyms <- fmap concat $ sequence $ map mk_TypeSynonym $ get_names_per_expr exprs'
@@ -138,7 +138,8 @@ mk_Touple_To_Predicate_Function_N n = FunD (mkName ("unwrap"++(show n))) [clause
 
 -- generates the expression " arbitrary `suchThat` unwrapn "
 mk_Arbitrary_Function_Call_N :: Integer -> Exp 
-mk_Arbitrary_Function_Call_N n = (AppE
+mk_Arbitrary_Function_Call_N n =
+                                (AppE
                                     (AppE
                                         (VarE (mkName "suchThat"))
                                         (VarE (mkName "arbitrary"))
