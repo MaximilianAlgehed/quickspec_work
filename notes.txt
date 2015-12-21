@@ -23,8 +23,8 @@
             Doesn't work very well for disjoint sets as an example (as seen in the set_FE demo).
 
         Possible problems:
-            Adding more functions that work over the same type as the rest of the program
-            means we slow the program down. 
+
+            It's slow and we need to compute the basic values.
 
     +: Type encoding: (TE)
 
@@ -47,8 +47,6 @@
 
     +: Things to figure out:
 
-        *: Conjunction of predicates in TE.
-        
         *: Transformation types in TE (types where we generate a predicate that holds after some transform is applied to x)
 
     +: Comparison of TE and FE:
@@ -154,6 +152,10 @@
                 
                 This is kind of fine. But we now have an explosion of the size of the signature.
 
+                In conclusion, the composition of these predicate functions does not work as a solution
+                to the problem of conjunction. The alternative, to introduce some "power-set" of functions
+                and construct additional functions from that set solves the problem of conjunction. 
+
         -- Soundness -- 
             FE risks losing more soundness as predicates which rarely hold will be replaced by their
             "representative". As an example consider "reverseSortedAndLongerThan1000" for lists (this is a stupid example I know),
@@ -192,6 +194,9 @@
             theorem prover may not need to be so complex or general.
 
             Transforms are only interesting if the equations contain both x and the transform of x.
+            Unless the transform significantly alters the structure of the expression, in a way which
+            would be quantifiable by some predicate. However, then it would be more interesting to 
+            just have the predicate type with that predicate.
 
     +: Automatic generation of TE types from given predicates:
 
