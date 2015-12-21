@@ -52,37 +52,34 @@ mk_Predicates exprs = do
                             type_count (PromotedT _) = 1
                             type_count _ = 0
 
+-- Takes a name and a type and creates the name of a newtype that wraps the type
+-- and adds the name to make it a unique new name
+make_compound_name :: Name -> Type -> Name
+make_compound_name n t = (mkName ("T"++(nameBase n) ++ (case t of
+                                                        (ConT name) -> nameBase name
+                                                        (PromotedT name) -> nameBase name)))
+
 mk_Newtypes :: (Name, [Type]) -> Q [Dec]
 mk_Newtypes (n, tps) = return $ (nub (concat (map helper tps)))++(predicateable_instance n tps)
     where
-        make_compound_name :: Type -> Name
-        make_compound_name t = (mkName ("T"++(nameBase n) ++ (case t of
-                                                        (ConT name) -> nameBase name
-                                                        (PromotedT name) -> nameBase name)))
         predicateable_instance :: Name -> [Type] -> [Dec]
         predicateable_instance n tps = [InstanceD [] inst_type [dec]]
             where
-                inst_type = foldl AppT (ConT (mkName ("Predicateable"++(show(length tps))))) (map (ConT . make_compound_name) tps)
-                conds = [ConP (make_compound_name t) [(VarP (mkName ("x"++(show i))))] | 
+                inst_type = foldl AppT (ConT (mkName ("Predicateable"++(show(length tps))))) (map (ConT . (make_compound_name n)) tps)
+                conds = [ConP (make_compound_name n t) [(VarP (mkName ("x"++(show i))))] | 
                                                                             (t, i) <- (zip tps [0..])]
                 n' = (mkName ("predicate"++(show (length tps))))
                 body = foldl AppE (VarE n) [VarE (mkName ("x"++(show i))) | i <- [0..((length tps)-1)]]
                 dec = FunD n' [Clause conds (NormalB body) []]
         helper :: Type -> [Dec]
-        helper t = let n' = make_compound_name t in 
-                       [NewtypeD [] n' [] (NormalC n' [(NotStrict, t)]) [''Ord, ''Eq, ''Typeable], arb_instance t n']
-        arb_instance :: Type -> Name -> Dec
-        arb_instance t n = InstanceD [] (AppT (ConT (mkName "Arbitrary")) (ConT n)) [arb]
-            where
-                arb = FunD (mkName "arbitrary") [Clause [] (NormalB (AppE (AppE (VarE (mkName "fmap")) (ConE n)) (VarE (mkName "arbitrary")))) []]
+        helper t = let n' = make_compound_name n t in 
+                       [NewtypeD [] n' [] (NormalC n' [(NotStrict, t)]) [''Ord, ''Eq, ''Typeable, ''Arbitrary]]
 
 mk_TypeSynonym :: (Name, Integer, [Type]) -> Q [Dec]
 mk_TypeSynonym (n, i, tps) = return [TySynD (mkName ("P"++(nameBase n))) [] t]
     where
         t = foldl AppT (ConT (mkName ("Predicate"++(show i)))) (map diffType (reverse (tail (reverse tps))))
-        diffType t = ConT (mkName ("T"++(nameBase n) ++ (case t of
-                                                        (ConT name) -> nameBase name
-                                                        (PromotedT name) -> nameBase name)))
+        diffType t = ConT (make_compound_name n t)
 
 -- Creates the entire predicate derivation structure when spliced
 mk_Predicate_Types :: Integer -> Q [Dec]
