@@ -21,7 +21,7 @@ $(mk_Predicates [[| lt :: Int -> Int -> Bool |], [| gt :: Int -> Int -> Bool |]]
 eq :: Plt -> Plt -> Bool
 eq p1 p2 = (a22 p1) == (a21 p2)
 
-$(mk_Conjunctions [ [| eq :: Plt -> Plt -> Bool |] ])
+$(mk_Relations [ [| eq :: Plt -> Plt -> Bool |] ])
 
 -- Insert
 -- Precondition: arg2 is sorted
