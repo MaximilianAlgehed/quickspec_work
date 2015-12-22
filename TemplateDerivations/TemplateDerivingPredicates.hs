@@ -7,6 +7,49 @@ import Test.QuickCheck
 import Data.Typeable
 import Data.List
 
+mk_Conjunctions :: [ExpQ] -> Q [Dec]
+mk_Conjunctions exprs = do
+                        exprs' <- fmap (filter is_sig) $ sequence exprs
+                        newtypes <- fmap concat $ sequence $ map mk_Newtypes $ nub $ get_types_per_expr exprs'
+                        synonyms <- fmap concat $ sequence $ map mk_TypeSynonym $ get_names_per_expr exprs'
+                        return (synonyms++newtypes)
+                        where
+                            get_names_per_expr :: [Exp] -> [(Name, Integer, [Type])]
+                            get_names_per_expr [] = []
+                            get_names_per_expr ((SigE (VarE n) t):xs) = (n, (type_count t) - 1, get_types t):(get_names_per_expr xs)
+                        
+                            get_types_per_expr :: [Exp] -> [(Name, [Type])]
+                            get_types_per_expr = (map  get_name_and_types) . (filter is_sig)
+
+                            get_name_and_types :: Exp -> (Name, [Type])
+                            get_name_and_types (SigE (VarE n) t) = (n, ((reverse . tail . reverse)  (get_types t)))
+
+                            get_types :: Type -> [Type]
+                            get_types (ForallT _ _ t) = get_types t
+                            get_types (AppT t1 t2) = (get_types t1) ++ (get_types t2)
+                            get_types t@(ConT _) = [t]
+                            get_types t@(PromotedT _) = [t]
+                            get_types _ = []
+
+                            get_type_counts :: [Exp] -> [Integer]
+                            get_type_counts xs = filter (>0) $ nub $ map (type_count . get_type) $ filter is_sig xs
+
+                            is_sig :: Exp -> Bool
+                            is_sig (SigE _ _) = True
+                            is_sig _ = False
+
+                            get_type :: Exp -> Type
+                            get_type (SigE _ t) = t
+
+                            type_count :: Type -> Integer
+                            type_count (ForallT _ _ t) = type_count t
+                            type_count (AppT t1 t2) = (type_count t1) + (type_count t2)
+                            type_count (SigT t _) = type_count t
+                            type_count (VarT _) = 1
+                            type_count (ConT _) = 1
+                            type_count (PromotedT _) = 1
+                            type_count _ = 0
+
 -- Creates all the plumbing given a list of quoted signatures
 mk_Predicates :: [ExpQ] -> Q [Dec]
 mk_Predicates exprs = do

@@ -18,6 +18,11 @@ lt = (<)
 
 $(mk_Predicates [[| lt :: Int -> Int -> Bool |], [| gt :: Int -> Int -> Bool |]])
 
+eq :: Plt -> Plt -> Bool
+eq p1 p2 = (a22 p1) == (a21 p2)
+
+$(mk_Conjunctions [ [| eq :: Plt -> Plt -> Bool |] ])
+
 -- Insert
 -- Precondition: arg2 is sorted
 isert :: Int -> [Int] -> [Int]
@@ -31,9 +36,6 @@ isort :: [Int] -> [Int]
 isort [] = []
 isort (x:xs) = isert x (isort xs)
 
-instance Predicateable2 Plt Plt where
-    predicate2 p1 p2 = (a22 p1) == (a21 p2)
-
 sig =
   signature {
     maxTermSize = Just 7,
@@ -42,8 +44,8 @@ sig =
                  names (NamesFor ["p"] :: NamesFor Pgt),
                  baseType (undefined::Plt),
                  names (NamesFor ["p'"] :: NamesFor Plt),
-                 baseType (undefined::Predicate2 Plt Plt),
-                 names (NamesFor ["q"] :: NamesFor (Predicate2 Plt Plt))
+                 baseType (undefined::Peq),
+                 names (NamesFor ["q"] :: NamesFor (Peq))
                 ],
     constants = [
        constant "isort" (isort :: [Int] -> [Int]),
@@ -56,8 +58,8 @@ sig =
        constant "y"  (coerce . a22 :: Pgt -> Int),
        constant "x'" (coerce . a21 :: Plt -> Int),
        constant "y'" (coerce . a22 :: Plt -> Int),
-       constant "p1" (coerce . a21 :: Predicate2 Plt Plt -> Plt),
-       constant "p2" (coerce . a22 :: Predicate2 Plt Plt -> Plt)
+       constant "p1" (coerce . a21 :: Peq -> Plt),
+       constant "p2" (coerce . a22 :: Peq -> Plt)
     ]
    }
 
