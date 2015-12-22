@@ -7,8 +7,32 @@ import Test.QuickCheck
 import Data.Typeable
 import Data.List
 
-mk_Conjunctions :: [ExpQ] -> Q [Dec]
-mk_Conjunctions exprs = do
+-- Get the "basic types" (i.e. not (,), (->), etc)
+get_types :: Type -> [Type]
+get_types (ForallT _ _ t) = get_types t
+get_types (AppT t1 t2) = (get_types t1) ++ (get_types t2)
+get_types t@(ConT _) = [t]
+get_types t@(PromotedT _) = [t]
+get_types _ = []
+
+-- Get the number of interesting types
+type_count :: Type -> Integer
+type_count (ForallT _ _ t) = type_count t
+type_count (AppT t1 t2) = (type_count t1) + (type_count t2)
+type_count (SigT t _) = type_count t
+type_count (VarT _) = 1
+type_count (ConT _) = 1
+type_count (PromotedT _) = 1
+type_count _ = 0
+
+-- Check if an expression is a type signature
+is_sig :: Exp -> Bool
+is_sig (SigE _ _) = True
+is_sig _ = False
+
+-- Makes conjunction predicate types based on the relations
+mk_Relations :: [ExpQ] -> Q [Dec]
+mk_Relations exprs = do
                         exprs' <- fmap (filter is_sig) $ sequence exprs
                         newtypes <- fmap concat $ sequence $ map mk_Newtypes $ nub $ get_types_per_expr exprs'
                         synonyms <- fmap concat $ sequence $ map mk_TypeSynonym $ get_names_per_expr exprs'
@@ -24,32 +48,13 @@ mk_Conjunctions exprs = do
                             get_name_and_types :: Exp -> (Name, [Type])
                             get_name_and_types (SigE (VarE n) t) = (n, ((reverse . tail . reverse)  (get_types t)))
 
-                            get_types :: Type -> [Type]
-                            get_types (ForallT _ _ t) = get_types t
-                            get_types (AppT t1 t2) = (get_types t1) ++ (get_types t2)
-                            get_types t@(ConT _) = [t]
-                            get_types t@(PromotedT _) = [t]
-                            get_types _ = []
-
                             get_type_counts :: [Exp] -> [Integer]
                             get_type_counts xs = filter (>0) $ nub $ map (type_count . get_type) $ filter is_sig xs
-
-                            is_sig :: Exp -> Bool
-                            is_sig (SigE _ _) = True
-                            is_sig _ = False
 
                             get_type :: Exp -> Type
                             get_type (SigE _ t) = t
 
-                            type_count :: Type -> Integer
-                            type_count (ForallT _ _ t) = type_count t
-                            type_count (AppT t1 t2) = (type_count t1) + (type_count t2)
-                            type_count (SigT t _) = type_count t
-                            type_count (VarT _) = 1
-                            type_count (ConT _) = 1
-                            type_count (PromotedT _) = 1
-                            type_count _ = 0
-
+                            
 -- Creates all the plumbing given a list of quoted signatures
 mk_Predicates :: [ExpQ] -> Q [Dec]
 mk_Predicates exprs = do
@@ -69,31 +74,11 @@ mk_Predicates exprs = do
                             get_name_and_types :: Exp -> (Name, [Type])
                             get_name_and_types (SigE (VarE n) t) = (n, ((reverse . tail . reverse)  (get_types t)))
 
-                            get_types :: Type -> [Type]
-                            get_types (ForallT _ _ t) = get_types t
-                            get_types (AppT t1 t2) = (get_types t1) ++ (get_types t2)
-                            get_types t@(ConT _) = [t]
-                            get_types t@(PromotedT _) = [t]
-                            get_types _ = []
-
                             get_type_counts :: [Exp] -> [Integer]
                             get_type_counts xs = filter (>0) $ nub $ map (type_count . get_type) $ filter is_sig xs
 
-                            is_sig :: Exp -> Bool
-                            is_sig (SigE _ _) = True
-                            is_sig _ = False
-
                             get_type :: Exp -> Type
                             get_type (SigE _ t) = t
-
-                            type_count :: Type -> Integer
-                            type_count (ForallT _ _ t) = type_count t
-                            type_count (AppT t1 t2) = (type_count t1) + (type_count t2)
-                            type_count (SigT t _) = type_count t
-                            type_count (VarT _) = 1
-                            type_count (ConT _) = 1
-                            type_count (PromotedT _) = 1
-                            type_count _ = 0
 
 -- Takes a name and a type and creates the name of a newtype that wraps the type
 -- and adds the name to make it a unique new name
@@ -102,6 +87,7 @@ make_compound_name n t = (mkName ("T"++(nameBase n) ++ (case t of
                                                         (ConT name) -> nameBase name
                                                         (PromotedT name) -> nameBase name)))
 
+-- Creates the newtypes associated with one predicate
 mk_Newtypes :: (Name, [Type]) -> Q [Dec]
 mk_Newtypes (n, tps) = return $ (nub (concat (map helper tps)))++(predicateable_instance n tps)
     where
@@ -118,6 +104,7 @@ mk_Newtypes (n, tps) = return $ (nub (concat (map helper tps)))++(predicateable_
         helper t = let n' = make_compound_name n t in 
                        [NewtypeD [] n' [] (NormalC n' [(NotStrict, t)]) [''Ord, ''Eq, ''Typeable, ''Arbitrary]]
 
+-- Creates a type synonym for predicae2 instance
 mk_TypeSynonym :: (Name, Integer, [Type]) -> Q [Dec]
 mk_TypeSynonym (n, i, tps) = return [TySynD (mkName ("P"++(nameBase n))) [] t]
     where
