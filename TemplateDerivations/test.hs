@@ -16,12 +16,21 @@ gt = (>)
 lt :: Int -> Int -> Bool
 lt = (<)
 
-$(mk_Predicates [[| lt :: Int -> Int -> Bool |], [| gt :: Int -> Int -> Bool |]])
+$(mk_Predicates [
+                 [| lt :: Int -> Int -> Bool |],
+                 [| gt :: Int -> Int -> Bool |]
+                ])
 
 eq :: Plt -> Plt -> Bool
 eq p1 p2 = (a22 p1) == (a21 p2)
 
-$(mk_Relations [ [| eq :: Plt -> Plt -> Bool |] ])
+eq_ :: Pgt -> Pgt -> Bool
+eq_ p1 p2 = (a22 p1) == (a21 p2)
+
+$(mk_Relations [
+                [| eq :: Plt -> Plt -> Bool |],
+                [| eq_ :: Pgt -> Pgt -> Bool |]
+               ])
 
 -- Insert
 -- Precondition: arg2 is sorted
@@ -45,7 +54,9 @@ sig =
                  baseType (undefined::Plt),
                  names (NamesFor ["p'"] :: NamesFor Plt),
                  baseType (undefined::Peq),
-                 names (NamesFor ["q"] :: NamesFor (Peq))
+                 names (NamesFor ["q'"] :: NamesFor Peq),
+                 baseType (undefined::Peq_),
+                 names (NamesFor ["q"] :: NamesFor Peq_)
                 ],
     constants = [
        constant "isort" (isort :: [Int] -> [Int]),
@@ -58,8 +69,10 @@ sig =
        constant "y"  (coerce . a22 :: Pgt -> Int),
        constant "x'" (coerce . a21 :: Plt -> Int),
        constant "y'" (coerce . a22 :: Plt -> Int),
-       constant "p1" (coerce . a21 :: Peq -> Plt),
-       constant "p2" (coerce . a22 :: Peq -> Plt)
+       constant "p1'" (coerce . a21 :: Peq -> Plt),
+       constant "p2'" (coerce . a22 :: Peq -> Plt),
+       constant "p1" (coerce . a21 :: Peq_ -> Pgt),
+       constant "p2" (coerce . a22 :: Peq_ -> Pgt)   
     ]
    }
 
