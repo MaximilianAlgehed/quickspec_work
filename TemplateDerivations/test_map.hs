@@ -34,6 +34,7 @@ sig =
     constants = [
        constant "lookup" (lookup :: Int -> Map Int Int -> Maybe Int),
        constant "insert" (insert :: Int -> Int -> Map Int Int -> Map Int Int),
+       constant "union" (union :: Map Int Int -> Map Int Int -> Map Int Int),
        constant "x" (coerce . a21 :: Pneq -> Int),
        constant "y"  (coerce . a22 :: Pneq -> Int)
     ]

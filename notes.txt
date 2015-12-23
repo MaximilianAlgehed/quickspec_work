@@ -49,6 +49,8 @@
 
         *: Transformation types in TE (types where we generate a predicate that holds after some transform is applied to x)
 
+        *: Injection functions to the types in TE. Is it really necessary? Can we get around it in the knuth bendix completion?
+
     +: Comparison of TE and FE:
 
         -- Efficiency -- 
