@@ -1,7 +1,11 @@
 -- Todo for the introduction of conditionals in quickSpeck --
 
-~Integrate the predicate derivation into quickspeck
-
 ~Find more examples of FE working
 
+~Test how good/bad an idea it is to automatically generate FE
+
 ~Integrate conjunction in TE into the template haskell implementation of TE
+
+~Investigate the merits of transformation equaitons
+
+~Integrate the template haskell stuff into quickspeck
