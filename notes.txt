@@ -7,24 +7,27 @@
 
     +: Function encoding (FE)
 
-        Make a function that converts data to a format where some predicate always holds
+        Encode predicates as functions like so:
 
-        Tricky for predicates of arity > 1
+            p is the predicate
 
-        One solution for arity > 1 is to do something like:
-            fun :: a -> b -> (a, b)
-        The problem with this is that now we have to add fst and snd to our
-        signature, and it's not very general.
+            p x = True
+
+            whenP y 
+                | p y       = y
+                | otherwise = x
+
+        For predicates of arity n the function whenP goes from an n-tuple to an n-tuple
+
+        When doing this we need to add fst and snd to the signature.
 
         Negative results:
             
-            Using the method of adding functions with airty > 1 as:
-                fun :: a -> b -> (a, b)
+            Using the method of encoding predicates with airty > 1 as:
+                whenP :: (a, b) -> (a, b)
             Doesn't work very well for disjoint sets as an example (as seen in the set_FE demo).
 
-        Possible problems:
-
-            It's slow and we need to compute the basic values.
+        Question, how to generate the value to return for which the predicate always holds?
 
     +: Type encoding: (TE)
 
@@ -38,13 +41,10 @@
                 insert i [] = i:[]
                 insert x (y:is) = y:(insert x is)
                 insert y (x:is) = y:x:is
+            
+            Conjunctions with relationships between the different sub-terms are just a "meta instance" of 
+            normal TE
         
-        Possible problems:
-            Complex relationships involving the same variable can be hard to encode
-
-        Question to investigate:
-            Conjunction of predicates!
-
     +: Things to figure out:
 
         *: Transformation types in TE (types where we generate a predicate that holds after some transform is applied to x)
