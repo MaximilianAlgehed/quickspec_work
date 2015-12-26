@@ -202,7 +202,7 @@
 
     +: Automatic generation of TE types from given predicates:
 
-        We find that the theory of sorted lists can be replaced by a type for sorted lists.
+        We find that the predicate (sorted :: (Ord a) => [a] -> Bool) can be replaced by a type for sorted lists.
 
         In fact any unary predicate over some type T:
             
@@ -213,7 +213,7 @@
             data Predicate = Predicate T
 
             instance Arbitrary where
-                arbitrary = return . Predicate =<< arbitrary `suchThat` predicate
+                arbitrary = fmap Predicate $ arbitrary `suchThat` predicate
 
         This gives us a conversion from unary FE to unary TE.
 
@@ -226,10 +226,8 @@
             data Predicate = Predicate T T'
 
             instance Arbitrary Predicate where
-                arbitrary = 
-                            do
-                                t <- arbitrary
-                                t' <- arbitrary `suchThat` predicate
+                arbitrary = do
+                                (t, t') <- suchThat arbitrary (\(x, y) -> p x y)
                                 return (Predicate t t')
 
         It is important to note that this construction allows encoding of a predicate as a type, in the sense that
@@ -263,10 +261,14 @@
         
         *: FE
 
-        *: Conjunction (disjucntion)
+        *: Automatic generation
+
+        *: Conjunction (disjunction)
 
         *: Transforms
 
         *: Efficiency
 
         *: Soudness
+
+        *: Conclusion 
