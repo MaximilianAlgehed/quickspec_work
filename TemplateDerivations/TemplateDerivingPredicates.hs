@@ -54,7 +54,6 @@ mk_Relations exprs = do
                             get_type :: Exp -> Type
                             get_type (SigE _ t) = t
 
-                            
 -- Creates all the plumbing given a list of quoted signatures
 mk_Predicates :: [ExpQ] -> Q [Dec]
 mk_Predicates exprs = do

@@ -1,5 +1,3 @@
-*: Conditional Lemma Discovery and Resurcion Induction in Hipster
-
 *: people.mpi-inf.mpg.de/~dwand/datasup/draft.pdf
     Automatic Induction inside Superposition
 
@@ -27,14 +25,22 @@
                 whenP :: (a, b) -> (a, b)
             Doesn't work very well for disjoint sets as an example (as seen in the set_FE demo).
 
-        Question, how to generate the value to return for which the predicate always holds?
+        Issues:
+
+            Binary predicates create the issue where you have
+
+            P x y => f x = g x
+
+            Where x and y are in the predicate but y is not used
+
+        Question, how to generate the value to return for which the predicate always holds at compile time?
 
     +: Type encoding: (TE)
 
         Create types that are instantiated such that some predicate always holds
 
         Positive result:
-            Giving quickcheck the insert (as in insertion sort) function, a type for 
+            Giving quickspec the insert (as in insertion sort) function, a type for 
             generating a pair of numbers (x, y) where x > y, and the basic list implementation
             (nil and cons) generates this rather exciting output in almost no time:
 
@@ -44,6 +50,13 @@
             
             Conjunctions with relationships between the different sub-terms are just a "meta instance" of 
             normal TE
+
+        Issues:
+            We get expressions like:
+
+                x /= y => foo x = bar i j
+
+            Where the predicate involves both x and y but the equation does not.
         
     +: Things to figure out:
 
@@ -56,6 +69,22 @@
         -- Efficiency -- 
             An issue with FE is that when we introduce functions of higher airity (e.g. max and min) to 
             encode the predicates we get exponential blowup. Especially as we increase the maxTermSize.
+
+            Interestingly we only have issues with blowup for non-unary predicates when we choose an FE
+            encoding like so:
+                
+                whenP :: a -> b -> ... -> (a, b, ... )
+
+            However the following encoding:
+
+                whenP :: (a, b, ... ) -> (a, b, ... )
+
+            Greatly reduces the blowup.
+
+            The reason why we don't get blowup when we encode using n-tuples is that there is no way to produce
+            an n-tuple (there is no constructor for n-tuples).
+
+            If we were to add a constructor for n-tuples into the signature we would get exponential blowup once again.
 
             A comparison of having max (which is not a pure FE encoding) versus having
             Greater (a TE encoding: newtype P = P {x::Int, y::Int}, (x p) >= (y p))
@@ -70,8 +99,25 @@
                 With Greater for insert with size 9:
                     11000 events
 
-        -- Conjunction -- 
+            Another example of TE vs. FE:
 
+                FE for maps, maxTermSize = 10
+                    == Statistics ==
+                    43855 events created in total (226 schemas, 9397 terms, 31596 creation, 2636 miscellaneous), 28 hooks.
+                    14241 schema test cases for 210 representative schemas.
+                    160563 term test cases for 9314 representative terms.
+                    16 equal schemas and 83 equal terms generated.
+                    200 rewrite rules, 0 extra rewrite rules.
+
+                TE for maps, maxTermSize = 10
+                    == Statistics ==
+                    41027 events created in total (95 schemas, 8591 terms, 29958 creation, 2383 miscellaneous), 25 hooks.
+                    1792 schema test cases for 84 representative schemas.
+                    166903 term test cases for 8405 representative terms.
+                    11 equal schemas and 186 equal terms generated.
+                    211 rewrite rules, 0 extra rewrite rules.
+
+        -- Conjunction -- 
             *: In TE we can do conjunction in the following way:
 
                 Let's say we have some binary (this is not a precondition, it simplifies the example)
@@ -100,7 +146,7 @@
 
                     (p a y) && (p x a) => f y = g x
 
-                N-ary Q types would allow for the same variable to exist in several different predicates,
+                N-ary Q-types would allow for the same variable to exist in several different predicates,
                 creating a conjunction of N terms.
 
                 Furthermore it is conceivable that the Q type does not have to be predicateable over equality.
@@ -162,10 +208,10 @@
             FE risks losing more soundness as predicates which rarely hold will be replaced by their
             "representative". As an example consider "reverseSortedAndLongerThan1000" for lists (this is a stupid example I know),
             this predicate will very rarely hold and if the representative is [] then maybe we discover laws about
-            [] that are not about reverseSorted lists. The solution to this is "more testing".
+            [] that are not about reverseSorted lists. The solution to this is "more testing", maybe...
 
         -- Transforms -- 
-            FE can potentially be more powerfull, as an example it is capable of expressing:
+            FE can potentially be more powerfull than TE, as an example it is capable of expressing:
                 
                 sorted (reverse xs) => ... xs ... (reverse xs) ...
 
@@ -199,6 +245,26 @@
             Unless the transform significantly alters the structure of the expression, in a way which
             would be quantifiable by some predicate. However, then it would be more interesting to 
             just have the predicate type with that predicate.
+
+        -- Completeness --
+            Neither strategy negatively impacts completeness for expressions not involving
+            implications as any equations which would be generated
+            without FE or TE will still be generated with FE or TE in place. Both methods simply add
+            to the existing coverage of QuickSpec. 
+
+            In order to discuss completeness with regards to expressions that do involve implications
+            it would be usefull to consider the increase in terms size needed to generate an expression
+            on the form:
+
+                P x y ... => E_z[x, y, ... ]
+
+            Where E_z[x, y, ... ] is any equation that would have been considered by old QuickSpec for a given 
+            term size z.
+
+            For TE the impact on completeness is linear by a factor n in the number of variable occurances in E_z.
+            This is because any variable i in E_z could be replaced by (x p) where p is a predicate and x
+            is a variable in that predicate. This however is only true for predicate types. For Q-types
+            the size increase is a factor 2n in the number of variable occurances in E_z.
 
     +: Automatic generation of TE types from given predicates:
 
@@ -272,3 +338,51 @@
         *: Soudness
 
         *: Conclusion 
+
+-- Methodology --
+
+    *: Methodology for comparison of FE and TE 
+        There are several qualities by which we measure the performance of FE and TE.
+        Some of the things discussed in the section above are:
+
+            ~ Efficiency
+            ~ Soundness
+            ~ Completeness
+            ~ Power, i.e. Conjunction and Transforms
+            ~ Generality
+
+        These qualities are usefull and relevant as they influence 
+        the usefullness of QuickSpec as a component in HipSpec and
+        as a stand-alone tool:
+
+            +: Power
+            The power of QuickSpec directly increases the power of any system that uses
+            QuickSpec.
+
+            +: Efficiency 
+            Efficiency is highly relevant when working with intractable problems like
+            the ones QuickSpec encounters.
+
+            +: Soundness
+            Soundness is a big issue, it can directly influence the efficiency of systems that use 
+            QuickSpec. Soundness is also relevant for anyone who is using QuickSpec to explore
+            a set of functions (like in the case studies in the papers).
+
+            +: Generality
+            Generality is important as it can help write automated tools that incorporate QuickSpec.
+            Without a general method for finding FE or TE representations of predicates
+            it is difficult to imagine an automated tool that uses predicates in QuickSpec extensively.
+
+            +: Completeness
+            Completeness is of interest for the reason pointed out in the first paper on QuickSpec that
+            missing equations teaches the user of QuickSpec as much about the systems as equations which are
+            present. For this reason the higher the degree of completeness the higher the usefullness
+            of QuickSpec as a stand-alone tool. It can be argued that completeness is not as important from an
+            integration into other systems point of view as those systems can be left to "fill in the blanks".
+            However, if QuickSpec is incomplete then it also directly loses power as a sub-system.
+
+        There are factors and qualities by which one could compare FE and TE which we have
+        not explored:
+
+            ~Existing support in QuickSpec
+            ~Implementation

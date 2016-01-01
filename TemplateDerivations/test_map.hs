@@ -23,21 +23,21 @@ instance Arbitrary (Map Int Int) where
     arbitrary = fmap fromList arbitrary
 
 sig =
-  signature {
-    maxTermSize = Just 10,
-    instances = [
-                 baseType (undefined::Map Int Int),
-                 names (NamesFor ["m"] :: NamesFor (Map Int Int)),
-                 baseType (undefined::Pneq),
-                 names (NamesFor ["p"] :: NamesFor Pneq)
-                ],
-    constants = [
-       constant "lookup" (lookup :: Int -> Map Int Int -> Maybe Int),
-       constant "insert" (insert :: Int -> Int -> Map Int Int -> Map Int Int),
-       constant "union" (union :: Map Int Int -> Map Int Int -> Map Int Int),
-       constant "x" (coerce . a21 :: Pneq -> Int),
-       constant "y"  (coerce . a22 :: Pneq -> Int)
-    ]
-   }
+    signature {
+        maxTermSize = Just 10,
+        instances = [
+                    baseType (undefined::Map Int Int),
+                    names (NamesFor ["m"] :: NamesFor (Map Int Int)),
+                    baseType (undefined::Pneq),
+                    names (NamesFor ["p"] :: NamesFor Pneq)
+                    ],
+        constants = [
+                    constant "lookup" (lookup :: Int -> Map Int Int -> Maybe Int),
+                    constant "insert" (insert :: Int -> Int -> Map Int Int -> Map Int Int),
+                    constant "union" (union :: Map Int Int -> Map Int Int -> Map Int Int),
+                    constant "x" (coerce . a21 :: Pneq -> Int),
+                    constant "y"  (coerce . a22 :: Pneq -> Int)
+                    ]
+    }
 
 main = quickSpec sig

@@ -17,7 +17,7 @@ instance Arbitrary (Map Int Int) where
 
 sig =
   signature {
-    maxTermSize = Just 10,
+    maxTermSize = Just 12,
     instances = [
                  baseType (undefined::Map Int Int),
                  names (NamesFor ["m"] :: NamesFor (Map Int Int))
