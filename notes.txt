@@ -205,7 +205,7 @@
                 and construct additional functions from that set solves the problem of conjunction. 
 
         -- Soundness -- 
-            FE risks losing more soundness as predicates which rarely hold will be replaced by their
+            FE risks losing soundness as predicates which rarely hold will be replaced by their
             "representative". As an example consider "reverseSortedAndLongerThan1000" for lists (this is a stupid example I know),
             this predicate will very rarely hold and if the representative is [] then maybe we discover laws about
             [] that are not about reverseSorted lists. The solution to this is "more testing", maybe...
@@ -247,11 +247,6 @@
             just have the predicate type with that predicate.
 
         -- Completeness --
-            Neither strategy negatively impacts completeness for expressions not involving
-            implications as any equations which would be generated
-            without FE or TE will still be generated with FE or TE in place. Both methods simply add
-            to the existing coverage of QuickSpec. 
-
             In order to discuss completeness with regards to expressions that do involve implications
             it would be usefull to consider the increase in terms size needed to generate an expression
             on the form:
@@ -261,10 +256,25 @@
             Where E_z[x, y, ... ] is any equation that would have been considered by old QuickSpec for a given 
             term size z.
 
-            For TE the impact on completeness is linear by a factor n in the number of variable occurances in E_z.
+            Neither strategy negatively impacts completeness for expressions not involving
+            implications as any equations which would be generated
+            without FE or TE will still be generated with FE or TE in place. Both methods simply add
+            to the existing coverage of QuickSpec. 
+
+            For TE the impact on completeness is linear by a factor 1 in the number of variable occurances in E_z.
             This is because any variable i in E_z could be replaced by (x p) where p is a predicate and x
             is a variable in that predicate. This however is only true for predicate types. For Q-types
-            the size increase is a factor 2n in the number of variable occurances in E_z.
+            the size increase is a factor 2 in the number of variable occurances in E_z. However, this factor 2 can 
+            be reduced to 1 if the access functions from Q-types to the variable types are combined.
+
+            For FE the impact on completeness is dependent on the implementation. It is possible to make the overhead
+            linear by a factor 1 in the number of variable occurances in E_z. This is done by having multiple when-functions
+            per predicate like so: 
+                
+                whenP :: (a, b) -> (a, b)
+
+                fstwhenP = fst . whenP
+                sndwhenP = snd . whenP
 
     +: Automatic generation of TE types from given predicates:
 
@@ -385,4 +395,4 @@
         not explored:
 
             ~Existing support in QuickSpec
-            ~Implementation
+            ~Ease of implementation

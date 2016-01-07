@@ -18,14 +18,12 @@ wheneqlen (xs, ys)
 
 sig =
     signature {
-        maxTermSize = Just 10,
+        maxTermSize = Just 7,
         constants = [
                     constant "zip" (zip :: [Int] -> [Int] -> [(Int, Int)]),
                     constant "++" ((++) :: [Int] -> [Int] -> [Int]),
-                    constant "length" (length :: [Int] -> Int),
-                    constant "fst" (fst :: ([Int], [Int]) -> [Int]),
-                    constant "snd" (snd :: ([Int], [Int]) -> [Int]),
-                    constant "whenSameLength" (wheneqlen :: ([Int], [Int]) -> ([Int], [Int]))
+                    constant "fstwhenSameLength" ((fst . wheneqlen) :: ([Int], [Int]) -> [Int]),
+                    constant "sndwhenSameLength" ((snd . wheneqlen) :: ([Int], [Int]) -> [Int])
                     ]
     }
 

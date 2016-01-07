@@ -44,6 +44,6 @@ sig =
             constant "x" (coerce . x :: Predicate2 IntWrapper IntWrapper -> Int),
             constant "y" (coerce . y :: Predicate2 IntWrapper IntWrapper -> Int)
         ]
-   }
+    }
 
 main = quickSpec sig

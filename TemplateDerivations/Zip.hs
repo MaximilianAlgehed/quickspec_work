@@ -23,7 +23,7 @@ $(mk_Predicates [
 
 sig =
     signature {
-        maxTermSize = Just 10,
+        maxTermSize = Just 7,
         instances = [
                     baseType (undefined::Peqlen),
                     names (NamesFor ["p"] :: NamesFor Peqlen)
