@@ -6,6 +6,7 @@ import Language.Haskell.TH
 import Test.QuickCheck
 import Data.Typeable
 import Data.List
+import System.IO.Unsafe
 
 -- Get the number of interesting types
 type_count :: Type -> Integer
@@ -31,9 +32,14 @@ mk_When_Function expr working =
         s <- expr
         case s of
             (SigE (VarE name) types) -> do
-                t <- working --runIO (fmap head $ sample' (suchThat arbitrary p)) -- maybe we can do some magic here to get the Exp?
-                return ([FunD (mkName ("when_"++(nameBase name))) [(Clause [tup_patterns (type_count' types)] (body t) [])]] ++ accs)
+                t <- working 
+                --t <- unsafe_hack
+                return ([FunD (mkName ("when_"++(nameBase name))) [(Clause [tup_patterns (type_count' types)] (body t) [])]] ++ accs ++ elems)
                 where
+                    unwrap = return $ LamE [tup_patterns (type_count' types)] (applications (type_count' types))
+
+                    unsafe_hack = [| head $ unsafePerformIO $ sample' (arbitrary `suchThat` $(unwrap)) |]
+                    
                     tup_patterns 1 = VarP (mkName "x1")
                     tup_patterns n = TupP [VarP (mkName ("x"++(show k))) | k <- [1..n]]
                     
@@ -45,5 +51,6 @@ mk_When_Function expr working =
                     applications k = AppE (applications (k-1)) (VarE (mkName ("x"++(show k))))
                     whenNot = (NormalG (applications (type_count' types)), tup_exprs (type_count' types))
                     ow t = (NormalG (ConE (mkName "True")), t)    
-                    accs = [FunD (mkName ("when_"++(nameBase name)++(show n))) [Clause [tup_patterns (type_count' types)] (NormalB (VarE (mkName ("x"++(show n))))) []] | n <- [1..(type_count' types)]]
-                _ -> return []
+                    accs = [FunD (mkName ("acc"++(show n))) [Clause [tup_patterns (type_count' types)] (NormalB (VarE (mkName ("x"++(show n))))) []] | n <- [1..(type_count' types)]]
+                    elems = [FunD (mkName ("when_"++(nameBase name)++(show n))) [Clause [] (NormalB (AppE (AppE (VarE (mkName ".")) (VarE (mkName ("acc"++(show n))))) (VarE (mkName ("when_"++(nameBase name)))))) []] | n <- [1..(type_count' types)]]
+            _ -> return []
