@@ -1,6 +1,6 @@
 -- Todo for the introduction of conditionals in quickSpeck --
 
-    ~Test how good/bad an idea it is to automatically generate FE
+    ~Figure out a way to generate the base value for FE representations in template haskell
 
     ~Figure out conjunctions in FE
 
