@@ -1,8 +1,6 @@
 -- Todo for the introduction of conditionals in quickSpeck --
 
-    ~Convert the FE examples to the scheme that maximizes completeness
-
-    ~Get the twee branch working
+    ~Test how good/bad an idea it is to automatically generate FE
 
     ~Figure out conjunctions in FE
 
@@ -10,7 +8,7 @@
 
     ~Do the mathematics on the completeness of FE for conjunctions of predicates
 
-    ~Test how good/bad an idea it is to automatically generate FE
+    ~Get the twee branch working
 
     ~Integrate conjunction in TE into the template haskell implementation of TE
 

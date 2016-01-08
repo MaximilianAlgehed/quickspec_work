@@ -30,13 +30,14 @@ is_sig :: Exp -> Bool
 is_sig (SigE _ _) = True
 is_sig _ = False
 
--- Makes conjunction predicate types based on the relations
+-- Makes relation predicate types based on the relations
 mk_Relations :: [ExpQ] -> Q [Dec]
 mk_Relations exprs = do
                         exprs' <- fmap (filter is_sig) $ sequence exprs
+                        predicate_types <- fmap concat $ sequence $ map (mk_Predicate_Types . (\x -> x-1)) $ get_type_counts exprs'
                         newtypes <- fmap concat $ sequence $ map mk_Newtypes $ nub $ get_types_per_expr exprs'
                         synonyms <- fmap concat $ sequence $ map mk_TypeSynonym $ get_names_per_expr exprs'
-                        return (synonyms++newtypes)
+                        return (predicate_types++synonyms++newtypes)
                         where
                             get_names_per_expr :: [Exp] -> [(Name, Integer, [Type])]
                             get_names_per_expr [] = []
@@ -112,11 +113,14 @@ mk_TypeSynonym (n, i, tps) = return [TySynD (mkName ("P"++(nameBase n))) [] t]
 
 -- Creates the entire predicate derivation structure when spliced
 mk_Predicate_Types :: Integer -> Q [Dec]
-mk_Predicate_Types n =
-     return [mk_Predicate_N n,
-             mk_Predicateable_N n,
-             mk_Arbitrary_Instance_Predicate_N n
-            ]
+mk_Predicate_Types n = do
+     m <- lookupTypeName ("Predicate"++(show n))
+     case m of
+        Nothing -> return [mk_Predicate_N n,
+                           mk_Predicateable_N n,
+                           mk_Arbitrary_Instance_Predicate_N n
+                   ]
+        _ -> return []
 
 -- Create names [x1, x2, ..., xn]
 make_names :: Integer -> [Name]
