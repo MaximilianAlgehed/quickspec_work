@@ -1,19 +1,19 @@
 -- Todo for the introduction of conditionals in quickSpeck --
 
-~Get the twee branch working
+    ~Convert the FE examples to the scheme that maximizes completeness
 
-~Figure out conjunctions in FE
+    ~Get the twee branch working
 
-~Give a good definition of completeness for FE and TE
+    ~Figure out conjunctions in FE
 
-~Do the mathematics on the completeness of FE for conjunctions of predicates
+    ~Give a good definition of completeness for FE and TE
 
-~Find more examples of FE working
+    ~Do the mathematics on the completeness of FE for conjunctions of predicates
 
-~Test how good/bad an idea it is to automatically generate FE
+    ~Test how good/bad an idea it is to automatically generate FE
 
-~Integrate conjunction in TE into the template haskell implementation of TE
+    ~Integrate conjunction in TE into the template haskell implementation of TE
 
-~Investigate the merits of transformation types
+    ~Investigate the merits of transformation types
 
-~Integrate the template haskell stuff into quickspeck
+    ~Integrate the template haskell stuff into quickspeck

@@ -62,7 +62,7 @@
 
         *: Transformation types in TE (types where we generate a predicate that holds after some transform is applied to x)
 
-        *: Injection functions to the types in TE. Is it really necessary? Can we get around it in the knuth bendix completion?
+        *: Injection functions to the types in TE. Is it really necessary? Can we get around it in the knuth-bendix completion?
 
     +: Comparison of TE and FE:
 
@@ -269,7 +269,7 @@
 
             For FE the impact on completeness is dependent on the implementation. It is possible to make the overhead
             linear by a factor 1 in the number of variable occurances in E_z. This is done by having multiple when-functions
-            per predicate like so: 
+            per predicate: 
                 
                 whenP :: (a, b) -> (a, b)
 
@@ -320,7 +320,7 @@
             instance Predicatable A where
                 getPredicate = predicate
 
-        Now we can automagically derive:
+        Now we can derive:
 
             newtype Predicate a = P a
 
@@ -339,7 +339,7 @@
 
         *: Automatic generation
 
-        *: Conjunction (disjunction)
+        *: Conjunction
 
         *: Transforms
 
@@ -365,10 +365,6 @@
         the usefullness of QuickSpec as a component in HipSpec and
         as a stand-alone tool:
 
-            +: Power
-            The power of QuickSpec directly increases the power of any system that uses
-            QuickSpec.
-
             +: Efficiency 
             Efficiency is highly relevant when working with intractable problems like
             the ones QuickSpec encounters.
@@ -385,14 +381,17 @@
 
             +: Completeness
             Completeness is of interest for the reason pointed out in the first paper on QuickSpec that
-            missing equations teaches the user of QuickSpec as much about the systems as equations which are
+            missing equations teaches the user as much about the systems as the equations which are
             present. For this reason the higher the degree of completeness the higher the usefullness
             of QuickSpec as a stand-alone tool. It can be argued that completeness is not as important from an
             integration into other systems point of view as those systems can be left to "fill in the blanks".
             However, if QuickSpec is incomplete then it also directly loses power as a sub-system.
+            
+            +: Power
+            The power of QuickSpec is directly related to the completeness of QuickSpec.
 
         There are factors and qualities by which one could compare FE and TE which we have
         not explored:
 
-            ~Existing support in QuickSpec
-            ~Ease of implementation
+            ~ Existing support in QuickSpec
+            ~ Ease of implementation

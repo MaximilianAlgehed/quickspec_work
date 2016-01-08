@@ -17,7 +17,7 @@ instance Arbitrary (Map Int Int) where
 
 sig =
   signature {
-    maxTermSize = Just 12,
+    maxTermSize = Just 10,
     instances = [
                  baseType (undefined::Map Int Int),
                  names (NamesFor ["m"] :: NamesFor (Map Int Int))
@@ -26,9 +26,8 @@ sig =
        constant "lookup" (lookup :: Int -> Map Int Int -> Maybe Int),
        constant "insert" (insert :: Int -> Int -> Map Int Int -> Map Int Int),
        constant "union" (union :: Map Int Int -> Map Int Int -> Map Int Int),
-       constant "whenDifferent" whenDifferent,
-       constant "fst" (fst :: (Int, Int) -> Int),
-       constant "snd" (snd :: (Int, Int) -> Int)
+       constant "a" (fst . whenDifferent),
+       constant "b" (snd . whenDifferent)
     ]
    }
 

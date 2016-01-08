@@ -15,6 +15,11 @@ isort :: [Int] -> [Int]
 isort [] = []
 isort (x:xs) = isert x (isort xs)
 
+whenGT :: (Int, Int) -> (Int, Int)
+whenGT (x, y)
+    | x > y = (x, y)
+    | otherwise = (1, 0)
+
 sig =
   signature {
     maxTermSize = Just 7,
@@ -23,8 +28,8 @@ sig =
        constant "isert" (isert :: Int -> [Int] -> [Int]),
        constant "[]" ([] :: [Int]),
        constant ":" ((:) :: Int -> [Int] -> [Int]),
-       constant "max" (max :: Int -> Int -> Int),
-       constant "min" (min :: Int -> Int -> Int)
+       constant "a" (fst . whenGT),
+       constant "b" (snd . whenGT)
     ]
    }
 
