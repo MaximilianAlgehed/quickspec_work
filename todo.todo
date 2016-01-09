@@ -1,5 +1,9 @@
 -- Todo for the introduction of conditionals in quickSpeck --
 
+    ~Implement CE
+
+    ~Measure run time and memory consumption of FE, TE, and CE
+
     ~Figure out a way to generate the base value for FE representations in template haskell
 
     ~Figure out conjunctions in FE
@@ -7,6 +11,8 @@
     ~Give a good definition of completeness for FE and TE
 
     ~Do the mathematics on the completeness of FE for conjunctions of predicates
+
+    ~Figure out conjunction in CE
 
     ~Get the twee branch working
 

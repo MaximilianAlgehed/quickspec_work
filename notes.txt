@@ -58,49 +58,59 @@
 
             Where the predicate involves both x and y but the equation does not.
         
+    +: Combined encoding (CE)
+
+        Motivated by the inefficiency of generating constrained random data with uniform distribution faced by TE
+        and the loss of soundness of having a go-to answer in FE we present the Combined Encoding (CE).
+
+        In short CE is FE but with an extra argument, a TE representation of the predicate:
+
+            whenP :: (A, B, Predicate A B) -> (A, B)
+            whenP (x, y, z)
+                | p x y = (x, y)
+                | otherwise = z
+
+        Becuase of haskells call by need semantics this works out more efficient than TE.
+
     +: Things to figure out:
 
         *: Transformation types in TE (types where we generate a predicate that holds after some transform is applied to x)
 
         *: Injection functions to the types in TE. Is it really necessary? Can we get around it in the knuth-bendix completion?
 
-    +: Comparison of TE and FE:
+    +: Comparison of TE, FE, and CE:
 
         -- Efficiency -- 
-            An issue with FE is that when we introduce functions of higher airity (e.g. max and min) to 
-            encode the predicates we get exponential blowup. Especially as we increase the maxTermSize.
+            *: FE
+                An issue with FE is that when we introduce functions of higher airity (e.g. max and min) to 
+                encode the predicates we get exponential blowup. Especially as we increase the maxTermSize.
 
-            Interestingly we only have issues with blowup for non-unary predicates when we choose an FE
-            encoding like so:
-                
-                whenP :: a -> b -> ... -> (a, b, ... )
+                Interestingly we only have issues with blowup for non-unary predicates when we choose an FE
+                encoding like so:
+                    
+                    whenP :: a -> b -> ... -> (a, b, ... )
 
-            However the following encoding:
+                However the following encoding:
 
-                whenP :: (a, b, ... ) -> (a, b, ... )
+                    whenP :: (a, b, ... ) -> (a, b, ... )
 
-            Greatly reduces the blowup.
+                Greatly reduces the blowup.
 
-            The reason why we don't get blowup when we encode using n-tuples is that there is no way to produce
-            an n-tuple (there is no constructor for n-tuples).
+                The reason why we don't get blowup when we encode using n-tuples is that there is no way to produce
+                an n-tuple (there is no constructor for n-tuples).
 
-            If we were to add a constructor for n-tuples into the signature we would get exponential blowup once again.
+                If we were to add a constructor for n-tuples into the signature we would get exponential blowup once again.
 
-            A comparison of having max (which is not a pure FE encoding) versus having
-            Greater (a TE encoding: newtype P = P {x::Int, y::Int}, (x p) >= (y p))
-            for encoding the relation >=, both in the "foreground" theory:
+            *: TE
+                One of the problems with TE is the issue of generating constrained random data with uniform distribution
+                outlined by Koen's paper.
 
-                With max for insert with size 7:
-                    1609 events 
-                with max for insert with size 9:
-                    33000 events
-                With Greater for insert with size 7:
-                    990 events
-                With Greater for insert with size 9:
-                    11000 events
+            *: CE
+                CE tries to fix the issue of generating contrained random data with uniform distribution by
+                using FE for "as long as possible". The issues faced by FE remain but the inefficencies faced
+                by TE are minimized.
 
-            Another example of TE vs. FE:
-
+            *: Empirical data
                 FE for maps, maxTermSize = 10
                     == Statistics ==
                     43855 events created in total (226 schemas, 9397 terms, 31596 creation, 2636 miscellaneous), 28 hooks.
@@ -337,6 +347,8 @@
         
         *: FE
 
+        *: CE
+
         *: Automatic generation
 
         *: Conjunction
@@ -395,3 +407,10 @@
 
             ~ Existing support in QuickSpec
             ~ Ease of implementation
+
+        The reson these things were not considered in more detail are the following:
+
+            +: Ease of implementation
+            The primary motivation for this work is to increase the power of QuickSpec as a component
+            in larger theorem proving systems. Therefore the implementation specific details are 
+            highly dependent of the implementation of such tools.
