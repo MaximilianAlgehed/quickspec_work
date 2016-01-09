@@ -1,5 +1,14 @@
-*: people.mpi-inf.mpg.de/~dwand/datasup/draft.pdf
-    Automatic Induction inside Superposition
+-- Motivation --
+
+    As outlined in [QuickSpec 1&2, Conditional Lemma Discovery (Irene and Moa)] there is a need for
+    QuickSpec to generate conditional equations. The need for conditional equations is motivated by
+    two different use cases for QuickSpec. The first use case is QuickSpec as a Conjecture/Lemma discovery
+    tool in use by other systems (mainly Hipster and Isabelle). The second use case is QuickSpec as 
+    a stand alone tool for proram specification and verification. In the first case conditional equations
+    are necessary to prove certain algorithms correct. In the second case one of the more compelling
+    reasons why we would want to find conditional equations in QuickSpec is the clean discovery of
+    partial functions.
+
 
 -- Pros and cons of different methods for encoding constraints in QuickSpec --
 
@@ -70,7 +79,7 @@
                 | p x y = (x, y)
                 | otherwise = z
 
-        Becuase of haskells call by need semantics this works out more efficient than TE.
+        Becuase of haskells call by need semantics this should work out more efficient than TE.
 
     +: Things to figure out:
 
@@ -341,29 +350,10 @@
 
         Even more generally, using template haskell, we can generate these instances for any type.
 
-    +: List of topics:
-
-        *: TE
-        
-        *: FE
-
-        *: CE
-
-        *: Automatic generation
-
-        *: Conjunction
-
-        *: Transforms
-
-        *: Efficiency
-
-        *: Soudness
-
-        *: Conclusion 
 
 -- Methodology --
 
-    *: Methodology for comparison of FE and TE 
+    *: Methodology for comparison of FE, TE, and CE
         There are several qualities by which we measure the performance of FE and TE.
         Some of the things discussed in the section above are:
 
@@ -405,7 +395,6 @@
         There are factors and qualities by which one could compare FE and TE which we have
         not explored:
 
-            ~ Existing support in QuickSpec
             ~ Ease of implementation
 
         The reson these things were not considered in more detail are the following:
@@ -414,3 +403,27 @@
             The primary motivation for this work is to increase the power of QuickSpec as a component
             in larger theorem proving systems. Therefore the implementation specific details are 
             highly dependent of the implementation of such tools.
+
+
+-- List of topics --
+    *: Introduction and motivation
+
+    *: Methodology
+
+    *: TE
+    
+    *: FE
+
+    *: CE
+
+    *: Automatic generation
+
+    *: Conjunction
+
+    *: Transforms
+
+    *: Efficiency
+
+    *: Soudness
+
+    *: Conclusion 
