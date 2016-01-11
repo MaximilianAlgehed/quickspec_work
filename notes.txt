@@ -24,15 +24,11 @@
                 | p y       = y
                 | otherwise = x
 
-        For predicates of arity n the function whenP goes from an n-tuple to an n-tuple
+        For predicates of arity n there are two different approaches to whenP:
 
-        When doing this we need to add fst and snd to the signature.
+            whenP :: A -> B -> (A, B) -- arity approach
 
-        Negative results:
-            
-            Using the method of encoding predicates with airty > 1 as:
-                whenP :: (a, b) -> (a, b)
-            Doesn't work very well for disjoint sets as an example (as seen in the set_FE demo).
+            whenP :: (A, B) -> (A, B) -- n-tuple approach
 
         Issues:
 
@@ -79,13 +75,10 @@
                 | p x y = (x, y)
                 | otherwise = z
 
-        Becuase of haskells call by need semantics this should work out more efficient than TE.
+        Becuase of haskell's call by need semantics this should work out more efficient than TE.
 
-    +: Things to figure out:
-
-        *: Transformation types in TE (types where we generate a predicate that holds after some transform is applied to x)
-
-        *: Injection functions to the types in TE. Is it really necessary? Can we get around it in the knuth-bendix completion?
+        The naive approach for transformations would be to use the transformation type 
+        along with the n-tuple constructor.
 
     +: Comparison of TE, FE, and CE:
 
@@ -136,8 +129,12 @@
                     11 equal schemas and 186 equal terms generated.
                     211 rewrite rules, 0 extra rewrite rules.
 
+                The differences in execution time for small examples is limited and the ordering
+                is as expected FE < CE < TE. Where the difference between CE and TE is much greater than
+                the difference between FE and CE.
+
         -- Conjunction -- 
-            *: In TE we can do conjunction in the following way:
+            *: TE
 
                 Let's say we have some binary (this is not a precondition, it simplifies the example)
                 predicate type P.
@@ -171,7 +168,7 @@
                 Furthermore it is conceivable that the Q type does not have to be predicateable over equality.
                 Any relation between terms could be used.
 
-            *: FE deals "well" with the conjunction of predicates: (But it is a very hard problem!)
+            *: FE
                 
                 P x && Q x => x <*> y = ...
                 gets encoded as
@@ -224,10 +221,14 @@
                 and construct additional functions from that set solves the problem of conjunction. 
 
         -- Soundness -- 
+            Soundness is directly related to how uniform the test data is.
+
             FE risks losing soundness as predicates which rarely hold will be replaced by their
             "representative". As an example consider "reverseSortedAndLongerThan1000" for lists (this is a stupid example I know),
             this predicate will very rarely hold and if the representative is [] then maybe we discover laws about
             [] that are not about reverseSorted lists. The solution to this is "more testing", maybe...
+
+            CE is a good approach for fixing this soundness issue.
 
         -- Transforms -- 
             FE can potentially be more powerfull than TE, as an example it is capable of expressing:
@@ -264,6 +265,32 @@
             Unless the transform significantly alters the structure of the expression, in a way which
             would be quantifiable by some predicate. However, then it would be more interesting to 
             just have the predicate type with that predicate.
+
+            Transforms in FE ae more difficult for arity > 1 functions. As outline below, if the n-tuple
+            constructor is added the completeness of FE is negatively impacted.
+
+            Transforms in FE are actually not as straight forward as they may seem. Consider the following example:
+                
+                whenPalindrome :: [A] -> [A]
+                whenPalindrome xs 
+                    | isPalindrome xs = xs
+                    | otherwise      = [0]
+
+            One would expect the following to hold:
+
+                isPalindrome (reverse xs) => xs == (reverse xs)
+
+            Which is expressed by the following equation:
+                
+                (whenPalindrome (reverse xs)) == xs
+
+            Which is of course not true.
+            
+            Of course in the above example QuickSpec would find the equation:
+
+                reverse (whenPalindrome xs) == whenPalindrome xs
+
+            instead. However this may not always be the case.
 
         -- Completeness --
             In order to discuss completeness with regards to expressions that do involve implications
@@ -348,7 +375,7 @@
 
         An example of this is in the derived_predicate demo.
 
-        Even more generally, using template haskell, we can generate these instances for any type.
+        Even more generally, using template haskell, we can generate these instances for any arity.
 
 
 -- Methodology --
@@ -406,7 +433,10 @@
 
 
 -- List of topics --
-    *: Introduction and motivation
+
+    *: Introduction
+   
+    *: Motivation
 
     *: Methodology
 

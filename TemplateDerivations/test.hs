@@ -47,32 +47,32 @@ isort (x:xs) = isert x (isort xs)
 
 sig =
   signature {
-    maxTermSize = Just 7,
+    maxTermSize = Just 12,
     instances = [
                  baseType (undefined::Pgt),
-                 names (NamesFor ["p"] :: NamesFor Pgt),
+                 names (NamesFor ["p"] :: NamesFor Pgt){-,
                  baseType (undefined::Plt),
                  names (NamesFor ["p'"] :: NamesFor Plt),
                  baseType (undefined::Peq),
                  names (NamesFor ["q'"] :: NamesFor Peq),
                  baseType (undefined::Peq_),
-                 names (NamesFor ["q"] :: NamesFor Peq_)
+                 names (NamesFor ["q"] :: NamesFor Peq_)-}
                 ],
     constants = [
        constant "isort" (isort :: [Int] -> [Int]),
        constant "isert" (isert :: Int -> [Int] -> [Int]),
        constant "[]" ([] :: [Int]),
        constant ":" ((:) :: Int -> [Int] -> [Int]),
-       constant "T" (True :: Bool),
-       constant "<" ((<) :: Int -> Int -> Bool),
+--       constant "T" (True :: Bool),
+--       constant "<" ((<) :: Int -> Int -> Bool),
        constant "x" (coerce . a21 :: Pgt -> Int),
-       constant "y"  (coerce . a22 :: Pgt -> Int),
+       constant "y"  (coerce . a22 :: Pgt -> Int){-,
        constant "x'" (coerce . a21 :: Plt -> Int),
        constant "y'" (coerce . a22 :: Plt -> Int),
        constant "p1'" (coerce . a21 :: Peq -> Plt),
        constant "p2'" (coerce . a22 :: Peq -> Plt),
        constant "p1" (coerce . a21 :: Peq_ -> Pgt),
-       constant "p2" (coerce . a22 :: Peq_ -> Pgt)   
+       constant "p2" (coerce . a22 :: Peq_ -> Pgt) -}  
     ]
    }
 

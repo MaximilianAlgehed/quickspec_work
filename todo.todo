@@ -1,6 +1,10 @@
 -- Todo for the introduction of conditionals in quickSpeck --
 
-    ~Implement CE
+    ~Find a good example of when FE does not work for transforms
+
+    ~Implement CE in template haskell
+
+    ~Check with Nick about currying the injections into CE
 
     ~Measure run time and memory consumption of FE, TE, and CE
 
@@ -14,6 +18,8 @@
 
     ~Figure out conjunction in CE
 
+    ~Do the mathematics on the completeness of CE for conjunctions of predicates
+
     ~Get the twee branch working
 
     ~Integrate conjunction in TE into the template haskell implementation of TE
@@ -21,3 +27,7 @@
     ~Investigate the merits of transformation types
 
     ~Integrate the template haskell stuff into quickspeck
+
+    ~Do the mathematics for the efficiency of the three approaches
+
+    ~Do the mathematics for the uniformity (soundness) of the three approaches 

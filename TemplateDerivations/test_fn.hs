@@ -25,7 +25,7 @@ isort (x:xs) = isert x (isort xs)
 
 sig =
   signature {
-    maxTermSize = Just 10,
+    maxTermSize = Just 12,
     constants = [
        constant "isort" (isort :: [Int] -> [Int]),
        constant "isert" (isert :: Int -> [Int] -> [Int]),
