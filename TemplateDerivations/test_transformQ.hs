@@ -18,9 +18,9 @@ newtype LInt = LInt [Int] deriving (Typeable, Arbitrary, Ord, Eq)
 $(mk_Predicates [[| isPalindrome :: LInt -> Bool |]])
 
 isReverse :: LInt -> PisPalindrome -> Bool
-isReverse xs pis = (coerce xs :: [Int]) == ((coerce . a11) pis :: [Int])
+isReverse xs pis = (reverse (coerce xs :: [Int])) == ((coerce . a11) pis :: [Int])
 
-$(mk_Relations [[| isReverse :: LInt -> PisPalindrome -> Bool|]])
+$(mk_Predicates [[| isReverse :: LInt -> PisPalindrome -> Bool|]])
 
 sig =
   signature {

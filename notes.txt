@@ -10,7 +10,7 @@
     partial functions.
 
 
--- Pros and cons of different methods for encoding constraints in QuickSpec --
+-- Different methods for encoding constraints in QuickSpec --
 
     +: Function encoding (FE)
 
@@ -78,11 +78,14 @@
                     
                 T-types represent a predicate applied to a transformation (a mapping) of
                 some data.
+            
+                T-types can be implemented like this:
 
-                In fact, T-types can be implemented using only Q-types. However, this
-                approach is very slow and only favorable for it's simplicity. However, the method
-                would be fine if there were a fast way to generate constraind random data
-                with uniform distribution.
+                    T x (t x)
+                        where
+                            x <- arbitrary `suchThat` (p . t) 
+
+                Which, given fast generation of uniform constrained random data would be very fast.
 
     +: Combined encoding (CE)
 
@@ -321,7 +324,7 @@
                     | p a = Left a
                     | otherwise = Right tab
 
-            However, the output type is Either which causes issues. This solution is not complete.
+            However, the output type is Either which causes issues. This solution is not finished.
             
         -- Completeness --
             In order to discuss completeness with regards to expressions that do involve implications
@@ -468,6 +471,19 @@
             highly dependent of the implementation of such tools.
 
 
+-- Future work --
+
+    It would be nice to come up with a QuickSpec DSL in which we can express the subtelties of these constrained data
+    in a way that would allow us to come up with optimal orders in which to generate the data.
+
+
+-- Related work --
+
+    As of yet we don't have a clear list of related work. Most work on constrained equations deal with constrained equations
+    in completion or (and) superposition. Which is not what we are trying to do (however, that research is usefull as it could be used 
+    in conjunction with this work to help reason about the equations found by QuickSpec using our method).
+
+
 -- List of topics --
 
     *: Introduction
@@ -493,3 +509,7 @@
     *: Soudness
 
     *: Conclusion 
+
+    *: Future work
+
+    *: Related work?

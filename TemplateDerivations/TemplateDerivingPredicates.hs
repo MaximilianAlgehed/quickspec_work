@@ -30,31 +30,6 @@ is_sig :: Exp -> Bool
 is_sig (SigE _ _) = True
 is_sig _ = False
 
--- Makes relation predicate types based on the relations
-mk_Relations :: [ExpQ] -> Q [Dec]
-mk_Relations exprs = do
-                        exprs' <- fmap (filter is_sig) $ sequence exprs
-                        predicate_types <- fmap concat $ sequence $ map (mk_Predicate_Types . (\x -> x-1)) $ get_type_counts exprs'
-                        newtypes <- fmap concat $ sequence $ map mk_Newtypes $ nub $ get_types_per_expr exprs'
-                        synonyms <- fmap concat $ sequence $ map mk_TypeSynonym $ get_names_per_expr exprs'
-                        return (predicate_types++synonyms++newtypes)
-                        where
-                            get_names_per_expr :: [Exp] -> [(Name, Integer, [Type])]
-                            get_names_per_expr [] = []
-                            get_names_per_expr ((SigE (VarE n) t):xs) = (n, (type_count t) - 1, get_types t):(get_names_per_expr xs)
-                        
-                            get_types_per_expr :: [Exp] -> [(Name, [Type])]
-                            get_types_per_expr = (map  get_name_and_types) . (filter is_sig)
-
-                            get_name_and_types :: Exp -> (Name, [Type])
-                            get_name_and_types (SigE (VarE n) t) = (n, ((reverse . tail . reverse)  (get_types t)))
-
-                            get_type_counts :: [Exp] -> [Integer]
-                            get_type_counts xs = filter (>0) $ nub $ map (type_count . get_type) $ filter is_sig xs
-
-                            get_type :: Exp -> Type
-                            get_type (SigE _ t) = t
-
 -- Creates all the plumbing given a list of quoted signatures
 mk_Predicates :: [ExpQ] -> Q [Dec]
 mk_Predicates exprs = do
