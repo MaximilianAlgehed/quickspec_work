@@ -79,9 +79,11 @@
                 T-types represent a predicate applied to a transformation (a mapping) of
                 some data.
 
-                In fact, T-types can be implemented using only Q-types. However, it is remarkably slow
-                and there are better solutions.
-        
+                In fact, T-types can be implemented using only Q-types. However, this
+                approach is very slow and only favorable for it's simplicity. However, the method
+                would be fine if there were a fast way to generate constraind random data
+                with uniform distribution.
+
     +: Combined encoding (CE)
 
         Motivated by the inefficiency of generating constrained random data with uniform distribution faced by TE
@@ -350,6 +352,11 @@
 
                 fstwhenP = fst . whenP
                 sndwhenP = snd . whenP
+
+
+            However, completeness extends beyond the size of the expressions. There are equations which
+            FE and CE can't find but TE can. These equations are primarily the ones which require predicates
+            of transforms.
 
     +: Automatic generation of TE types from given predicates:
 

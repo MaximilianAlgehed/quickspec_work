@@ -16,7 +16,9 @@ sig =
     maxTermSize = Just 12,
     constants = [
        constant "P" when_isPalindrome,
-       constant "reverse" (reverse :: [Int] -> [Int])
+       constant "reverse" (reverse :: [Int] -> [Int]),
+       constant "len1" ((\x -> (length x) <= 1) :: [Int] -> Bool),
+       constant "T" True
     ]
    }
 
