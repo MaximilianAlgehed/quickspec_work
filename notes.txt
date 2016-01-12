@@ -62,6 +62,25 @@
                 x /= y => foo x = bar i j
 
             Where the predicate involves both x and y but the equation does not.
+
+        There are three types in TE:
+        
+            P-types:
+
+                P-types are the basic idea in TE
+
+            Q-types
+
+                Q-types represents two or more predicates which's free variables
+                have some relation.
+
+            T-types
+                    
+                T-types represent a predicate applied to a transformation (a mapping) of
+                some data.
+
+                In fact, T-types can be implemented using only Q-types. However, it is remarkably slow
+                and there are better solutions.
         
     +: Combined encoding (CE)
 
@@ -105,7 +124,7 @@
 
             *: TE
                 One of the problems with TE is the issue of generating constrained random data with uniform distribution
-                outlined by Koen's paper.
+                outlined by Koen's paper. TE will only become viable if this problem can be solved efficiently.
 
             *: CE
                 CE tries to fix the issue of generating contrained random data with uniform distribution by
@@ -292,6 +311,16 @@
 
             instead. However this may not always be the case.
 
+            Perhaps there is a solution for this issue in a modified version of CE given that
+            we have a transformation type in TE (T-types):
+
+                whenP :: A -> (T A B) -> Either B (T A B)
+                whenP a tab
+                    | p a = Left a
+                    | otherwise = Right tab
+
+            However, the output type is Either which causes issues. This solution is not complete.
+            
         -- Completeness --
             In order to discuss completeness with regards to expressions that do involve implications
             it would be usefull to consider the increase in terms size needed to generate an expression

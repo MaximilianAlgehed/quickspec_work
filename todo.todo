@@ -26,8 +26,8 @@
 
     ~Investigate the merits of transformation types
 
-    ~Integrate the template haskell stuff into quickspeck
-
     ~Do the mathematics for the efficiency of the three approaches
 
     ~Do the mathematics for the uniformity (soundness) of the three approaches 
+
+    ~Integrate the template haskell stuff into quickspeck
