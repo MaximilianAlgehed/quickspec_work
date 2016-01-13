@@ -87,6 +87,26 @@
 
                 Which, given fast generation of uniform constrained random data would be very fast.
 
+        A general problem with TE is that the order of generating data is very bad. Consider the following
+        example:
+
+            x < y && y < z
+
+        Represented roughly as:
+
+            arbitrary (Q (P x y) (P y z)) = Q p1 p2
+                suchThat
+                    snd p1 == fst p2
+                    where
+                        fst p1 < snd p1
+                        fst p2 < snd p2
+        
+        Here the order of the generation of the data is slow because we first generate p1 and p2 and then check
+        that the second element of p1 is equal to the first element of p2.
+        
+        What we would like to do is to compute 
+        an order that means that as few results as possible need to be recomputed.
+
     +: Combined encoding (CE)
 
         Motivated by the inefficiency of generating constrained random data with uniform distribution faced by TE
