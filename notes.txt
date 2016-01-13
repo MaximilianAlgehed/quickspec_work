@@ -336,16 +336,42 @@
 
             instead. However this may not always be the case.
 
-            Perhaps there is a solution for this issue in a modified version of CE given that
-            we have a transformation type in TE (T-types):
+            Another more realistic example:
+                
+                Consider the following constrained equation where xs is a non-null list: (non-null for technical reasons) 
 
-                whenP :: A -> (T A B) -> Either B (T A B)
-                whenP a tab
-                    | p a = Left a
-                    | otherwise = Right tab
+                    sorted (tail xs) => insert (head xs) (tail xs) == sort xs
 
-            However, the output type is Either which causes issues. This solution is not finished.
-            
+                To represent it in FE:
+
+                    We use the when function:
+
+                        when_sorted xs
+                            | sorted xs = xs
+                            | otherwise = []
+
+                    To hope to generate the following equation:
+
+                        insert (head xs) (when_sorted (tail xs)) == sort xs
+
+                    However, this equation can not be generated, as:
+
+                        insert (head [1, 3, 2]) when_sorted (tail [1, 3, 2]) =
+                        insert 1 (when_sorted [3, 2]) = 
+                        insert 1 [] =
+                        [1]
+
+                        sort [1, 3, 2] = [1, 2, 3]
+
+                To represent it in TE:
+
+                    In T-types the predicate (sorted) is true for the transform of the original
+                    data. So in here we have:
+
+                        tsortedtail = Tsorted xs tail_xs
+                            => (tail xs) == tail_xs && sorted (tail_xs)
+                        insert (head (xs tsortedtail)) (tail_xs tsortedtail) == sort (xs tsortedtail)
+
         -- Completeness --
             In order to discuss completeness with regards to expressions that do involve implications
             it would be usefull to consider the increase in terms size needed to generate an expression
