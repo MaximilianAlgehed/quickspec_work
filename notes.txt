@@ -79,7 +79,7 @@
                 T-types represent a predicate applied to a transformation (a mapping) of
                 some data.
             
-                T-types can be implemented like this:
+                T-types look like this
 
                     T x (t x)
                         where
