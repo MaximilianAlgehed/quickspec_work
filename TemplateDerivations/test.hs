@@ -27,7 +27,7 @@ eq p1 p2 = (a22 p1) == (a21 p2)
 eq_ :: Pgt -> Pgt -> Bool
 eq_ p1 p2 = (a22 p1) == (a21 p2)
 
-$(mk_Relations [
+$(mk_Predicates [
                 [| eq :: Plt -> Plt -> Bool |],
                 [| eq_ :: Pgt -> Pgt -> Bool |]
                ])

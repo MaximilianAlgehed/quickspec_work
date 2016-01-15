@@ -1,14 +1,12 @@
 -- Todo for the introduction of conditionals in quickSpeck --
 
-    ~Find a good example of when FE does not work for transforms
+    ~Pester Nick about the crashes in the twee branch
 
-    ~Implement CE in template haskell
+    ~Implement CE in template haskell (?)
 
-    ~Check with Nick about currying the injections into CE
+    ~Check with Nick about currying the injections of TE types into CE
 
     ~Measure run time and memory consumption of FE, TE, and CE
-
-    ~Figure out a way to generate the base value for FE representations in template haskell
 
     ~Figure out conjunctions in FE
 
@@ -19,8 +17,6 @@
     ~Figure out conjunction in CE
 
     ~Do the mathematics on the completeness of CE for conjunctions of predicates
-
-    ~Get the twee branch working
 
     ~Integrate conjunction in TE into the template haskell implementation of TE
 

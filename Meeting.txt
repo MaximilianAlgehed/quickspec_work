@@ -1,0 +1,41 @@
+-- Talking points for meeting 16-01-18 --
+
+     *: Have done
+
+        ~ Automatic generation of TE
+
+        ~ Automatic generation of FE
+
+        ~ Different metrics for measuring how good FE and TE are
+
+        ~ Soundness issues in FE -> CE
+
+        ~ Q-types, conjunction in TE
+
+        ~ T-types, transforms in TE
+
+        ~ Example for why naive transforms don't work in FE
+
+        ~ Written about methodology
+
+        ~ Nick's ideas about toP functions and how we can avoid them
+
+     *: Want to do
+
+        ~ Conjunction in FE
+
+        ~ Conjunction in CE, requires us to have solved conjunction in FE first
+
+     *: Goal
+
+        ~ Write everything up as a paper that can be published
+
+        ~ Topic of the paper would be comparison of the three (two ?) methods
+
+     *: Future work
+
+        ~ EDSL or QDSL for order of generation issue in TE, EDSL vs. QDSL it's own problem
+
+        ~ Implement everything as a system that uses FE, CE, and TE when appropriet in QuickSpec
+
+        ~ Work on algorithms for optimal order of generation of random data, it's definately a graph problem

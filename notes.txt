@@ -3,11 +3,11 @@
     As outlined in [QuickSpec 1&2, Conditional Lemma Discovery (Irene and Moa)] there is a need for
     QuickSpec to generate conditional equations. The need for conditional equations is motivated by
     two different use cases for QuickSpec. The first use case is QuickSpec as a Conjecture/Lemma discovery
-    tool in use by other systems (mainly Hipster and Isabelle). The second use case is QuickSpec as 
+    tool in use by other systems (Hipster). The second use case is QuickSpec as 
     a stand alone tool for proram specification and verification. In the first case conditional equations
     are necessary to prove certain algorithms correct. In the second case one of the more compelling
     reasons why we would want to find conditional equations in QuickSpec is the clean discovery of
-    partial functions.
+    partial functions. There are more justifications outlined in the QuickSpec 1&2 papers.
 
 
 -- Different methods for encoding constraints in QuickSpec --
@@ -363,6 +363,8 @@
 
                         sort [1, 3, 2] = [1, 2, 3]
 
+                        [1] =/= [1, 2, 3]
+
                 To represent it in TE:
 
                     In T-types the predicate (sorted) is true for the transform of the original
@@ -401,7 +403,6 @@
 
                 fstwhenP = fst . whenP
                 sndwhenP = snd . whenP
-
 
             However, completeness extends beyond the size of the expressions. There are equations which
             FE and CE can't find but TE can. These equations are primarily the ones which require predicates
@@ -522,6 +523,10 @@
     It would be nice to come up with a QuickSpec DSL in which we can express the subtelties of these constrained data
     in a way that would allow us to come up with optimal orders in which to generate the data.
 
+    Just working on the problem of finding an algorithm for optimal data generation would be interesting.
+
+    Work out an adaptive system that maybe uses FE (CE) for some predicates and TE for others.
+
 
 -- Related work --
 
@@ -558,4 +563,4 @@
 
     *: Future work
 
-    *: Related work?
+    *: Related work (?)

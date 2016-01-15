@@ -168,8 +168,8 @@ mk_Arbitrary_Instance_Predicate_N :: Integer -> Dec
 mk_Arbitrary_Instance_Predicate_N n = InstanceD context types [mk_Arbitrary_Declaration_N n]
     where
         context = predicateable_instance:arb_instances
-        predicateable_instance = ClassP (mkName ("Predicateable"++(show n))) (map VarT (make_names n))
-        arb_instances = [ClassP (mkName "Arbitrary") [(VarT (mkName ("x"++(show j))))] | j<- [1..n]]
+        predicateable_instance = foldl AppT (ConT (mkName ("Predicateable"++(show n)))) (map VarT (make_names n))
+        arb_instances = [foldl AppT (ConT (mkName "Arbitrary")) [(VarT (mkName ("x"++(show j))))] | j<- [1..n]]
         predicate_type = (ConT (mkName ("Predicate"++(show n))))
         types = AppT (ConT (mkName "Arbitrary")) (tp n)
         tp 0 = predicate_type
