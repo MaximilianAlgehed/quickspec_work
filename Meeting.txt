@@ -38,9 +38,9 @@
 
      *: Goal
 
-        ~ Write everything up as a paper that can be published
+        ~ Topic of the written stuff would be comparison of the three (two ?) methods
 
-        ~ Topic of the paper would be comparison of the three (two ?) methods
+        ~ Write everything up as a paper that can be published
 
      *: Future work
 

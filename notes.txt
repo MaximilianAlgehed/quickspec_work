@@ -463,6 +463,45 @@
 
         Even more generally, using template haskell, we can generate these instances for any arity.
 
+    +: Notes on theorem proving
+
+        The TeExamples/NotNill.hs example is a wonderfull example of why case analysis in QuickSpec's pruning would be good:
+
+            When given the predicate "NotNull" and its negation over lists QuickSpec finds a few different equations:
+
+                [] ++ is = is
+                head (i : is) = i
+                NotNull xs => head (xs ++ is) = head xs
+                not (NotNull xs) => xs = []
+            
+            which along with:
+
+                P or (not P)
+
+            would let us prove:
+
+                head (is ++ (i : js)) = head (is ++ (i : js))
+
+            as:
+
+                (NotNull is) or (not (NotNull is))
+                [(NotNull is)
+                 head (is ++ (i : js)) = head is
+                 head (is ++ (i : is)) = head is
+                 head (is ++ (i : js)) = head (is ++ (i : is))
+                ]
+                [(not (NotNull is))
+                 is = []
+                 head (is ++ (i : js)) = head (i : js) = i
+                 head (is ++ (i : is)) = head (i : is) = i
+                 head (is ++ (i : js)) = head (is ++ (i : is))
+                ]
+                head (is ++ (i : js)) = head (is ++ (i : is))
+        
+            however, because QuickSpec does not _yet_ deal with simple case analysis 
+            it still prints:
+
+                head (is ++ (i : js)) = head (is ++ (i : is))
 
 -- Methodology --
 

@@ -1,5 +1,15 @@
 -- Todo for the introduction of conditionals in quickSpeck --
 
+    ~Read Irenes thesis and try to implement the examples with TE
+
+    ~Prove that every expression that can be formed in TE can be reduced to a conditional
+
+    ~Prove that not every expression formed in FE can be reduced to a conditional}
+
+    ~Create a folder of TE examples
+
+    ~Existential quantifiers?
+
     ~Pester Nick about the crashes in the twee branch
 
     ~Implement CE in template haskell (?)

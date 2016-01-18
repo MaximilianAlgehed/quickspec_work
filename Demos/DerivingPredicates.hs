@@ -11,7 +11,7 @@ class (Predicatable2 a b) where
     predicate2 :: a -> b -> Bool
 
 -- A predicate type for arity 2 predicates
-data Predicate2 a b = P {x::a, y::b} deriving (Ord, Eq, Typeable)
+data Predicate2 a b = P {a21::a, a22::b} deriving (Ord, Eq, Typeable)
 
 -- The general instance for arbitrary predicates of size 2
 instance (Predicatable2 a b, Arbitrary a, Arbitrary b) => Arbitrary (Predicate2 a b) where
