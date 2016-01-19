@@ -1,12 +1,10 @@
--- Todo for the introduction of conditionals in quickSpeck --
+-- Todo for the introduction of conditionals in QuickSpeck --
 
     ~Read Irenes thesis and try to implement the examples with TE
 
     ~Prove that every expression that can be formed in TE can be reduced to a conditional
 
-    ~Prove that not every expression formed in FE can be reduced to a conditional}
-
-    ~Create a folder of TE examples
+    ~Prove that not every expression formed in FE can be reduced to a conditional
 
     ~Existential quantifiers?
 
@@ -37,3 +35,5 @@
     ~Do the mathematics for the uniformity (soundness) of the three approaches 
 
     ~Integrate the template haskell stuff into quickspeck
+
+    ~Argue why expressions with transforms are only interesting when they are on the form "P(f(x)) => ... x ..."

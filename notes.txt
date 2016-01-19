@@ -275,16 +275,19 @@
             CE is a good approach for fixing this soundness issue.
 
         -- Transforms -- 
-            FE can potentially be more powerfull than TE, as an example it is capable of expressing:
+            In order to encode equations like the following:
                 
-                sorted (reverse xs) => ... xs ... (reverse xs) ...
+                sorted (reverse xs) => ... xs ... (reverse xs) ... (1)
 
-            through equations like:
+            One could imagine a representation like:
 
-                ... xs ... (whenSorted (reverse xs)) 
+                ... xs ... (whenSorted (reverse xs)) (2)
+
+            Sadly it turns out that the two representations are not the same and
+            more specifically the FE representation in (2) can not be reduced to (1).
 
             However this can also be expressed in TE, but we need to change the type 
-            so that it generates the transformed data and the other data at the same time.
+            so that it generates the transformed data and the other data at the same time (T-types).
             This way it would be accesed in this way:
 
                 (x p) (xt p)
@@ -295,22 +298,16 @@
                 
                 (xt p) == reverse . reverse 
 
-            To this end it would now be usefull to run QuickSpec on the signature without the 
-            predicate types in it at first (maybe with some ad-hoc FE to "substitute" TE) and
-            try to prove the equality of transforms.
+            In order to avoid this one could imagine running QuickSpec twice. Once with the signature without
+            transforms and once more with the transforms that are interesting, pruning away transforms like
+            "id . reverse" and replacing them with "reverse".
 
-            An advantage of FE here is clearly the fact that run-time generation (by QuickSpec)
-            is a "solved" problem while a TE solution would require us to do something more 
-            radical, like introduce a theorem prover at compile time (if we assume that
-            the TE types are generated at compile time by template haskell). However this 
-            theorem prover may not need to be so complex or general.
+            As mentioned in Irenes thesis there is a very real exponential blowup when we start considering 
+            even finite size transforms.
+            
+            Transforms are only interesting if the equations contain x and the predicate concerns the transform of x.
 
-            Transforms are only interesting if the equations contain both x and the transform of x.
-            Unless the transform significantly alters the structure of the expression, in a way which
-            would be quantifiable by some predicate. However, then it would be more interesting to 
-            just have the predicate type with that predicate.
-
-            Transforms in FE ae more difficult for arity > 1 functions. As outline below, if the n-tuple
+            Transforms in FE are more difficult for arity > 1 functions. As outline below, if the n-tuple
             constructor is added the completeness of FE is negatively impacted.
 
             Transforms in FE are actually not as straight forward as they may seem. Consider the following example:
@@ -482,7 +479,7 @@
 
                 head (is ++ (i : js)) = head (is ++ (i : js))
 
-            as:
+            as: (Natural deduction esque proof)
 
                 (NotNull is) or (not (NotNull is))
                 [(NotNull is)
@@ -498,7 +495,7 @@
                 ]
                 head (is ++ (i : js)) = head (is ++ (i : is))
         
-            however, because QuickSpec does not _yet_ deal with simple case analysis 
+            however, because QuickSpec does not deal with simple case analysis 
             it still prints:
 
                 head (is ++ (i : js)) = head (is ++ (i : is))
@@ -516,8 +513,8 @@
             ~ Generality
 
         These qualities are usefull and relevant as they influence 
-        the usefullness of QuickSpec as a component in HipSpec and
-        as a stand-alone tool:
+        the usefullness of QuickSpec as a conjecture generating
+        component in HipSpec and as a stand-alone tool:
 
             +: Efficiency 
             Efficiency is highly relevant when working with intractable problems like
@@ -570,8 +567,11 @@
 -- Related work --
 
     As of yet we don't have a clear list of related work. Most work on constrained equations deal with constrained equations
-    in completion or (and) superposition. Which is not what we are trying to do (however, that research is usefull as it could be used 
+    in completion or (and) superposition. Which is not strictly we are trying to do
+    (however, that research is usefull as it could be used 
     in conjunction with this work to help reason about the equations found by QuickSpec using our method).
+    However, some work to mention is of course Moa and Irenes paper. Maybe mention that this has been done
+    on a very small scale in the old quickspec papers (the monotonic function example comes to mind).
 
 
 -- List of topics --
