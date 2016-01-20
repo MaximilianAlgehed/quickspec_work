@@ -40,8 +40,8 @@ sig =
     constants = [
        constant "isort" (isort :: [Int] -> [Int]),
        constant "isert" (isert :: Int -> [Int] -> [Int]),
-       constant "[]" ([] :: [Int]),
-       constant ":" ((:) :: Int -> [Int] -> [Int]),
+       constant "[]" ([] :: [A]),
+       constant ":" ((:) :: A -> [A] -> [A]),
        constant "x" (coerce . a21 :: Pgt -> Int),
        constant "y"  (coerce . a22 :: Pgt -> Int)
     ]

@@ -30,12 +30,15 @@ is_sig :: Exp -> Bool
 is_sig (SigE _ _) = True
 is_sig _ = False
 
+mk_Predicates = mk_Predicates' True
+mk_Predicates_No_Ord = mk_Predicates' False
+
 -- Creates all the plumbing given a list of quoted signatures
-mk_Predicates :: [ExpQ] -> Q [Dec]
-mk_Predicates exprs = do
+mk_Predicates' :: Bool -> [ExpQ] -> Q [Dec]
+mk_Predicates' ord exprs = do
                         exprs' <- fmap (filter is_sig) $ sequence exprs
                         predicate_types <- fmap concat $ sequence $ map (mk_Predicate_Types . (\x -> x-1)) $ get_type_counts exprs'
-                        newtypes <- fmap concat $ sequence $ map mk_Newtypes $ nub $ get_types_per_expr exprs'
+                        newtypes <- fmap concat $ sequence $ map (mk_Newtypes ord) $ nub $ get_types_per_expr exprs'
                         synonyms <- fmap concat $ sequence $ map mk_TypeSynonym $ get_names_per_expr exprs'
                         return (predicate_types++synonyms++newtypes)
                         where
@@ -63,8 +66,8 @@ make_compound_name n t = (mkName ("T"++(nameBase n) ++ (case t of
                                                         (PromotedT name) -> nameBase name)))
 
 -- Creates the newtypes associated with one predicate
-mk_Newtypes :: (Name, [Type]) -> Q [Dec]
-mk_Newtypes (n, tps) = return $ (nub (concat (map helper tps)))++(predicateable_instance n tps)
+mk_Newtypes :: Bool -> (Name, [Type]) -> Q [Dec]
+mk_Newtypes ord (n, tps) = return $ (nub (concat (map helper tps)))++(predicateable_instance n tps)
     where
         predicateable_instance :: Name -> [Type] -> [Dec]
         predicateable_instance n tps = [InstanceD [] inst_type [dec]]
@@ -77,7 +80,7 @@ mk_Newtypes (n, tps) = return $ (nub (concat (map helper tps)))++(predicateable_
                 dec = FunD n' [Clause conds (NormalB body) []]
         helper :: Type -> [Dec]
         helper t = let n' = make_compound_name n t in 
-                       [NewtypeD [] n' [] (NormalC n' [(NotStrict, t)]) [''Ord, ''Eq, ''Typeable, ''Arbitrary]]
+                       [NewtypeD [] n' [] (NormalC n' [(NotStrict, t)]) ((if ord then [''Ord] else [])++[''Eq, ''Typeable, ''Arbitrary])]
 
 -- Creates a type synonym for predicae2 instance
 mk_TypeSynonym :: (Name, Integer, [Type]) -> Q [Dec]
