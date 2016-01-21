@@ -477,7 +477,7 @@
 
             would let us prove:
 
-                head (is ++ (i : js)) = head (is ++ (i : js))
+                head (is ++ (i : js)) = head (is ++ (i : is))
 
             as: (Natural deduction esque proof)
 
@@ -499,6 +499,7 @@
             it still prints:
 
                 head (is ++ (i : js)) = head (is ++ (i : is))
+
 
 -- Methodology --
 

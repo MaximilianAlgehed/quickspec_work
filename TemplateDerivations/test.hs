@@ -56,34 +56,34 @@ sig =
     maxTermSize = Just 12,
     instances = [
                  baseType (undefined::Pgt),
-                 names (NamesFor ["p"] :: NamesFor Pgt),{-,
+                 names (NamesFor ["p"] :: NamesFor Pgt),
                  baseType (undefined::Plt),
                  names (NamesFor ["p'"] :: NamesFor Plt),
                  baseType (undefined::Peq),
-                 names (NamesFor ["q'"] :: NamesFor Peq),-}
+                 names (NamesFor ["q'"] :: NamesFor Peq)
  --                baseType (undefined::Peq_),
 --                 names (NamesFor ["q"] :: NamesFor Peq_)
-                 baseType (undefined::Psorted_),
-                 names (NamesFor ["ps"] :: NamesFor Psorted_),
-                 baseType (undefined::Lst),
-                 names (NamesFor ["is", "js", "ks"] :: NamesFor Lst)
+--                 baseType (undefined::Psorted_),
+--                 names (NamesFor ["ps"] :: NamesFor Psorted_),
+--                 baseType (undefined::Lst),
+--                 names (NamesFor ["is", "js", "ks"] :: NamesFor Lst)
                 ],
     constants = [
        --constant "isort" (Lst . isort . coerce :: Lst -> Lst),
-       constant "isert" ((\x xs -> Lst (isert x (coerce xs))) :: Int -> Lst -> Lst),
-       constant "[]" (Lst [] :: Lst),
+ --      constant "isert" ((\x xs -> Lst (isert x (coerce xs))) :: Int -> Lst -> Lst),
+ --      constant "[]" (Lst [] :: Lst),
        --constant ":" ((\x xs -> Lst (x:(coerce xs))) :: Int -> Lst -> Lst),
        constant "T" (True :: Bool),
---       constant "<" ((<) :: Int -> Int -> Bool),
+       constant "<" ((<) :: Int -> Int -> Bool),
        constant "xs" (coerce . a11 :: Psorted_ -> Lst),
        --constant "x" (coerce . a21 :: Pgt -> Int),
        --constant "y"  (coerce . a22 :: Pgt -> Int),
        constant "sorted" (sorted_ :: Lst -> Bool)
-       {-,
+       ,
        constant "x'" (coerce . a21 :: Plt -> Int),
        constant "y'" (coerce . a22 :: Plt -> Int),
        constant "p1'" (coerce . a21 :: Peq -> Plt),
-       constant "p2'" (coerce . a22 :: Peq -> Plt),-}
+       constant "p2'" (coerce . a22 :: Peq -> Plt)
 --       constant "p1" (coerce . a21 :: Peq_ -> Pgt),
 --       constant "p2" (coerce . a22 :: Peq_ -> Pgt)  
     ]
