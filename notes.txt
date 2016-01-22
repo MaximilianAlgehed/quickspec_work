@@ -54,7 +54,7 @@
                 insert y (x:is) = y:x:is
             
             Conjunctions with relationships between the different sub-terms are just a "meta instance" of 
-            normal TE
+            normal TE (see Q-types).
 
         Issues:
             We get expressions like:
@@ -107,6 +107,26 @@
         What we would like to do is to compute 
         an order that means that as few results as possible need to be recomputed.
 
+        A novel algorithm that may work for this problem is the following:
+
+            Given predicates and their arity, as well as all equality relations between variables.
+
+            1. Order all variables by their connectivity
+
+            2. Pick the most connected variable as the next variable to be generated.
+
+            3. Remove the selected variable from the list.
+
+            4. Find all partialy applied predicates that when applied to the selected variable will be fully applied
+               and generate the variable according to these predicates.
+
+            5. Find all predicates which will still be partially applied when applied to the variable, apply the predicates
+               to the variable
+
+            6. Go to 2 untill the list of variables is empty.
+
+            7. All variables have been generated.
+        
     +: Combined encoding (CE)
 
         Motivated by the inefficiency of generating constrained random data with uniform distribution faced by TE
