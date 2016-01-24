@@ -27,13 +27,13 @@ deriving instance Show TeqlenLst
 
 sig =
     signature {
-        maxTermSize = Just 10,
+        maxTermSize = Just 13,
         instances = [
                     baseType (undefined::Peqlen),
                     names (NamesFor ["p"] :: NamesFor Peqlen)
                     ],
         constants = [
-                    constant "zip" (zip :: [A] -> [B] -> [(A, B)]),
+                    constant "zip" (zip :: [A] -> [A] -> [(A, A)]),
                     constant "++" ((++) :: [A] -> [A] -> [A]),
                     constant "length" (length :: [A] -> Int),
                     constant "Pxs" (coerce . a21 :: Peqlen -> [Int]),
