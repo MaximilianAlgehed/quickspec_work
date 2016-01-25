@@ -33,6 +33,16 @@ is_sig _ = False
 mk_Predicates = mk_Predicates' True
 mk_Predicates_No_Ord = mk_Predicates' False
 
+-- Creates a t-type from a list of quoted transformations and predicates
+mk_Transforms :: [(ExpQ, ExpQ)] -> Q [Dec]
+mk_Transforms exprs' = do
+                        let exprsL = sequence (fst (unzip exprs')) :: Q [Exp]
+                        let exprsR = sequence (snd (unzip exprs')) :: Q [Exp]
+                        lstL <- exprsL
+                        lstR <- exprsR
+                        let exprs = filter (\(x, y) -> (is_sig x) && (is_sig y)) (zip lstL lstR)
+                        return []
+
 -- Creates all the plumbing given a list of quoted signatures
 mk_Predicates' :: Bool -> [ExpQ] -> Q [Dec]
 mk_Predicates' ord exprs = do
