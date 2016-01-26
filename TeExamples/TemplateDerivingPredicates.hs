@@ -59,7 +59,7 @@ mk_Ttypes_Arbitrary exprs = sequence $ map (\(p, t) -> return $ InstanceD [] (Ap
 mk_Ttypes :: [(Exp, Exp)] -> Q [Dec]
 mk_Ttypes exprs = sequence $ map (\(p, t) -> return (DataD [] (name_ p t) [] [record p t] instances)) exprs
                                 where
-                                    instances = []
+                                    instances = [''Ord, ''Show, ''Eq]
                                     name_ pred transform = mkName ("T"++(nameBase (getName pred))++(nameBase (getName transform)))
                                     getName (SigE (VarE name) _) = name
                                     
