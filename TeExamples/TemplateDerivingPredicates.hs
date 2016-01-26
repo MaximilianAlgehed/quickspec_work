@@ -41,7 +41,34 @@ mk_Transforms exprs' = do
                         lstL <- exprsL
                         lstR <- exprsR
                         let exprs = filter (\(x, y) -> (is_sig x) && (is_sig y)) (zip lstL lstR)
-                        return []
+                        t_types <- mk_Ttypes exprs
+                        arbitraries <- mk_Ttypes_Arbitrary exprs
+                        return (t_types++arbitraries)
+
+mk_Ttypes_Arbitrary :: [(Exp, Exp)] -> Q [Dec]
+mk_Ttypes_Arbitrary exprs = sequence $ map (\(p, t) -> return $ InstanceD [] (AppT (ConT (mkName "Arbitrary")) (ConT (name_ p t))) [dec p t]) exprs
+    where
+        dec pred transform = FunD (mkName "arbitrary") [Clause [] (NormalB (doexpr pred transform))[]]
+    
+        doexpr pred transform = DoE [BindS (VarP (mkName "x")) (AppE (AppE (VarE (mkName "suchThat")) (VarE (mkName "arbitrary"))) (sigs_to_combination pred transform)),
+                                     NoBindS (AppE (VarE (mkName "return")) (AppE (AppE (ConE (name_ pred transform)) (VarE (mkName "x"))) (AppE (VarE (getName transform)) (VarE (mkName "x")))))]
+
+        getName (SigE (VarE name) _) = mkName $ nameBase name
+        name_ pred transform = mkName ("T"++(nameBase (getName pred))++(nameBase (getName transform)))
+
+mk_Ttypes :: [(Exp, Exp)] -> Q [Dec]
+mk_Ttypes exprs = sequence $ map (\(p, t) -> return (DataD [] (name_ p t) [] [record p t] instances)) exprs
+                                where
+                                    instances = []
+                                    name_ pred transform = mkName ("T"++(nameBase (getName pred))++(nameBase (getName transform)))
+                                    getName (SigE (VarE name) _) = name
+                                    
+                                    record pred transform = RecC (name_ pred transform) [(mkName ("x"++(nameBase (name_ pred transform))), NotStrict, getType transform), (mkName ("xt"++(nameBase (name_ pred transform))), NotStrict, getType pred)]
+                                    
+                                    getType (SigE _ (AppT (AppT _ t) _)) = t
+
+sigs_to_combination :: Exp -> Exp -> Exp
+sigs_to_combination (SigE p _) (SigE t _) = LamE [VarP (mkName "x")] (AppE p (AppE t (VarE (mkName "x"))))
 
 -- Creates all the plumbing given a list of quoted signatures
 mk_Predicates' :: Bool -> [ExpQ] -> Q [Dec]
