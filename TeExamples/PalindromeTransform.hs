@@ -10,31 +10,28 @@ import QuickSpec
 import Test.QuickCheck
 import Data.Coerce
 
-isPalindrome :: LInt -> Bool
+isPalindrome :: Lst -> Bool
 isPalindrome xs = ((coerce xs) :: [Int]) == ((reverse (coerce xs)) :: [Int])
 
-newtype LInt = LInt [Int] deriving (Typeable, Arbitrary, Ord, Eq)
+newtype Lst = Lst [Int] deriving (Show, Arbitrary, Ord, Eq)
 
-$(mk_Predicates [[| isPalindrome :: LInt -> Bool |]])
+mreverse :: Lst -> Lst
+mreverse (Lst xs) = Lst (reverse xs)
 
-isReverse :: LInt -> PisPalindrome -> Bool
-isReverse xs pis = (reverse (coerce xs :: [Int])) == ((coerce . a11) pis :: [Int])
-
-$(mk_Predicates [[| isReverse :: LInt -> PisPalindrome -> Bool|]])
+$(mk_Transforms [([| isPalindrome :: Lst -> Bool |], [| mreverse :: Lst -> Lst |])])
 
 sig =
   signature {
     maxTermSize = Just 12,
-    instances = [baseType (undefined::PisPalindrome),
-                 names (NamesFor ["p"] :: NamesFor PisPalindrome),
-                 baseType (undefined::PisReverse),
-                 names (NamesFor ["q"] :: NamesFor PisReverse)
+    instances = [baseType (undefined::TisPalindromemreverse),
+                 names (NamesFor ["p"] :: NamesFor TisPalindromemreverse),
+                 baseType (undefined::Lst),
+                 names (NamesFor ["is", "js", "ks"] :: NamesFor Lst)
                 ],
     constants = [
-       constant "reverse" (reverse :: [Int] -> [Int]),
-       constant "x" ((coerce . a11 . (coerce . a22 :: PisReverse -> PisPalindrome)) :: PisReverse -> [Int]),
-       constant "rx" ((coerce . a21) :: PisReverse -> [Int])
-       --constant "x" ((coerce . a11) :: PisPalindrome -> [Int])
+       constant "reverse" mreverse,
+       constant "x"  xTisPalindromemreverse,
+       constant "rx" xtTisPalindromemreverse
     ]
    }
 
