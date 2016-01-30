@@ -236,6 +236,9 @@
                 Furthermore it is conceivable that the Q type does not have to be predicateable over equality.
                 Any relation between terms could be used.
 
+                The algorithm proposed in the explanation of TE would allow Q-types over the Equality relation
+                to be relatively fast compared to the novel way of implementing Q types that is nested P types.
+                
             *: FE
                 
                 P x && Q x => x <*> y = ...

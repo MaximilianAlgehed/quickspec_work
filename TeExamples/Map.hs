@@ -19,9 +19,6 @@ $(mk_Predicates [
                  [| neq :: Int -> Int -> Bool |]
                 ])
 
-instance Arbitrary (Map Int Double) where
-    arbitrary = fmap fromList arbitrary
-
 sig =
     signature {
         maxTermSize = Just 10,
