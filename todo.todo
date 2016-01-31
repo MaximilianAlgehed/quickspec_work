@@ -1,8 +1,6 @@
 -- Todo for the introduction of conditionals in QuickSpec --
 
-    ~Pester Dan about installation issues with Hipspec
-
-    ~Pester Nick about finding tautologies in QuickSpec
+    ~Try to see what emna can come up with in the Escaping example
 
     ~Figure out what the deal is with "isSorted xs => isSorted (insert x xs)" and "isSorted (insert x xs) == isSorted xs"
 
