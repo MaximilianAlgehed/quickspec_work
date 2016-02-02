@@ -31,3 +31,4 @@ conj xs ys = head (xs ++ ys) === head xs
 conj1 xs ys = notNill (xs ++ ys) ==> (notNill xs) P.|| (notNill ys)
 conj2 xs = notNill xs === (isJust (head xs))
 conj4 xs ys = notNill xs ==> head (xs ++ ys) === head xs
+conj5 i is js = (head (is ++ (i:js))) === (head (is ++ (i:is)))

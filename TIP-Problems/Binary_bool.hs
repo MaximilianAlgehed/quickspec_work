@@ -9,20 +9,19 @@ module Binary where
 import Tip
 import qualified Prelude as P
 
-even :: P.Int -> P.Bool
-even x = (x `P.mod` 2) P.== 0
+data Binary = B P.Bool P.Bool P.Bool deriving (P.Eq, P.Show)
 
-bitZeroZero :: P.Int -> P.Bool
-bitZeroZero b = even b
+bitZeroZero :: Binary -> P.Bool
+bitZeroZero (B _ _ v) = P.not v
 
-bit3Zero :: P.Int -> P.Bool
-bit3Zero b = b P.<= 127
+bit3Zero :: Binary -> P.Bool
+bit3Zero (B v _ _) = P.not v
 
-lsl :: P.Int -> P.Int
-lsl x = P.mod (x P.* 2) 256
+lsl :: Binary -> Binary
+lsl (B _ a b) = B a b P.False
 
-lsr :: P.Int -> P.Int
-lsr x = P.div x 2
+lsr :: Binary -> Binary
+lsr (B a b _) = B P.False a b
 
 prop1 b = bitZeroZero b ==> (lsl (lsr b)) === b
 prop2 b = bit3Zero b ==> (lsr (lsl b)) === b

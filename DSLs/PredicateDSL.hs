@@ -60,7 +60,6 @@ makeOrdering (x:xs) ps = (Arbitrary x appliedPreds):(makeOrdering xs preds')
 applyPredicates :: ArgumentName -> [PredicateApplication] -> [PredicateApplication]
 applyPredicates name preds = map (applyArg name) preds
     where
-
         applyArg name (PredicateApplication pname args avail) = PredicateApplication pname args [indx | indx <- avail,
                                                                                                         (args !! (indx - 1)) /= name]
 getUnappliedPredicates :: [Dependency] -> [PredicateApplication]

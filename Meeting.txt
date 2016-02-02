@@ -1,30 +1,27 @@
--- Talking points for meeting 16-01-18 --
+-- 16-02-05 --
 
      *: Have done since last meeting
 
-        ~ Automatic generation of TE
-
-        ~ Automatic generation of FE
-
-        ~ Different metrics for measuring how good FE and TE are
-
-        ~ Soundness issues in FE lead to CE
-
-        ~ Q-types, conjunction in TE
+        ~ Q-types, conjunction in TE - Algorithm for "fast" generation
 
         ~ T-types, transforms in TE
 
         ~ Examples for why naive transforms don't work in FE
 
-        ~ Written about methodology
+        ~ Tried to work with TIP problems and emna - not much success
 
-        ~ Nick's ideas about toP functions and how we can avoid them
+        ~ Difficult to find solid examples of where we can utilize conditional equations in Hipspec.
+
+        ~ It has been difficult to translate results from QuickSpec into emna because of lack of invariants (unlike QS)
+
+        ~ Many "results" in QS are non-results in emna, as emna tends to prove the result without needing the conditionals
 
      *: Want to do before writing everything up
 
         ~ Do large scale experiments to inform my writing
 
-        ~ Conjunction in FE
+        ~ Conjunction in FE - hard to say something about TE being better when we don't have
+        ~ even a solid propsal to solve this problem
 
         ~ Conjunction in CE, requires us to have solved conjunction in FE first
 
@@ -33,19 +30,3 @@
         ~ Mathematics for efficiency
 
         ~ Explore CE some more
-
-        ~ Do a case study of some sort
-
-     *: Goal
-
-        ~ Topic of the written stuff would be comparison of the three (two ?) methods
-
-        ~ Write everything up as a paper that can be published
-
-     *: Future work
-
-        ~ Work on algorithms for optimal order of generation of random data, it's definately a graph problem (?)
-
-        ~ EDSL or QDSL for order of generation issue in TE, EDSL vs. QDSL it's own problem
-
-        ~ Implement everything as a system that uses FE, CE, and TE when appropriet in QuickSpec
