@@ -11,6 +11,14 @@ import qualified Tip
 
 data Maybe a = Just a | Nothing
 
+isMap :: [(P.Int, P.Int)] -> P.Bool
+isMap [] = P.True
+isMap ((x, y):xs) = (notelem x xs) P.&& (isMap xs)
+    where
+        notelem :: P.Int -> [(P.Int, P.Int)] -> P.Bool
+        notelem v [] = P.True
+        notelem v ((x, y):xs) = (P.not (v P.== x)) P.&& (notelem v xs)
+
 isort :: [(P.Int, P.Int)] -> [(P.Int, P.Int)]
 isort [] = []
 isort (x:xs) = isert x (isort xs)
@@ -33,5 +41,4 @@ insert a b ((x, y):is)
     | a P.== x = isort ((a, b):is)
     | P.otherwise = isort ((x, y) : (insert a b is))
 
---conj :: (P.Ord a, P.Eq a) => a -> a -> b -> b -> [(a, b)] -> (P.Bool Tip.:=>: Tip.Equality [(a, b)])
-conj x y i j m = (x P./= y) Tip.==> ((insert x i (insert y j m)) Tip.=== (insert y j (insert x i m)))
+conj x y i j m = isMap m Tip.==> (x P./= y) Tip.==> ((insert x i (insert y j m)) Tip.=== (insert y j (insert x i m)))
