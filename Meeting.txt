@@ -2,7 +2,7 @@
 
      *: Have done since last meeting
 
-        ~ Q-types, conjunction in TE - Algorithm for "fast" generation
+        ~ Q-types, conjunction in TE - Algorithm for faster generation
 
         ~ T-types, transforms in TE
 
@@ -14,7 +14,8 @@
 
         ~ It has been difficult to translate results from QuickSpec into emna because of lack of invariants (unlike QS)
 
-        ~ Many "results" in QS are non-results in emna, as emna tends to prove the result without needing the conditionals
+        ~ Many "results" in QS are non-results in emna, as emna tends to prove the "target" without needing the conditionals
+        ~ Example of this in the NilHead.hs in TIP example
 
      *: Want to do before writing everything up
 
