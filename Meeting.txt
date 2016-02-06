@@ -2,8 +2,6 @@
 
      *: Have done since last meeting
 
-        (y = y1) && x < y && y1 < z => ...
-
         ~ Q-types, conjunction in TE - Algorithm for faster generation
 
         ~ T-types, transforms in TE

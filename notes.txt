@@ -527,7 +527,6 @@
 
                 head (is ++ (i : js)) = head (is ++ (i : is))
 
-
 -- Methodology --
 
     *: Methodology for comparison of FE, TE, and CE
@@ -581,6 +580,23 @@
             in larger theorem proving systems. Therefore the implementation specific details are 
             highly dependent of the implementation of such tools.
 
+-- Comparison to other work --
+
+    +: Automatic induction inside superposition
+
+        QuickSpec now automatically finds the conjecture:
+            
+            length xs = length ys => zip (reverse xs) (reverse ys) = reverse (zip xs ys) 
+
+    +: Hipster: Integrating theory exploration in a proof assistant
+
+        QuickSpec now automatically finds the conjecture:
+            
+            xs /= [] => head (xs ++ ys) = head xs
+
+        QuickSpec can now generate conditional equations to handle
+        partial functions. This means that we have a new way to handle
+        the "head" and "second" functions discussed in section 4.
 
 -- Future work --
 
