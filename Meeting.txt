@@ -2,32 +2,31 @@
 
      *: Have done since last meeting
 
+        (y = y1) && x < y && y1 < z => ...
+
         ~ Q-types, conjunction in TE - Algorithm for faster generation
 
         ~ T-types, transforms in TE
 
         ~ Examples for why naive transforms don't work in FE
 
-        ~ Tried to work with TIP problems and emna - not much success
-
-        ~ Difficult to find solid examples of where we can utilize conditional equations in Hipspec.
-
-        ~ It has been difficult to translate results from QuickSpec into emna because of lack of invariants (unlike QS)
+        ~ Difficult to find solid examples of where we can utilize conditional equations in Hipspec. 
+        //Maybe my fault?
 
         ~ Many "results" in QS are non-results in emna, as emna tends to prove the "target" without needing the conditionals
         ~ Example of this in the NilHead.hs in TIP example
 
      *: Want to do before writing everything up
 
-        ~ Do large scale experiments to inform my writing
-
         ~ Conjunction in FE - hard to say something about TE being better when we don't have
         ~ even a solid propsal to solve this problem
 
-        ~ Conjunction in CE, requires us to have solved conjunction in FE first
+        ~ Conjunction in CE, requires us to have solved conjunction in FE first (?)
 
         ~ Mathematics for soundness
 
         ~ Mathematics for efficiency
+
+        ~ Prove the correctness and usefullness of the algorithm for Q-types
 
         ~ Explore CE some more

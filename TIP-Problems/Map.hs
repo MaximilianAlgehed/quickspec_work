@@ -33,7 +33,7 @@ lookup :: P.Int -> [(P.Int, P.Int)] -> Maybe P.Int
 lookup _ [] = Nothing
 lookup a ((x, y):is) 
     | a P.== x = Just y
-    | P.otherwise = Nothing
+    | P.otherwise = lookup a is
 
 insert :: P.Int -> P.Int -> [(P.Int, P.Int)] -> [(P.Int, P.Int)]
 insert a b [] = isort [(a, b)]

@@ -173,7 +173,7 @@
 
             *: TE
                 One of the problems with TE is the issue of generating constrained random data with uniform distribution
-                outlined by Koen's paper. TE will only become viable if this problem can be solved efficiently.
+                outlined by Koen's paper. TE will only become fast if this problem can be solved efficiently.
 
             *: CE
                 CE tries to fix the issue of generating contrained random data with uniform distribution by
@@ -237,7 +237,7 @@
                 Any relation between terms could be used.
 
                 The algorithm proposed in the explanation of TE would allow Q-types over the Equality relation
-                to be relatively fast compared to the novel way of implementing Q types that is nested P types.
+                to be relatively fast compared to the novel way of implementing Q types discussed above.
                 
             *: FE
                 
