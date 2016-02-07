@@ -645,7 +645,9 @@
     we see that many equations have the form: invariant && predicate => equation.
 
     Efficient conjunction over many predicates is an interesting problem for which there are ideas floating 
-    around that could prove good/bad.
+    around that could prove good/bad. One idea is to reduce the variables in a set of conjoined predicates
+    by the equalities present and then use the "degree of dependancy" of variables to order the generation.
+    This along with some degree of randomness and (maybe) backtracking may prove usefull.
 
 
 -- Related work --
