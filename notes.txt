@@ -299,7 +299,7 @@
             this predicate will very rarely hold and if the representative is [] then maybe we discover laws about
             [] that are not about reverseSorted lists. The solution to this is "more testing", maybe...
 
-            CE is a good approach for fixing this soundness issue.
+            CE is a good approach for fixing this soundness issue (?).
 
         -- Transforms -- 
             In order to encode equations like the following:
@@ -527,6 +527,7 @@
 
                 head (is ++ (i : js)) = head (is ++ (i : is))
 
+
 -- Methodology --
 
     *: Methodology for comparison of FE, TE, and CE
@@ -580,6 +581,44 @@
             in larger theorem proving systems. Therefore the implementation specific details are 
             highly dependent of the implementation of such tools.
 
+
+-- Improvements on old QS --
+
+    +: Invariants
+        
+        Good results have been obtained when running QuickSpeck with TE on 
+        datatypes which have invariants. There are several equations about efficient
+        functional queues that obey the invariant described in "The fun of programming"
+        that quickspeck is now capable of discovering.
+
+
+-- Injectivity and such --
+
+    Some predicates are very difficult to generate test cases for without knowing anything about the 
+    theory surounding a predicate.
+
+    When trying to prove injectivity of a pretty printer for arithemtic expressions of the form one
+    might find in an introductory course in domain specific languages or functional programming one
+    finds oneself needing the following predicate and associated conditional equation:
+        
+        P(e, f, s, t) := showTerm e ++ s = showTerm f ++ t (1)
+        P(e, f, s, t) => e = f && s = t (2)
+    
+    When adding P to the signature of QuickSpec however, the tool grinds to a complete halt. This is
+    because, as we can see in (2), generating data where P holds implies generating two
+    random expression which are equal, and generating two random strings which are also equal.
+
+    The problem here is that showTerm and the partially applied append function are both injective.
+    Predicates involving injective functions generaly don't fare well in a normal TE setting. However,
+    they also don't fare well in a FE setting, in FE they lose soundness big time.
+
+    One idea for how to deal with injective functions is to let the user specify that they suspect that 
+    a function may be injective. Which would then let us write a generator that is more likely to generate
+    equal data. One could even imagine having a generator which chooses between arbitrary data
+    and data which is very likely to be equal, this way cornercases where the function is not injective may
+    still be found.
+
+
 -- Comparison to other work --
 
     +: Automatic induction inside superposition
@@ -596,16 +635,17 @@
 
         QuickSpec can now generate conditional equations to handle
         partial functions. This means that we have a new way to handle
-        the "head" and "second" functions discussed in section 4.
+        the "head" and "second" functions discussed in section 4 (?).
+
 
 -- Future work --
 
-    It would be nice to come up with a QuickSpec DSL in which we can express the subtelties of these constrained data
-    in a way that would allow us to come up with optimal orders in which to generate the data.
+    Automatic conjunction of predicates is a topic that should be worked on. The current implementation
+    of the tool does not automatically find conjunctions. However looking at examples in datastructures
+    we see that many equations have the form: invariant && predicate => equation.
 
-    Just working on the problem of finding an algorithm for optimal data generation would be interesting.
-
-    Work out an adaptive system that maybe uses FE (CE) for some predicates and TE for others.
+    Efficient conjunction over many predicates is an interesting problem for which there are ideas floating 
+    around that could prove good/bad.
 
 
 -- Related work --
@@ -642,8 +682,10 @@
 
     *: Soudness
 
+    *: Injectivity
+
     *: Conclusion 
 
     *: Future work
 
-    *: Related work (?)
+    *: Related work
