@@ -592,13 +592,9 @@
         that quickspeck is now capable of discovering.
 
 
--- Injectivity and such --
+-- Injectivity --
 
-    Some predicates are very difficult to generate test cases for without knowing anything about the 
-    theory surounding a predicate.
-
-    When trying to prove injectivity of a pretty printer for arithemtic expressions of the form one
-    might find in an introductory course in domain specific languages or functional programming one
+    When trying to prove injectivity of a pretty printer for arithemtic expressions one
     finds oneself needing the following predicate and associated conditional equation:
         
         P(e, f, s, t) := showTerm e ++ s = showTerm f ++ t (1)
