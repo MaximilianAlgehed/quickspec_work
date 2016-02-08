@@ -1,0 +1,22 @@
+\section{Introduction}
+Theory exploration tools are programs that
+automatically build rich theories about a given mathematical
+domain. %something about usefullness  
+Existing theory exploration tools have limited or no
+support for automatically discovering conditional equations.
+%Nothing is mentioned in:
+%Scheme-based theorem discovery and concept invention
+%Hipster paper obviously
+This work builds on the work of Johansson et. al. %Hipster paper reference here
+by providing a theoretical framework for introducing conditional
+equations in the lightweight theory exploration tool QuickSpec. %Quickspec paper
+QuickSpec generates equational conjectures and uses random testing to
+find equations that may be valid. QuickSpec uses a schema system to
+generate equations and as such is limited to finding equational conjectures.
+This work aims to compliment QuickSpec by introducing three different methods
+of encoding conditional conjectures as equational conjectures and comparing
+the usefullness of these three methods. QuickSpec can be used both as a standalone
+system allowing the user to investigate a set of combinators and datatypes in the
+purely functional lazy programming language Haskell and as a component of other tools %haskell reference
+like tip-spec and HipSpec. %TIP and Hipspec references
+Familiarity with QuickSpec is assumed in the rest of this report.

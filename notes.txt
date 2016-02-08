@@ -591,6 +591,12 @@
         functional queues that obey the invariant described in "The fun of programming"
         that quickspeck is now capable of discovering.
 
+    +: Generally
+
+        In general every example that we have studied have yielded non-trivial conditional equations 
+        that QuickSpec was unable to discover before. A personal favourite is the entire 
+        implementation of Insertion sort.
+
 
 -- Injectivity --
 
