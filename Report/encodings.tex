@@ -8,16 +8,18 @@
     the context of QuickSpec. In fact,
     the idea of encoding conditionals
     as types is something users of
-    QuickCheck, Hughes and Cleassen, %QuickCheck reference
-    have used for a long time.
+    QuickCheck %QuickCheck reference
+    will be very familiar to. This poor
+    man's dependent typing is even implemented
+    in the QuickCheck package one Hackage.%reference and footnote
 
     \subsection{Type encoding}
 
-        Type encoding is based on the idea of encoding
+        Type encoding is the idea of encoding
         predicates as dependent types. More specifically
         it is saying that for a given predicate
         \begin{verbatim}
-            p :: (a, b, c, ..., x) -> Bool
+            p :: (a, b, c, ... , x) -> Bool
         \end{verbatim}
         there exists a dependent type
         \begin{verbatim}
@@ -25,22 +27,66 @@
         \end{verbatim}
         and a function 
         \begin{verbatim}
-            data :: Predicate p -> (a, b, c, ..., d)
+            data :: Predicate p -> (a, b, c, ... , x)
         \end{verbatim}
         such that 
         \begin{verbatim}
             p . data = const True
         \end{verbatim}
         This may seem odd when you consider that haskell is not a dependently types
-        language and QuickSpec works in the domain of haskell.
-        However, becuase QuickSpec uses QuickCheck and QuickCheck lets us define
-        custom generators for random data we can write a generic generator for
-        these types. This means that when equations involving these predicate
+        language. However, becuase QuickSpec uses QuickCheck which lets us define
+        custom generators for random data we can write a generator for 
+        the predicate type which behaves like a dependent type.
+        This means that when equations involving these predicate
         types are tested by QuickCheck the types behave as if they were dependent types.
         The equations involving predicate types are on the form:
         \begin{verbatim}
-            
-            f (data p) = g (data q)
-
+            f (data p) = g (data p)
         \end{verbatim}
-        which translates nicely to $p(x) \wedge q(y) \implies f(x) = g(y)$.
+        which translates nicely to $p(x) \implies f(x) = g(x)$.
+
+    \subsection{Function encoding}
+
+        Function encoding is the idea of encoding 
+        predicates with functions. The idéa is best
+        illustrated with an example.
+        \begin{verbatim}
+            -- p is a predicate
+            p :: (a, b, c, ... , x) -> Bool
+
+            -- default is a value such that
+            p default = True
+
+            -- The predicate is encoded as
+            when_p :: (a, b, c, ... , x) -> (a, b, c, ... , x)
+            when_p input
+                | p input   = input
+                | otherwise = data default
+        \end{verbatim}
+        In function encoding, an equation like
+        \begin{verbatim}
+            g (when_p x) == f (when_p x)
+        \end{verbatim}
+        would be equivalent to the aformentioned $p(x) \implies f(x) = g(x)$.
+
+    \subsection{Combined encoding}
+        
+        Combined encoding is the idea that we can let the
+        default value of a function encoded predicate be a type
+        encoding of the predicate. A combined encoding can be illustrated
+        like this:
+        \begin{verbatim}
+            -- p is a predicate
+            p :: (a, b, c, ..., x) -> Bool  
+
+            -- when_p is a combined encoding of p
+            when_p :: Predicate p -> (a, b, c, ... , x) -> (a, b, c, ... , x)
+            when_p default input
+                | p input   = input
+                | otherwise = default
+        \end{verbatim}
+        The encoding of $p(x) \implies f(x) = g(x)$ in combined encoding would look like
+        this:
+        \begin{verbatim}
+            f (when_p p x) == g (when_p p x)
+        \end{verbatim}
