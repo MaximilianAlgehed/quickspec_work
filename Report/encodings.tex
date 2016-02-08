@@ -1,0 +1,46 @@
+\section{Different encodings}
+
+    This section describes three
+    ways of encoding conditional
+    equations in QuickSpec. It is
+    worth noting that these methods
+    are general and could be used outside
+    the context of QuickSpec. In fact,
+    the idea of encoding conditionals
+    as types is something users of
+    QuickCheck, Hughes and Cleassen, %QuickCheck reference
+    have used for a long time.
+
+    \subsection{Type encoding}
+
+        Type encoding is based on the idea of encoding
+        predicates as dependent types. More specifically
+        it is saying that for a given predicate
+        \begin{verbatim}
+            p :: (a, b, c, ..., x) -> Bool
+        \end{verbatim}
+        there exists a dependent type
+        \begin{verbatim}
+           Predicate p
+        \end{verbatim}
+        and a function 
+        \begin{verbatim}
+            data :: Predicate p -> (a, b, c, ..., d)
+        \end{verbatim}
+        such that 
+        \begin{verbatim}
+            p . data = const True
+        \end{verbatim}
+        This may seem odd when you consider that haskell is not a dependently types
+        language and QuickSpec works in the domain of haskell.
+        However, becuase QuickSpec uses QuickCheck and QuickCheck lets us define
+        custom generators for random data we can write a generic generator for
+        these types. This means that when equations involving these predicate
+        types are tested by QuickCheck the types behave as if they were dependent types.
+        The equations involving predicate types are on the form:
+        \begin{verbatim}
+            
+            f (data p) = g (data q)
+
+        \end{verbatim}
+        which translates nicely to $p(x) \wedge q(y) \implies f(x) = g(y)$.
