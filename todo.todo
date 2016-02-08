@@ -2,15 +2,9 @@
 
     ~Try to see what emna can come up with in the Escaping example
 
-    ~Figure out what the deal is with "isSorted xs => isSorted (insert x xs)" and "isSorted (insert x xs) == isSorted xs"
-
-    ~Read Irenes thesis and try to implement the examples with TE
-
     ~Prove that every expression that can be formed in TE can be reduced to a conditional
 
     ~Prove that not every expression formed in FE can be reduced to a conditional
-
-    ~Existential quantifiers?
 
     ~Pester Nick about the crashes in the twee branch
 
@@ -21,8 +15,6 @@
     ~Measure run time and memory consumption of FE, TE, and CE
 
     ~Figure out conjunctions in FE
-
-    ~Give a good definition of completeness for FE and TE
 
     ~Do the mathematics on the completeness of FE for conjunctions of predicates
 
