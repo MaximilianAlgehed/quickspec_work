@@ -640,6 +640,12 @@
         the "head" and "second" functions discussed in section 4 (?).
 
 
+-- The bitvector example --
+
+    This bitvector example can actually be generalized with conjunction, as it's really any number which is smaller
+    than or equal to n. This should be talked about in the discussion of conjunction.
+
+
 -- Future work --
 
     Automatic conjunction of predicates is a topic that should be worked on. The current implementation

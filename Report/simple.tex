@@ -1,0 +1,39 @@
+\section{Finding simple conjectures}
+All three methods described in section \ref{encodings}
+are capable of expressing conditional equations on the form
+\\$\forall x_0, x_1, ..., x_n. P_0(x_0) \wedge P_1(x_1) \wedge ... \wedge P_n(x_n) \implies f(x_j, x_k ...) = g(x_a, x_b, ...)$.\\
+This means that QuickSpec is now capable of finding several
+interesting conjectures.
+
+\subsection{A gentle start} \label{bitvector}
+Bitvectors, expressed neatly as lists of booleans,
+have the following nice property:
+\begin{gather*}
+    P(n:\mathbb{N},\;xs:List\;\mathbb{B}) = "first\;n\;values\;equal\;False"\\
+    \forall n:\mathbb{N},\;xs:List\;\mathbb{B}.\;P(n,\;xs)\implies lsr\;n\;(lsl\;n\;xs)=xs
+\end{gather*}
+Something which our extensions allow QuickSpec to conjecture.
+
+\subsection{Lists, lists, and more lists...}
+There are many interesting conditional equations that
+QuickSpec can discover about lists. Here is a small subset of them:
+\begin{gather*}
+    \forall n:\mathbb{N},\; xs:List\; a,\; is:List\; a.\\ n \leq length\; xs \implies append\; (drop\; n\; xs)\; is\; =\; drop\; n\; (append\; xs\; is)\\\\
+    \forall xs:List\; a,\; is:List\; a.\\ xs \neq Nil \implies head\; (append\; xs\: is) = head\; xs
+\end{gather*}
+
+\subsection{Prettyprinting}
+When exploring Hughes pretty printing DSL, %reference to pretty printing library
+a task which QuickSpec has done well at before, we now find a law that QuickSpec
+was not previously able to explicitly express:
+\begin{gather*}
+    P(x:Document) = "x\; is\; not\; indented"\\
+    \forall x:Document.\; P(x)\implies text\;Nil\diamond x=x
+\end{gather*}
+The fact that the equation\\
+$\forall x:Document.\; text\;Nil\diamond x = x$\\
+was not in the output from QuickSpec tells us that there is something special
+relating unindendet documents to the $text$ function. In fact, this relationship
+is that the partially applied $text\;Nil\;\diamond$ unindents any document it is applied to. 
+
+

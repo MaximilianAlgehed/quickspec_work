@@ -25,7 +25,7 @@ $(mk_Predicates [
 
 sig =
   signature {
-    maxTermSize = Just 10,
+    maxTermSize = Just 13,
     instances = [
                  baseType (undefined::PnotNill),
                  names (NamesFor ["ps"] :: NamesFor PnotNill),

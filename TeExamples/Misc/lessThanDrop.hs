@@ -14,7 +14,7 @@ import Data.Coerce
 newtype Lst = Lst [Int] deriving (Show, Arbitrary, Ord, Eq)
 
 ltl :: Int -> Lst -> Bool
-ltl n (Lst lst) = (n > 0) && n < (length lst)
+ltl n (Lst lst) = (n >= 0) && n < (length lst)
 
 $(mk_Predicates [
                 [| ltl :: Int -> Lst -> Bool |]

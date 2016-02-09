@@ -76,6 +76,7 @@ $(mk_Predicates [[| notNull :: String -> Bool |]])
 sig =
   signature {
     maxTests = Just 1000,
+    maxTermSize = Just 15,
     constants = [
        constant "P" (coerce . a11 :: Punindented -> Doc),
        constant "Q" (coerce . a11 :: Pnested -> Doc),
