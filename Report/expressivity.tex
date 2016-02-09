@@ -1,0 +1,26 @@
+\section{Expressivity}
+
+A question which naturally arises when studying the
+definitions in section \ref{encodings} is;
+Can every equation that is expressed in a specific encoding
+scheme really be translated into a conditional equation?
+The answer to this question, sadly, is no. The semantics
+for how one would translate a function encoding or a combined
+encoding to a conditional are not as obvious as one would think.
+Consider the following example:
+\begin{verbatim}
+%Example involving whenBitZeroZero (whenBitSevenZero b) = whenBitSevenZero (whenBitZeroZero b)
+%which shows that if we choose repeated application of different predicates
+%to mean conjunction of predicates we get problems with
+%whenSorted (whenNotNull xs) = f xs
+%which can't be translated to
+%(whenSorted xs) and (whenNotNull xs) => xs = f xs
+\end{verbatim}
+
+The coulprit here is surely the choice of default value for our function encodings. 
+In section \ref{combined_encoding} we introduced the idea of combined encoding which was meant to do away
+with issues like this. However, as we see in the following example
+the semanitcs for combined encoding are not clear either
+\begin{verbatim}
+%Some example, not sure which it will be yet
+\end{verbatim}
