@@ -1,0 +1,16 @@
+\section{Completeness}
+
+Because using QuickSpec means limiting the size
+of the equations QuickSpec considers, size being
+defined as the number of function symbols in the
+equation. It is worth considering the impact that
+different encodings have on the size of the output
+and how that relates to completeness. In both
+function encoding and type encoding we use two
+symbols to express ever occurance of
+a constrained variable. However, in
+combined encoding we need to use three symbols
+to refer to any one occurance of a constrained variable.
+This means that without support for combined encoding in
+QuickSpec the approach loses out on many equations which
+it's less verbose siblings are able to handle.
