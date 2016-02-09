@@ -20,7 +20,17 @@ Consider the following example:
 The coulprit here is surely the choice of default value for our function encodings. 
 In section \ref{combined_encoding} we introduced the idea of combined encoding which was meant to do away
 with issues like this. However, as we see in the following example
-the semanitcs for combined encoding are not clear either
+the semanitcs for combined encoding are not clear either:
 \begin{verbatim}
-%Some example, not sure which it will be yet
+%some example of when multiple applications of a ce function
+%destroys the property whenP (f x) = (g x)
 \end{verbatim}
+
+These examples clearly illustrate the need to be explicit about conjunctions
+and mappings of data. It is apparent that what advantage function
+and combined encoding had over type encoding in terms of expressing
+predicates of mappings or conjunction of predicates is lost.
+Furthermore we now need to consider the extra overhead that is introduced
+when we have to, for each equation generated in a function or combined
+encoding setting, consider if an equation can actually be rewritten
+as a conditional equation.
