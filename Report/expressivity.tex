@@ -1,34 +1,8 @@
 \section{Expressivity}
 
-When looking at the definition in 
-section \ref{encodings} it is easy to assume
-that function encoding is highly expressive.
-One assumption one is tempted to make is that
-function encoding can handle conditional (highly contrived)
-equations like this\\
-$\forall xs : List.\;sorted\;(tail\; xs) \implies insert\;(head\;xs)\;(tail\;xs)=sort\;xs$.
-However, as we will see there are several limitations to what function encoding can express.
-If we analyze the equation above we find that QuickSpec will indeed not find it
-using function encoding as easily as we would have hoped.
-\begin{verbatim}
--- Function encoding of sorted lists
-whenSorted :: [Integer] -> Bool
-whenSorted xs
-    | sorted xs = xs
-    | otherwise = []
-
-let xs = [2, 2, 1, 3]
-sort xs = [1, 2, 2, 3]
-insert (head xs) (whenSorted (tail xs)) = [2]
-\end{verbatim}
-Here we see that function will rule the implication of as false. The approach is
-incomplete for these types of equations.
-
-An interesting side effect of the way function encoding
-works is that you can get some very (un)interesting results. 
-When given a signature like this:
-\begin{verbatim}
--- All elements greater than 0
+Function encoding can some times lead to non-results.Consider this interesting side effect of the way function encoding
+works:
+\begin{verbatim}-- All elements greater than 0
 greater :: [Integer] -> Bool
 
 -- All elements less than 0 
@@ -44,19 +18,46 @@ whenGreater xs
 whenLesser :: [Integer] -> [Integer]
 whenLesser xs
     | lesser xs = xs
-    | otherwise = [-1]
-\end{verbatim}
-QuickSpec will happily generate equations like
+    | otherwise = [-1]\end{verbatim}
+Given this QuickSpec will happily generate equations like
 \begin{verbatim}(whenLesser (whenGreater xs)) = [-1]\end{verbatim}
 which of course translates to the riddiculous\\
-$\forall xs : List\; Integer.\; greater(xs)\wedge lesser(xs)\implies xs = Cons\; -1\; Nil$.
-Which is actually just $\forall xs : List\; Integer.\; False\implies xs = Cons\; -1\; Nil$,
-or put simply $p\vee \neg p$.
+$\forall xs : List\; Integer.\; greater(xs)\wedge lesser(xs)\implies xs = Cons\; (-1)\; Nil$.
+Which is actually just\\$\forall xs : List\; Integer.\; False\implies xs = Cons\; (-1)\; Nil$,
+or put simply\\$p\vee \neg p$.
 
-%These examples clearly illustrate the need to be explicit about conjunctions
-%and mappings of data, it is not something we get for free with function or combined
-%encoding. 
-%Furthermore we now need to consider the extra overhead that is introduced
-%when we have to, for each equation generated in a function or combined
-%encoding setting, consider if an equation can actually be rewritten
-%as a conditional equation.
+When looking at the definition in 
+section \ref{encodings} it is easy to assume
+that function encoding is highly expressive.
+One assumption one is tempted to make is that
+function encoding can handle conditional (highly contrived)
+equations like this\\
+$\forall xs : List.\;sorted\;(tail\; xs) \implies insert\;(head\;xs)\;(tail\;xs)=sort\;xs$.
+However, as we will see there are several limitations to what function encoding can express.
+If we analyze the equation above we find that QuickSpec will indeed not find it
+using function encoding as easily as we would have hoped.
+\begin{verbatim}-- Function encoding of sorted lists
+whenSorted :: [Integer] -> Bool
+whenSorted xs
+    | sorted xs = xs
+    | otherwise = []
+
+let xs = [2, 2, 1, 3]
+
+-- Now we get the following
+sort xs = [1, 2, 2, 3]
+insert (head xs) (whenSorted (tail xs)) = [2]\end{verbatim}
+Here we see that function encoding will rule the implication out as false. The approach is
+incomplete for these types of equations.
+
+Function encoding has the potential to produce unparsable equations.
+There is nohting in Haskell's semantics that stop us from getting function
+encoded equations like:
+\begin{verbatim}whenP x (whenQ y) = g (whenP (f y) (h x))\end{verbatim}
+In the space of all predicates $P$ and $Q$, as well as all functions $f$, $g$, and $h$ it
+is not inconveciable that the above expression can not be translated to a constrained
+equation on the form\\$"Something\;with\;variables,\;P,\;and\;Q"\implies "Something\;with\;variables,\;f,\;g,\;and\;h"$.
+One may argue that the equation still has a meaning, but it is at the very best a side track
+from the original theory we are trying to investigate and ultimately is a distraction from the goal.
+We would like our representation of conditional equations to be opaque but the expression above
+can not be parsed in any meaningfull way without knowing something about the function symbols involved.
