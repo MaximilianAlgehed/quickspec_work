@@ -222,7 +222,7 @@
                     instance Predicateable P P where
                         predicate = eq_xy
 
-                Then QuickSpeck can generate laws like:
+                Then QuickSpec can generate laws like:
 
                     f (y (x' q)) = g (x (y' q))
 
@@ -360,7 +360,7 @@
 
             instead. However this may not always be the case.
 
-            Another more realistic example:
+            Another example:
                 
                 Consider the following constrained equation where xs is a non-null list: (non-null for technical reasons) 
 
@@ -586,16 +586,17 @@
 
     +: Invariants
         
-        Good results have been obtained when running QuickSpeck with TE on 
+        Good results have been obtained when running QuickSpec with TE on 
         datatypes which have invariants. There are several equations about efficient
         functional queues that obey the invariant described in "The fun of programming"
-        that quickspeck is now capable of discovering.
+        that QuickSpec is now capable of discovering.
 
     +: Generally
 
         In general every example that we have studied have yielded non-trivial conditional equations 
         that QuickSpec was unable to discover before. A personal favourite is the entire 
-        implementation of Insertion sort.
+        implementation of Insertion sort (which is not relly non-trivial as it can be obtained from looking
+        at the implementation of insert and insertion sort I suppose...).
 
 
 -- Injectivity --
