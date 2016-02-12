@@ -1,0 +1,17 @@
+-- Equations that would be cool to work with from APL --
+
+    Property ← {∧/⍵ = ⍳⌈/⍵ ⍳ ⍵}
+
+    This would be:
+    "The list of the indecies of every
+    number from 1 to ⌈⍵ in ⍵ 
+    is equal to ⍵"
+    This is of course only true for lists with no negative
+    numbers. Here is the conditional:
+
+    Condition ← {∧/1≤⍵}
+    Impl ← {⍵∨(~⍺)}
+    CondProperty ← {(Condition ⍵) Impl (Property ⍵)}
+
+    We can very easily write this as a property test 
+    in apl using the ? function and some magic
