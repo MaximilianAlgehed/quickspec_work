@@ -1,17 +1,50 @@
 -- Equations that would be cool to work with from APL --
 
-    Property ← {∧/⍵ = ⍳⌈/⍵ ⍳ ⍵}
+    +: List indexing
+        Property ← {∧/⍵ = ⍳⌈/⍵ ⍳ ⍵}
 
-    This would be:
-    "The list of the indecies of every
-    number from 1 to ⌈⍵ in ⍵ 
-    is equal to ⍵"
-    This is of course only true for lists with no negative
-    numbers. Here is the conditional:
+        This would be:
+        "The list of the indecies of every
+        number in ⍵ in the list of numbers
+        from 1 to max(⍵) 
+        is equal to ⍵"
+        This is of course only true for lists with no negative
+        numbers. Here is the conditional:
 
-    Condition ← {∧/1≤⍵}
-    Impl ← {⍵∨(~⍺)}
-    CondProperty ← {(Condition ⍵) Impl (Property ⍵)}
+        Condition ← {∧/1≤⍵}
+        Impl ← {⍵∨(~⍺)}
+        CondProperty ← {(Condition ⍵) Impl (Property ⍵)}
 
-    We can very easily write this as a property test 
-    in apl using the ? function and some magic
+        We can very easily write this as a property test 
+        in apl using the ? function and some magic
+
+
+    +: Subsets
+        Property ← {∧/⍵∊⍺[(⍺∊⍵)/⍳⍴⍺]}
+
+        "
+        List Property Data
+        "
+    
+        Says that "Every value in Data is also in
+        the list comprised of the values at the 
+        indecies of items in List that are also
+        in data"
+
+        However, if Data contains elements not in
+        List then those elements can not be accessed
+        by any indexing (⍺[...]) of List.
+
+        So the conditional would be:
+
+        Conditional ← {∧/⍵∊⍺}
+
+        So
+
+        "
+        List Conditional Data
+        "
+
+        is
+
+        "List is a superset of Data"
