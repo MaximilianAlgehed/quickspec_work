@@ -23,7 +23,6 @@ instance (APLValue a) => Rohable (V.Vector (V.Vector a)) where
 
     roh_m = V.map V.length
 
-
 iota_m :: Int -> V.Vector Int
 iota_m = V.enumFromN 1
 
@@ -42,7 +41,5 @@ v `iota_d` w = V.map (iota_index v) w
 (</\>) = (*)
 
 (<\/>) :: Int -> Int -> Int
-(<\/>) x 0 = abs x
-(<\/>) 0 x = abs x
-(<\/>) 1 _ = 1
-(<\/>) _ 1 = 1
+(<\/>) 0 0 = 0
+(<\/>) _ _ = 1
