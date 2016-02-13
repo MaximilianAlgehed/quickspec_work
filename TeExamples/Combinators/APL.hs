@@ -9,10 +9,12 @@ class APLValue a where
     
     apl_eq :: a -> a -> Bool
 
-instance APLValue Char where
+instance APLValue Int where
+
     apl_eq = (==)
 
-instance APLValue Int where
+instance (Eq a, APLValue a) => APLValue (V.Vector a) where
+
     apl_eq = (==)
 
 class Rohable a where
@@ -20,10 +22,6 @@ class Rohable a where
     roh_m :: a -> V.Vector Int
 
 instance Rohable Int where
-    
-    roh_m = const V.empty
-
-instance Rohable Char where
     
     roh_m = const V.empty
 
@@ -45,8 +43,28 @@ instance Tildeable a => Tildeable (V.Vector a) where
 
     tilde = V.map tilde
 
+class Equateable a where
+    
+    (<=>) :: a -> a -> a
+
+instance Equateable Int where
+
+    x <=> y = if x == y then
+                1
+              else
+                0
+
+instance (Equateable a) => Equateable (V.Vector a) where
+
+    v <=> w
+        | V.length v /= V.length w = error "Length error"
+        | otherwise = V.zipWith (<=>) v w
+
 iota_m :: Int -> V.Vector Int
-iota_m = V.enumFromN 1
+iota_m 0 = V.empty
+iota_m n 
+    | n < 0 = error "Domain error"
+    | otherwise = V.enumFromN 1 n
 
 iota_d :: (APLValue a) => V.Vector a -> V.Vector a -> V.Vector Int
 v `iota_d` w = V.map (iota_index v) w
@@ -65,3 +83,9 @@ v `iota_d` w = V.map (iota_index v) w
 (<\/>) :: Int -> Int -> Int
 (<\/>) 0 0 = 0
 (<\/>) _ _ = 1
+
+ceiling_d :: Int -> Int -> Int
+ceiling_d = max
+
+floor_d :: Int -> Int -> Int
+floor_d = min
