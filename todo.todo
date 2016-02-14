@@ -1,6 +1,6 @@
 -- Todo for the introduction of conditionals in QuickSpec --
 
-    ~Try to see what emna can come up with in the Escaping example
+    ~Work out a nice way to work with well-formedness of expression in the APL stuff
 
     ~Prove that every expression that can be formed in TE can be reduced to a conditional
 
@@ -8,19 +8,7 @@
 
     ~Pester Nick about the crashes in the twee branch
 
-    ~Implement CE in template haskell (?)
-
-    ~Check with Nick about currying the injections of TE types into CE
-
     ~Measure run time and memory consumption of FE, TE, and CE
-
-    ~Figure out conjunctions in FE
-
-    ~Do the mathematics on the completeness of FE for conjunctions of predicates
-
-    ~Figure out conjunction in CE
-
-    ~Do the mathematics on the completeness of CE for conjunctions of predicates
 
     ~Integrate conjunction in TE into the template haskell implementation of TE
 
