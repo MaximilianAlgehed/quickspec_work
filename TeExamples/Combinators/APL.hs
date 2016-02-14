@@ -1,5 +1,6 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 
 module APL where
 
@@ -27,7 +28,8 @@ instance Rohable Int where
 
 instance (Rohable a) => Rohable (V.Vector a) where
     
-    roh_m v = (V.concatMap roh_m v) V.++ (V.singleton (V.length v))
+    roh_m v = (V.singleton (V.length v)) V.++
+              (V.concatMap roh_m (V.take 1 v))
 
 class Tildeable a where
     
@@ -60,6 +62,31 @@ instance (Equateable a) => Equateable (V.Vector a) where
         | V.length v /= V.length w = error "Length error"
         | otherwise = V.zipWith (<=>) v w
 
+class Andable a where
+    
+    (</\>) :: a -> a -> a
+
+instance Andable Int where
+
+    (</\>) = (*)
+
+instance (Andable a) => Andable (V.Vector a) where
+
+    (</\>) = V.zipWith (</\>)
+
+class APLFoldable v a' a where
+
+    (</>) :: (a -> a -> a) -> v -> a' 
+
+instance APLFoldable (V.Vector Int) Int Int where
+
+    (</>) = V.foldl1
+
+instance (APLFoldable (V.Vector a') a' a) =>
+         APLFoldable (V.Vector (V.Vector a')) (V.Vector a') a where
+
+    (</>) fun = V.map ((</>) fun)
+
 iota_m :: Int -> V.Vector Int
 iota_m 0 = V.empty
 iota_m n 
@@ -73,12 +100,6 @@ v `iota_d` w = V.map (iota_index v) w
         iota_index v a = case findIndex (apl_eq a) v of
                             Just i  -> i+1
                             Nothing -> (V.length v)+1
-
-(</>) :: (a -> a -> a) -> V.Vector a -> a
-(</>) = V.foldl1
-
-(</\>) :: Int -> Int -> Int
-(</\>) = (*)
 
 (<\/>) :: Int -> Int -> Int
 (<\/>) 0 0 = 0
