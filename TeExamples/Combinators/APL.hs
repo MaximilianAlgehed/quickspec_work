@@ -18,15 +18,15 @@ instance (Eq a, APLValue a) => APLValue (V.Vector a) where
 
     apl_eq = (==)
 
-class Rohable a where
+class MRohable a where
     
     roh_m :: a -> V.Vector Int
 
-instance Rohable Int where
+instance MRohable Int where
     
     roh_m = const V.empty
 
-instance (Rohable a) => Rohable (V.Vector a) where
+instance (MRohable a) => MRohable (V.Vector a) where
     
     roh_m v = (V.singleton (V.length v)) V.++
               (V.concatMap roh_m (V.take 1 v))
@@ -98,6 +98,30 @@ instance (APLFoldable (V.Vector a') a' a) =>
 
     (</>) fun = V.map ((</>) fun)
 
+class DCeiling a where
+    
+    ceiling_d :: a -> a -> a
+
+instance DCeiling Int where
+    
+    ceiling_d = max
+
+instance (DCeiling a) => DCeiling (V.Vector a) where
+    
+    ceiling_d = V.zipWith ceiling_d
+
+class DFloor a where
+    
+    floor_d :: a -> a -> a
+
+instance DFloor Int where
+    
+    floor_d = min
+
+instance (DFloor a) => DFloor (V.Vector a) where
+    
+    floor_d = V.zipWith floor_d
+
 iota_m :: Int -> V.Vector Int
 iota_m 0 = V.empty
 iota_m n 
@@ -111,9 +135,3 @@ v `iota_d` w = V.map (iota_index v) w
         iota_index v a = case findIndex (apl_eq a) v of
                             Just i  -> i+1
                             Nothing -> (V.length v)+1
-
-ceiling_d :: Int -> Int -> Int
-ceiling_d = max
-
-floor_d :: Int -> Int -> Int
-floor_d = min
