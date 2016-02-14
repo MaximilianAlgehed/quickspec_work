@@ -74,6 +74,19 @@ instance (Andable a) => Andable (V.Vector a) where
 
     (</\>) = V.zipWith (</\>)
 
+class Orable a where
+
+    (<\/>) :: a -> a -> a
+
+instance Orable Int where
+
+    (<\/>) 0 0 = 0  
+    (<\/>) _ _ = 1
+
+instance (Orable a) => Orable (V.Vector a) where
+
+    v <\/> w = V.zipWith (<\/>) v w
+
 class APLFoldable v a' a where
 
     (</>) :: (a -> a -> a) -> v -> a' 
@@ -100,10 +113,6 @@ v `iota_d` w = V.map (iota_index v) w
         iota_index v a = case findIndex (apl_eq a) v of
                             Just i  -> i+1
                             Nothing -> (V.length v)+1
-
-(<\/>) :: Int -> Int -> Int
-(<\/>) 0 0 = 0
-(<\/>) _ _ = 1
 
 ceiling_d :: Int -> Int -> Int
 ceiling_d = max
