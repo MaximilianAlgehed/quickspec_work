@@ -58,9 +58,7 @@ instance Equateable Int where
 
 instance (Equateable a) => Equateable (V.Vector a) where
 
-    v <=> w
-        | V.length v /= V.length w = error "Length error"
-        | otherwise = V.zipWith (<=>) v w
+    (<=>) = V.zipWith (<=>)
 
 class Andable a where
     
@@ -85,7 +83,7 @@ instance Orable Int where
 
 instance (Orable a) => Orable (V.Vector a) where
 
-    v <\/> w = V.zipWith (<\/>) v w
+    (<\/>) = V.zipWith (<\/>)
 
 class APLFoldable v a' a where
 
