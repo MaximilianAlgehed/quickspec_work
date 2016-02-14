@@ -1,6 +1,7 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE UndecidableInstances #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 module APL where
 
@@ -17,6 +18,18 @@ instance APLValue Int where
 instance (Eq a, APLValue a) => APLValue (V.Vector a) where
 
     apl_eq = (==)
+
+class APLDyadic a where
+
+    apl_zip :: (Int -> Int -> Int) -> a -> a -> a
+
+instance APLDyadic Int where
+    
+    apl_zip = ($)
+
+instance (APLDyadic a) => APLDyadic (V.Vector a) where
+
+    apl_zip f = V.zipWith (apl_zip f)
 
 class MRohable a where
     
@@ -45,46 +58,6 @@ instance Tildeable a => Tildeable (V.Vector a) where
 
     tilde = V.map tilde
 
-class Equateable a where
-    
-    (<=>) :: a -> a -> a
-
-instance Equateable Int where
-
-    x <=> y = if x == y then
-                1
-              else
-                0
-
-instance (Equateable a) => Equateable (V.Vector a) where
-
-    (<=>) = V.zipWith (<=>)
-
-class Andable a where
-    
-    (</\>) :: a -> a -> a
-
-instance Andable Int where
-
-    (</\>) = (*)
-
-instance (Andable a) => Andable (V.Vector a) where
-
-    (</\>) = V.zipWith (</\>)
-
-class Orable a where
-
-    (<\/>) :: a -> a -> a
-
-instance Orable Int where
-
-    (<\/>) 0 0 = 0  
-    (<\/>) _ _ = 1
-
-instance (Orable a) => Orable (V.Vector a) where
-
-    (<\/>) = V.zipWith (<\/>)
-
 class APLFoldable v a' a where
 
     (</>) :: (a -> a -> a) -> v -> a' 
@@ -98,29 +71,36 @@ instance (APLFoldable (V.Vector a') a' a) =>
 
     (</>) fun = V.map ((</>) fun)
 
-class DCeiling a where
-    
-    ceiling_d :: a -> a -> a
+(<=>) :: APLDyadic a => a -> a -> a
+(<=>) = apl_zip apl_eq
+    where
+        apl_eq :: Int -> Int -> Int
+        apl_eq x y = if x == y then
+                        1
+                     else
+                        0
 
-instance DCeiling Int where
-    
-    ceiling_d = max
+(</\>) :: APLDyadic a => a -> a -> a
+(</\>) = apl_zip apl_and
+    where
+        apl_and :: Int -> Int -> Int
+        apl_and x y = if x*y /= 0 then
+                        1
+                      else
+                        0
 
-instance (DCeiling a) => DCeiling (V.Vector a) where
-    
-    ceiling_d = V.zipWith ceiling_d
+(<\/>) :: APLDyadic a => a -> a -> a
+(<\/>) = apl_zip apl_or
+    where
+        apl_or :: Int -> Int -> Int
+        apl_or 0 0 = 0
+        apl_or _ _ = 1
 
-class DFloor a where
-    
-    floor_d :: a -> a -> a
+ceiling_d :: APLDyadic a => a -> a -> a
+ceiling_d = apl_zip max
 
-instance DFloor Int where
-    
-    floor_d = min
-
-instance (DFloor a) => DFloor (V.Vector a) where
-    
-    floor_d = V.zipWith floor_d
+floor_d :: APLDyadic a => a -> a -> a
+floor_d = apl_zip min
 
 iota_m :: Int -> V.Vector Int
 iota_m 0 = V.empty
