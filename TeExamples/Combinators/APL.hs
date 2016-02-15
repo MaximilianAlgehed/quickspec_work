@@ -31,6 +31,18 @@ instance (APLDyadic a) => APLDyadic (V.Vector a) where
 
     apl_zip f = V.zipWith (apl_zip f)
 
+class APLMonadic a where
+    
+    apl_map :: (Int -> Int) -> a -> a
+
+instance APLMonadic Int where
+    
+    apl_map f x = f x
+
+instance (APLMonadic a) => APLMonadic (V.Vector a) where
+
+    apl_map f = V.map (apl_map f)
+
 class MRohable a where
     
     roh_m :: a -> V.Vector Int
@@ -52,7 +64,7 @@ instance Tildeable Int where
 
     tilde 0 = 1
     tilde 1 = 0
-    tilde _ = error "Domain error"
+    tilde _ = 0
 
 instance Tildeable a => Tildeable (V.Vector a) where
 
@@ -70,6 +82,18 @@ instance (APLFoldable (V.Vector a') a' a) =>
          APLFoldable (V.Vector (V.Vector a')) (V.Vector a') a where
 
     (</>) fun = V.map ((</>) fun)
+
+class Ravelable a where
+
+    ravel :: a -> V.Vector Int
+
+instance Ravelable Int where
+
+    ravel = V.singleton
+    
+instance (Ravelable a) => Ravelable (V.Vector a) where
+    
+    ravel = V.concatMap ravel
 
 (<=>) :: APLDyadic a => a -> a -> a
 (<=>) = apl_zip apl_eq
@@ -103,9 +127,8 @@ floor_d :: APLDyadic a => a -> a -> a
 floor_d = apl_zip min
 
 iota_m :: Int -> V.Vector Int
-iota_m 0 = V.empty
 iota_m n 
-    | n < 0 = error "Domain error"
+    | n <= 0 = V.empty
     | otherwise = V.enumFromN 1 n
 
 iota_d :: (APLValue a) => V.Vector a -> V.Vector a -> V.Vector Int
