@@ -28,7 +28,19 @@ isBooleanV = V.all isBoolean . coerce
 isBooleanV' :: VV -> Bool
 isBooleanV' = V.all isBooleanV . coerce
 
-$(mk_Predicates [[| isBoolean :: Int -> Bool |], [| isBooleanV :: V -> Bool |], [| isBooleanV' :: VV -> Bool |]])
+isWellShaped :: VV -> Bool
+isWellShaped (VV v) = V.all (\x -> if (V.length v) == 0 then True else x == (V.length (V.head v))) (V.map V.length v)
+
+eqRohV :: V -> V -> Bool
+eqRohV (V v) (V w) = (roh_m v) == (roh_m w)
+
+$(mk_Predicates [
+                 [| isWellShaped :: VV -> Bool |],
+                 [| isBoolean :: Int -> Bool |],
+                 [| isBooleanV :: V -> Bool |],
+                 [| isBooleanV' :: VV -> Bool |],
+                 [| eqRohV :: V -> V -> Bool |]
+                ])
 
 sig =
   signature {
@@ -43,12 +55,19 @@ sig =
                  baseType (undefined::PisBooleanV),
                  names (NamesFor ["p"] :: NamesFor PisBooleanV),
                  baseType (undefined::PisBooleanV'),
-                 names (NamesFor ["p"] :: NamesFor PisBooleanV')
+                 names (NamesFor ["p"] :: NamesFor PisBooleanV'),
+                 baseType (undefined::PisWellShaped),
+                 names (NamesFor ["q"] :: NamesFor PisWellShaped),
+                 baseType (undefined::PeqRohV),
+                 names (NamesFor ["w"] :: NamesFor PeqRohV)
                 ],
     constants = [
         constant "x" (coerce . a11 :: PisBoolean -> Int),
         constant "xs" (coerce . a11 :: PisBooleanV -> V.Vector Int),
+        constant "xs" (coerce . a21 :: PeqRohV -> V.Vector Int),
+        constant "ys" (coerce . a22 :: PeqRohV -> V.Vector Int),
         constant "xss" (coerce . a11 :: PisBooleanV' -> V.Vector (V.Vector Int)),
+        constant "xss" (coerce . a11 :: PisWellShaped -> V.Vector (V.Vector Int)),
         constant "⌈" (ceiling_d :: Int -> Int -> Int),
         constant "⌈" (ceiling_d :: V.Vector Int -> V.Vector Int -> V.Vector Int),
         constant "⌈" (ceiling_d :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int)),
@@ -65,9 +84,9 @@ sig =
         constant "⍴" (roh_m :: Int -> V.Vector Int),
         constant "⍴" (roh_m :: V.Vector Int -> V.Vector Int),
         constant "⍴" (roh_m :: V.Vector (V.Vector Int) -> V.Vector Int),
-        constant "=" ((<=>) :: Int -> Int -> Int),
-        constant "=" ((<=>) :: V.Vector Int -> V.Vector Int -> V.Vector Int),
-        constant "=" ((<=>) :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int)),
+        constant "==" ((<=>) :: Int -> Int -> Int),
+        constant "==" ((<=>) :: V.Vector Int -> V.Vector Int -> V.Vector Int),
+        constant "==" ((<=>) :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int)),
         constant "∧" ((</\>) :: Int -> Int -> Int),
         constant "∧" ((</\>) :: V.Vector Int -> V.Vector Int -> V.Vector Int),
         constant "∧" ((</\>) :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int)),

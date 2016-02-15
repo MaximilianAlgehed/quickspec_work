@@ -24,9 +24,11 @@ instance APLDyadic Int where
     
     apl_zip = ($)
 
-instance (APLDyadic a) => APLDyadic (V.Vector a) where
+instance (MRohable a, APLDyadic a) => APLDyadic (V.Vector a) where
 
-    apl_zip f = V.zipWith (apl_zip f)
+    apl_zip f as bs 
+        | (roh_m as) == (roh_m bs) = V.zipWith (apl_zip f) as bs
+        | otherwise                = undefined
 
 class APLMonadic a where
     
@@ -34,7 +36,7 @@ class APLMonadic a where
 
 instance APLMonadic Int where
     
-    apl_map f x = f x
+    apl_map f = f
 
 instance (APLMonadic a) => APLMonadic (V.Vector a) where
 
