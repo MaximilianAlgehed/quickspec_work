@@ -95,6 +95,30 @@ instance (Ravelable a) => Ravelable (V.Vector a) where
     
     ravel = V.concatMap ravel
 
+class MIotable a where
+    
+    iota_m :: a -> V.Vector Int
+
+instance MIotable Int where
+
+    iota_m = iota
+        where
+            iota :: Int -> V.Vector Int
+            iota 0          = V.empty
+            iota n
+                | n < 0     = undefined
+                | otherwise = V.enumFromN 1 n
+
+instance MIotable a => MIotable (V.Vector a) where
+
+    iota_m = iota
+        where
+            iota v
+             | V.length v == 1 = case v V.!? 0 of
+                                    Nothing -> V.empty
+                                    Just x  -> iota_m x
+             | otherwise = undefined
+
 (<=>) :: APLDyadic a => a -> a -> a
 (<=>) = apl_zip apl_eq
     where
@@ -125,11 +149,6 @@ ceiling_d = apl_zip max
 
 floor_d :: APLDyadic a => a -> a -> a
 floor_d = apl_zip min
-
-iota_m :: Int -> V.Vector Int
-iota_m n 
-    | n <= 0 = V.empty
-    | otherwise = V.enumFromN 1 n
 
 iota_d :: (APLValue a) => V.Vector a -> V.Vector a -> V.Vector Int
 v `iota_d` w = V.map (iota_index v) w

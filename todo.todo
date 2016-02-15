@@ -1,5 +1,7 @@
 -- Todo for the introduction of conditionals in QuickSpec --
 
+    ~Make APL functions like ⍳ crash on functions where the dimension is not right
+
     ~Work out a nice way to work with well-formedness of expression in the APL stuff
 
     ~Prove that every expression that can be formed in TE can be reduced to a conditional

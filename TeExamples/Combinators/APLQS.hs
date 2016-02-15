@@ -22,7 +22,9 @@ sig =
         constant "⌊" (floor_d :: Int -> Int -> Int),
         constant "⌊" (floor_d :: V.Vector Int -> V.Vector Int -> V.Vector Int),
         constant "⌊" (floor_d :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int)),
-        constant "⍳" iota_m,
+        constant "⍳" (iota_m :: Int -> V.Vector Int),
+        constant "⍳" (iota_m :: V.Vector Int -> V.Vector Int),
+        constant "⍳" (iota_m :: V.Vector (V.Vector Int) -> V.Vector Int),
         constant "⍳" (iota_d :: V.Vector Int -> V.Vector Int -> V.Vector Int),
         constant "0" (0 :: Int),
         constant "1" (1 :: Int),
@@ -32,7 +34,13 @@ sig =
         constant "⍴" (roh_m :: V.Vector (V.Vector Int) -> V.Vector Int),
         constant "=" ((<=>) :: Int -> Int -> Int),
         constant "=" ((<=>) :: V.Vector Int -> V.Vector Int -> V.Vector Int),
-        constant "=" ((<=>) :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int))
+        constant "=" ((<=>) :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int)),
+        constant "∧" ((</\>) :: Int -> Int -> Int),
+        constant "∧" ((</\>) :: V.Vector Int -> V.Vector Int -> V.Vector Int),
+        constant "∧" ((</\>) :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int)),
+        constant "∨" ((<\/>) :: Int -> Int -> Int),
+        constant "∨" ((<\/>) :: V.Vector Int -> V.Vector Int -> V.Vector Int),
+        constant "∨" ((<\/>) :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int))
     ]
    }
 
