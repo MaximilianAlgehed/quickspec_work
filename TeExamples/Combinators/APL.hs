@@ -1,7 +1,4 @@
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE UndecidableInstances #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances,UndecidableInstances,MultiParamTypeClasses,FlexibleContexts #-}
 
 module APL where
 
