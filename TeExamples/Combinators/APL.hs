@@ -53,20 +53,6 @@ instance (MRohable a) => MRohable (V.Vector a) where
     roh_m v = (V.singleton (V.length v)) V.++
               (V.concatMap roh_m (V.take 1 v))
 
-class Tildeable a where
-    
-    tilde :: a -> a
-
-instance Tildeable Int where
-
-    tilde 0 = 1
-    tilde 1 = 0
-    tilde _ = 0
-
-instance Tildeable a => Tildeable (V.Vector a) where
-
-    tilde = V.map tilde
-
 class APLFoldable v a' a where
 
     (</>) :: (a -> a -> a) -> v -> a' 
@@ -140,6 +126,13 @@ instance MIotable a => MIotable (V.Vector a) where
         apl_or :: Int -> Int -> Int
         apl_or 0 0 = 0
         apl_or _ _ = 1
+
+tilde :: APLMonadic a => a -> a
+tilde = apl_map apl_tilde
+    where
+        apl_tilde 0 = 1
+        apl_tilde 1 = 0
+        apl_tilde _ = undefined
 
 ceiling_d :: APLDyadic a => a -> a -> a
 ceiling_d = apl_zip max

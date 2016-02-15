@@ -40,7 +40,10 @@ sig =
         constant "∧" ((</\>) :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int)),
         constant "∨" ((<\/>) :: Int -> Int -> Int),
         constant "∨" ((<\/>) :: V.Vector Int -> V.Vector Int -> V.Vector Int),
-        constant "∨" ((<\/>) :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int))
+        constant "∨" ((<\/>) :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int)),
+        constant "~" (tilde :: Int -> Int),
+        constant "~" (tilde :: V.Vector Int -> V.Vector Int),
+        constant "~" (tilde :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int))
     ]
    }
 
