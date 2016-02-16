@@ -646,6 +646,12 @@
     This bitvector example can actually be generalized with conjunction, as it's really any number which is smaller
     than or equal to n. This should be talked about in the discussion of conjunction.
 
+-- A programming language --
+
+    There are several things that are made difficult by the shallow embedding. Maybe a deep embedding is needed.
+    Cross-dimensional equality should help improve things. Lifting things from ⍴ to ⍴ 1 should be an opeation. (V.singleton)
+    This should help QuickSpec
+
 
 -- Future work --
 
