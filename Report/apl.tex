@@ -5,16 +5,27 @@ APL has very concise notation and semantics.
 To work with APL in haskell we implement a small
 algebra for haskell's vector type %reference to vector (?)
 that emulates the basic semantics of APL.
-Using conditionals in QuickSpec we are able to check some of
-the semantics of APL at runtime.
+Using conditionals in QuickSpec we are able to discover
+equations about APL in spite of some of the
+difficulties of modelling a dynamically typed language that 
+behaves like a dependently typed duck.
 
 An example of this is matrices in APL. Matrices in APL
 have the same properties of rank that those of normal
 matrices in standard linear algebra. However, in our implementation
-of matrices in haskell one may choose to represent an APL matrix with
-the type:
+of matrices in haskell one may choose to represent a two dimensional
+APL matrix with the type:
 \begin{verbatim}type APLMatrix a = Vector (Vector a)\end{verbatim}
 Using conditional equations in QuickSpec we are still able to deal with
 APL matrices even though our type has none of the properties of APL matrices.
 One such property, our type involves the value \begin{verbatim} [[], [1, 2, 3]] \end{verbatim}
 which is not a valid value in APL.
+
+Partiality of shallow embeddings representing malformed expressions in the
+embedded language can be represented by conditional equations in QuickSpec.
+Take for an instance the unary operator $\iota$ in APL. The semantics
+of $\iota$ are that any dimension matrix which contains only one element which is also
+an integer the $\iota$ operator will produce the vector of all integers from 1 to that element.
+The implementation of the $\iota$ operator in a shallow embedding will be inherently partial,
+but since we can deal with partial functions using our techniques we are still able to reason
+about equations involving $\iota$.
