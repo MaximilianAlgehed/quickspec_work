@@ -1,0 +1,20 @@
+\section{A programming language}
+The programming language APL %apl reference
+is a language for processing arrays and tabular data.
+APL has very concise notation and semantics.
+To work with APL in haskell we implement a small
+algebra for haskell's vector type %reference to vector (?)
+that emulates the basic semantics of APL.
+Using conditionals in QuickSpec we are able to check some of
+the semantics of APL at runtime.
+
+An example of this is matrices in APL. Matrices in APL
+have the same properties of rank that those of normal
+matrices in standard linear algebra. However, in our implementation
+of matrices in haskell one may choose to represent an APL matrix with
+the type:
+\begin{verbatim}type APLMatrix a = Vector (Vector a)\end{verbatim}
+Using conditional equations in QuickSpec we are still able to deal with
+APL matrices even though our type has none of the properties of APL matrices.
+One such property, our type involves the value \begin{verbatim} [[], [1, 2, 3]] \end{verbatim}
+which is not a valid value in APL.
