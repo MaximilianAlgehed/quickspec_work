@@ -5,14 +5,15 @@
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 import APL
+import Data.Function
 import QuickSpec
 import Test.QuickCheck
-import Data.Vector as V
+import qualified Data.Vector as V
 import TemplateDerivingPredicates
 import Data.Coerce
 
 instance Arbitrary a => Arbitrary (V.Vector a) where
-    arbitrary = fmap fromList arbitrary
+    arbitrary = fmap V.fromList arbitrary
 
 newtype V = V (V.Vector Int) deriving (Ord, Eq, Show, Arbitrary)
 newtype VV = VV (V.Vector (V.Vector Int)) deriving (Ord, Eq, Show, Arbitrary)
@@ -34,7 +35,31 @@ isWellShaped (VV v) = V.all (\x -> if (V.length v) == 0 then True else x == (V.l
 eqRohV :: V -> V -> Bool
 eqRohV (V v) (V w) = (roh_m v) == (roh_m w)
 
+erws :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> Bool
+erws a b = (isWellShaped (VV a)) && (isWellShaped (VV b)) && ((roh_m a) == (roh_m b))
+
+data Perws = Perws {p21 :: V.Vector (V.Vector Int), p22 :: V.Vector (V.Vector Int)} deriving (Eq, Ord, Show)
+
+instance Arbitrary Perws where
+
+    arbitrary = sized (\s ->
+                        if s == 0 then
+                            return (Perws V.empty V.empty)
+                        else
+                        do
+                            n <- oneof (map return [1..s])
+                            m <- oneof (map return [1..s])
+                            a <- genVectorLen (genVectorLen arbitrary m) n
+                            b <- genVectorLen (genVectorLen arbitrary m) n
+                            return (Perws a b)
+                )
+                where
+                    genVectorLen :: Gen a -> Int -> Gen (V.Vector a)
+                    genVectorLen gen k = fmap V.fromList (sequence (replicate k gen))
+                    
+
 $(mk_Predicates [
+                 --[| erws :: VV -> VV -> Bool |],
                  [| isWellShaped :: VV -> Bool |],
                  [| isBoolean :: Int -> Bool |],
                  [| isBooleanV :: V -> Bool |],
@@ -42,9 +67,12 @@ $(mk_Predicates [
                  [| eqRohV :: V -> V -> Bool |]
                 ])
 
+prop_erws :: Perws -> Bool
+prop_erws e = erws (p21 e) (p22 e)
+
 sig =
   signature {
-    maxTermSize = Just 7,
+    maxTermSize = Just 10,
     instances = [
                  baseType (undefined::V.Vector Int),
                  names (NamesFor ["xs", "ys", "zs"] :: NamesFor (V.Vector Int)),
@@ -59,43 +87,48 @@ sig =
                  baseType (undefined::PisWellShaped),
                  names (NamesFor ["q"] :: NamesFor PisWellShaped),
                  baseType (undefined::PeqRohV),
-                 names (NamesFor ["w"] :: NamesFor PeqRohV)
+                 names (NamesFor ["w"] :: NamesFor PeqRohV),
+                 baseType (undefined::Perws),
+                 names (NamesFor ["e"] :: NamesFor Perws)
                 ],
     constants = [
-        constant "x" (coerce . a11 :: PisBoolean -> Int),
-        constant "xs" (coerce . a11 :: PisBooleanV -> V.Vector Int),
-        constant "xs" (coerce . a21 :: PeqRohV -> V.Vector Int),
-        constant "ys" (coerce . a22 :: PeqRohV -> V.Vector Int),
+        --constant "x" (coerce . a11 :: PisBoolean -> Int),
+        --constant "xs" (coerce . a11 :: PisBooleanV -> V.Vector Int),
+        --constant "xs" (coerce . a21 :: PeqRohV -> V.Vector Int),
+        --constant "ys" (coerce . a22 :: PeqRohV -> V.Vector Int),
         constant "xss" (coerce . a11 :: PisBooleanV' -> V.Vector (V.Vector Int)),
         constant "xss" (coerce . a11 :: PisWellShaped -> V.Vector (V.Vector Int)),
-        constant "⌈" (ceiling_d :: Int -> Int -> Int),
-        constant "⌈" (ceiling_d :: V.Vector Int -> V.Vector Int -> V.Vector Int),
+        constant "xss" (p21 :: Perws -> V.Vector (V.Vector Int)),
+        constant "yss" (p22 :: Perws -> V.Vector (V.Vector Int)),
+        --constant "⌈" (ceiling_d :: Int -> Int -> Int),
+        --constant "⌈" (ceiling_d :: V.Vector Int -> V.Vector Int -> V.Vector Int),
         constant "⌈" (ceiling_d :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int)),
-        constant "⌊" (floor_d :: Int -> Int -> Int),
-        constant "⌊" (floor_d :: V.Vector Int -> V.Vector Int -> V.Vector Int),
+        --constant "⌊" (floor_d :: Int -> Int -> Int),
+        --constant "⌊" (floor_d :: V.Vector Int -> V.Vector Int -> V.Vector Int),
         constant "⌊" (floor_d :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int)),
-        constant "⍳" (iota_m :: Int -> V.Vector Int),
-        constant "⍳" (iota_m :: V.Vector Int -> V.Vector Int),
+        --constant "⍳" (iota_m :: Int -> V.Vector Int),
+        --constant "⍳" (iota_m :: V.Vector Int -> V.Vector Int),
         constant "⍳" (iota_m :: V.Vector (V.Vector Int) -> V.Vector Int),
-        constant "⍳" (iota_d :: V.Vector Int -> V.Vector Int -> V.Vector Int),
+        --constant "⍳" (iota_d :: V.Vector Int -> V.Vector Int -> V.Vector Int),
         constant "0" (0 :: Int),
         constant "1" (1 :: Int),
         constant "2" (2 :: Int),
         constant "⍴" (roh_m :: Int -> V.Vector Int),
         constant "⍴" (roh_m :: V.Vector Int -> V.Vector Int),
         constant "⍴" (roh_m :: V.Vector (V.Vector Int) -> V.Vector Int),
-        constant "==" ((<=>) :: Int -> Int -> Int),
-        constant "==" ((<=>) :: V.Vector Int -> V.Vector Int -> V.Vector Int),
+        --constant "==" ((<=>) :: Int -> Int -> Int),
+        --constant "==" ((<=>) :: V.Vector Int -> V.Vector Int -> V.Vector Int),
         constant "==" ((<=>) :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int)),
-        constant "∧" ((</\>) :: Int -> Int -> Int),
-        constant "∧" ((</\>) :: V.Vector Int -> V.Vector Int -> V.Vector Int),
+        --constant "∧" ((</\>) :: Int -> Int -> Int),
+        --constant "∧" ((</\>) :: V.Vector Int -> V.Vector Int -> V.Vector Int),
         constant "∧" ((</\>) :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int)),
-        constant "∨" ((<\/>) :: Int -> Int -> Int),
-        constant "∨" ((<\/>) :: V.Vector Int -> V.Vector Int -> V.Vector Int),
+        --constant "∨" ((<\/>) :: Int -> Int -> Int),
+        --constant "∨" ((<\/>) :: V.Vector Int -> V.Vector Int -> V.Vector Int),
         constant "∨" ((<\/>) :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> V.Vector (V.Vector Int)),
-        constant "~" (tilde :: Int -> Int),
-        constant "~" (tilde :: V.Vector Int -> V.Vector Int),
-        constant "~" (tilde :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int))
+        --constant "~" (tilde :: Int -> Int),
+        --constant "~" (tilde :: V.Vector Int -> V.Vector Int),
+        constant "~" (tilde :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int)),
+        constant "s" (V.singleton :: A -> V.Vector A)
     ]
    }
 
