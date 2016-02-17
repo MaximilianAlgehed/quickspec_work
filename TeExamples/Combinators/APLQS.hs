@@ -30,7 +30,9 @@ isBooleanV' :: VV -> Bool
 isBooleanV' = V.all isBooleanV . coerce
 
 isWellShaped :: VV -> Bool
-isWellShaped (VV v) = V.all (\x -> if (V.length v) == 0 then True else x == (V.length (V.head v))) (V.map V.length v)
+isWellShaped (VV v)
+    | V.null v  = False
+    | otherwise = V.all (\x -> if (V.length v) == 0 then True else x == (V.length (V.head v))) (V.map V.length v)
 
 eqRohV :: V -> V -> Bool
 eqRohV (V v) (V w) = (roh_m v) == (roh_m w)
@@ -69,6 +71,11 @@ $(mk_Predicates [
 
 prop_erws :: Perws -> Bool
 prop_erws e = erws (p21 e) (p22 e)
+
+deriving instance Show TisWellShapedVV
+
+prop_isw :: PisWellShaped -> PisWellShaped -> Bool 
+prop_isw w w' = (roh_m (roh_m (coerce (a11 w) :: V.Vector (V.Vector Int)))) == (roh_m (roh_m (coerce (a11 w') :: V.Vector (V.Vector Int))))
 
 sig =
   signature {

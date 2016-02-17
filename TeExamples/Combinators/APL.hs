@@ -1,4 +1,4 @@
-{-# LANGUAGE FlexibleInstances,UndecidableInstances,MultiParamTypeClasses,FlexibleContexts #-}
+{-# LANGUAGE FlexibleInstances,UndecidableInstances,MultiParamTypeClasses,FlexibleContexts,ScopedTypeVariables #-}
 
 module APL where
 
@@ -44,16 +44,21 @@ instance (APLMonadic a) => APLMonadic (V.Vector a) where
 
 class MRohable a where
     
+    def :: a -> V.Vector Int
     roh_m :: a -> V.Vector Int
 
 instance MRohable Int where
     
+    def _ = V.empty
     roh_m = const V.empty
 
 instance (MRohable a) => MRohable (V.Vector a) where
     
-    roh_m v = (V.singleton (V.length v)) V.++
-              (V.concatMap roh_m (V.take 1 v))
+    def _ = (V.singleton 0) V.++ (def (undefined :: a))
+    roh_m v 
+        | V.length v == 0 = def v
+        | otherwise       = (V.singleton (V.length v)) V.++
+                            (V.concatMap roh_m (V.take 1 v))
 
 class APLFoldable v a' a where
 
