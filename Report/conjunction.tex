@@ -1,0 +1,12 @@
+\section{Conjunction}
+Conjunction of predicates is an important
+but difficult problem to solve using the three
+encodings discussed in this work.
+Being able to deal with conditional equations on the form
+\\$\forall x.\;P(x)\wedge Q(x)\implies f(x)=g(x)$\\
+is important as they show up in most non-trivial
+algebras. Consider the bit-vector example from section
+\ref{bitvector}, the conditional equation
+\\$\forall n:\mathbb{N},\;xs:List\;\mathbb{B}.\;P(n,\;xs)\implies lsr\;n\;(lsl\;n\;xs)=xs$\\
+can be generalized to
+\\$\forall n,m:\mathbb{N},\;xs:List\;\mathbb{B}.\;(m\leq n)\wedge P(m,\;xs)\implies lsr\;n\;(lsl\;n\;xs)=xs$.
