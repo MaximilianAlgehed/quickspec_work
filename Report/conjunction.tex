@@ -1,4 +1,4 @@
-\section{Conjunction}
+\section{Conjunction}\label{conjunction}
 Conjunction of predicates is an important
 but difficult problem to solve using the three
 encodings discussed in this work.
@@ -10,3 +10,40 @@ algebras. Consider the bit-vector example from section
 \\$\forall n:\mathbb{N},\;xs:List\;\mathbb{B}.\;P(n,\;xs)\implies lsr\;n\;(lsl\;n\;xs)=xs$\\
 can be generalized to
 \\$\forall n,m:\mathbb{N},\;xs:List\;\mathbb{B}.\;(m\leq n)\wedge P(m,\;xs)\implies lsr\;n\;(lsl\;n\;xs)=xs$.
+
+Conjunction is vital for expressing conditional equations after invariants.
+As evidenced by section \ref{apl}, where we find that one predicate, "is well shaped",
+is used to express invariants of the language and another predicate "shape of these two matrices
+are equal" is used to express a property of interest in the domain of APL.
+This property is not unique to shallow embeddings of APL, rather it shows up in several languages.
+Consider a set represented by some algebraic datatype (a tree perhaps), if we are interested
+in the study of disjoint sets we would have to have two predicates to describe the well-formedness
+and disjointness of two sets. One approach to solving the problem of conjunction of predicates over this
+type of data would be to do what QuickCheck users have been doing for fifteen years, define instances
+of arbitrary that mean the set datastructure always has the property of a set (if the set is represented
+as a red-black tree for an instance these properties would be precisely the invariants of red-black trees). 
+However, this method fits poorly with the idea of using QuickSpec in an automated setting.
+
+Using the method of atuomatically generate predicate types in type encoding described in section
+\ref{TE} we find that conjunction becomes problematic. To see why this is we need to look at the
+gory details of how we go about representing conjunction of predicates in type encoding. Recall that
+binary predicates can be naïvely represented as datatypes that look something like this:
+\begin{verbatim}data Predicate = Predicate {data0 :: A, data1 :: B}
+
+instance Arbitrary Predicate where
+    
+    arbitrary = fmap (\(a, b) -> Predicate a b) $
+                arbitrary `suchThat` (\(a, b) -> p a b)
+
+\end{verbatim}
+Here the type \texttt{Predicate} represents the binary predicate \texttt{p}.
+To work with conditional equations like the ones above that look like
+\\$P(x) \wedge P(y) \wedge Q(x, y)\implies f\;x\;y=g\;x\;y$\\
+we can simply do lambda abstraction over the predicates and replace them with
+one predicate $H$. At this point we stop to consider the complexity of $H$, not only
+does it contain two conjunctions, which are likely to be represented as normal (non-parallel) $\wedge$,
+it is also highly unlikely that our automatic "general" method for encoding conditionals
+will work simply because of the complexity of the predicate, \texttt{suchThat}'s guessing strategy
+is very unlikely to find two elements for which $H$ will hold.
+
+%Somewhere around here is where we introduce the ideas from lazy feat or whatever

@@ -1,4 +1,4 @@
-\section{A programming language}
+\section{A programming language}\label{apl}
 The programming language APL %apl reference
 is a language for processing arrays and tabular data.
 APL has very concise notation and semantics.
@@ -10,17 +10,6 @@ equations about APL in spite of some of the
 difficulties of modelling a dynamically typed language that 
 behaves like a dependently typed duck.
 
-An example of this is matrices in APL. Matrices in APL
-have the same properties of rank that those of normal
-matrices in standard linear algebra. However, in our implementation
-of matrices in haskell one may choose to represent a two dimensional
-APL matrix with the type:
-\begin{verbatim}type APLMatrix a = Vector (Vector a)\end{verbatim}
-Using conditional equations in QuickSpec we are still able to deal with
-APL matrices even though our type has none of the properties of APL matrices.
-One such property, our type involves the value \begin{verbatim} [[], [1, 2, 3]] \end{verbatim}
-which is not a valid value in APL.
-
 Partiality of shallow embeddings representing malformed expressions in the
 embedded language can be handled by conditional equations in QuickSpec.
 Take for an instance the unary operator $\iota$ in APL. The semantics
@@ -29,3 +18,20 @@ an integer the $\iota$ operator will produce the vector of all integers from 1 t
 The implementation of the $\iota$ operator in a shallow embedding will be inherently partial,
 but since we can deal with partial functions using our techniques we are still able to reason
 about equations involving $\iota$.
+
+The unary $\rho$ operator in APL takes the shape of it's operand,
+so $\rho$ of a scalar is \texttt{[]} 
+and $\rho$\texttt{[0, 1, 3] = [3]} and
+$\rho\circ\rho$ is a function that gives the dimension of the operand (scalars having dimension 0).
+A property of this operator is that it requires the operand to be homogenious.
+This means that in APL the operation $\rho$\texttt{[[1, 2], [1, 3, 2]]}
+would result in an error because the first and second sub-vector do not have the same shape.
+This property of $\rho$ becomes very relevant when we consider operators like $\times$, element wise
+multiplication. It turns out that in the special (but most common and obvious case)
+when the $\rho\circ\rho$ of the two operands agree the $\times$ operation
+is only defined if the two operands also have the same element-wise $\rho$. So, for two "well bahaved" matrices
+$x$ and $y$ we would expect the property $\rho(x \times y) = \rho x = \rho y$ to hold. Furthermore
+we would expect this property to hold for many operations like element wise subtraction, addition, equality etc..
+The good news is that QuickSpec is able to find these (conditional!) equations using type encoding. However,
+as discussed in section \ref{conjunction} we need to define a custom generator for these predicate types
+and as such they are not very general.

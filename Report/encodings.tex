@@ -16,7 +16,7 @@
     which hope to be more flexible and lightweight
     than the old idea of type encoding.
 
-    \subsection{Type encoding}
+    \subsection{Type encoding}\label{TE}
 
         Type encoding is the idea of encoding
         predicates as dependent types. More specifically
@@ -53,6 +53,11 @@
         Because being explicit about these things induces more overhead
         we want to find a light weight encoding scheme. Motivated by this
         we introduce function encoding.
+
+        Because we are looking for a general method for encoding predicates we need
+        a way to automatically generate the instances of the \texttt{Arbitrary} type class.
+        The naïve way of doing this is to simply use the \texttt{suchThat}%footnote here!
+        combinator. 
 
     \subsection{Function encoding}
 
