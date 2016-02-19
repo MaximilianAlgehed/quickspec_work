@@ -1,0 +1,26 @@
+Topics for the talk
+
+1. The big picture, why is this relevant?
+    1.1 Hipster/Hipspec/Emna
+
+2. The problem
+    2.1 Conditional equations (!)
+    2.2 Old QuickSpec's way of doing it
+    2.3 What we want
+        2.3.1 A way of representing conditionals in an equational setting
+        2.3.2 We want function symbols to be opaque
+
+3. Our way of doing it
+    3.1 Type encoding
+    3.2 Function encoding
+        3.2.1 That time I used unsafePerformIO...
+        3.2.2 Soundness issues -> Combined encoding
+
+4. Function encoding sounds good, is there a downside?
+    4.1 The p or not p example
+    4.2 But at least they mean something...
+
+Question to work out
+    How to introduce the "well this doesn't mean anything" - problem in FE
+    without making it completely useless to talk about function encoding
+    in the context of transforms (how it can't do it... the sorted example)?
