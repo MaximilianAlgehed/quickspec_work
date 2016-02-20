@@ -1,4 +1,6 @@
 -- Todo for the introduction of conditionals in QuickSpec --
+    
+    ~What is the connection between schemas and TE?
 
     ~Work out how to use the lazy feat list to generate the list and
     ~use sized to select oneof the first n elements in this list as the arbitrary
