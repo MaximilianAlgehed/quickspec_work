@@ -27,7 +27,34 @@ Topics for the talk
     4.2 But at least they mean something... not... 
 
 5. Ok, so functions suck. Type encoding to the rescue!
-    5.1 APL/Sets as lists, oh crap conjunction
+    5.1 APL/Sets as lists, oh crap conjunction:
+        
+            We want to represent APL in haskell.
+            The ⍴ function has this simplified dependent type:
+
+                ⍴ :: {lst : [[a]] | P⍴ lst } -> [Int]
+                    where
+                        P⍴ lst = Exists y. Forall x. x ∊ lst => length x = y
+
+            We can't represent this in haskell, because dependent type...
+            But we can do it with a partial definition of ⍴.
+            So now we need the predicate in the type.
+
+            Furthermore we have the operator for element wise equality
+
+                eq :: {xs : [[a]] | P⍴' xs ys} -> {ys : [[a]] | P⍴' xs ys} -> [[Int]] -- APL represents bools as ints
+                    where
+                        P⍴' xs ys = ⍴' xs == ⍴' ys
+                        ⍴'        = map length
+
+            So now we have two predicates:
+
+                P⍴ and P⍴'
+
+            And we get the property
+
+                (P⍴ xs) & (P⍴ ys) & (P⍴' xs ys) =>  ⍴ (xs `eq` ys) = ⍴ xs
+
         5.1.1 Yeah sure, `suchThat` is slow. But it works. Not for conjunction!
         5.1.2 Ok, Jonas' work looks promising
 
