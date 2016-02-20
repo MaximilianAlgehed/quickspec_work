@@ -9,16 +9,30 @@ Topics for the talk
     2.3 What we want
         2.3.1 A way of representing conditionals in an equational setting
         2.3.2 We want function symbols to be opaque
+        2.3.3 Lightweight (!)
 
 3. Our way of doing it
     3.1 Type encoding
     3.2 Function encoding
         3.2.1 That time I used unsafePerformIO...
         3.2.2 Soundness issues -> Combined encoding
+        3.2.3 Function encoding looks like it's more "dynamic"
 
 4. Function encoding sounds good, is there a downside?
     4.1 The p or not p example
-    4.2 But at least they mean something...
+    4.2 But at least they mean something... not... 
+
+5. Ok, so functions suck. Type encoding to the rescue!
+    5.1 APL, oh crap conjunction
+        5.1.1 Yeah sure, `suchThat` is slow. But it works. Not for conjunction!
+        5.1.2 Ok, Jonas' work looks promising
+
+6. But what about P compose f?
+    6.1 Function encoding looks like it's almost got it down
+        6.1.1 No it hasn't, sorted example
+    6.2 Okay, type encoding would let us do it, I suppose
+        6.2.1 Hilarious results, lots of redundant predicates
+        6.2.2 It's ok, just run QS twice
 
 Question to work out
     How to introduce the "well this doesn't mean anything" - problem in FE
