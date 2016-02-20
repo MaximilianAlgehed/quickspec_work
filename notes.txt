@@ -598,6 +598,11 @@
         implementation of Insertion sort (which is not relly non-trivial as it can be obtained from looking
         at the implementation of insert and insertion sort I suppose...).
 
+    +: Efficiency
+
+        These methods don't require us to run QS twice with the same signature. Because we can utilize the schema
+        system we no longer have to consider every possible precondition when we have general a general result.
+
 
 -- Injectivity --
 
