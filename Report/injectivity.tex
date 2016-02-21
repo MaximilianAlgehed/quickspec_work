@@ -12,7 +12,7 @@ because, as we can see in (2), generating data where P holds implies generating 
 random expression which are equal, and generating two random strings which are also equal.
 
 The problem here is that \texttt{showTerm} and the partially applied append function are both injective.
-Predicates involving injective functions generaly don't fare well in a normal TE setting.
+Predicates involving injective functions generaly don't fare well in a normal type encoding setting.
 
 One idea for how to deal with injective functions is to let the user specify that they suspect that 
 a function may be injective. Which would then let us write a generator that is more likely to generate
