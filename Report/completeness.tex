@@ -14,3 +14,13 @@ to refer to any one occurance of a constrained variable.
 This means that without support for combined encoding in
 QuickSpec the approach loses out on many equations which
 it's less verbose siblings are able to handle.
+
+For this result to be valid the function encoding representation
+of predicates of arity greater than one must be something similar to
+\texttt{whenP :: (A, B, C) -> (A, B, C)}. However, this means that
+function encoding may not automatically find conjunctions (represented as
+the higher arity equivalient of \texttt{whenP . whenQ}) of predicates
+as easily as it will for arity one predicates. In order to combat this
+one could choose to add the constructors for n-tuples to the signature. This,
+of course, means that we now have a larger signature full of auxilleary functions
+which we are not interested in.

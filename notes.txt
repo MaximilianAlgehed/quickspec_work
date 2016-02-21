@@ -428,10 +428,6 @@
                 fstwhenP = fst . whenP
                 sndwhenP = snd . whenP
 
-            However, completeness extends beyond the size of the expressions. There are equations which
-            FE and CE can't find but TE can. These equations are primarily the ones which require predicates
-            of transforms.
-
     +: Automatic generation of TE types from given predicates:
 
         We find that the predicate (sorted :: (Ord a) => [a] -> Bool) can be replaced by a type for sorted lists.

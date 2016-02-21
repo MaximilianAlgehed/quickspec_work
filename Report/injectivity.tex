@@ -1,0 +1,21 @@
+\section{Injective functions in Type Encoding}
+When trying to prove injectivity of a pretty printer for arithemtic expressions one
+finds oneself needing the following predicate (1) and associated lemma (2):
+\begin{verbatim}
+
+P(e, f, s, t) := showTerm e ++ s = showTerm f ++ t (1)
+P(e, f, s, t) => e = f && s = t (2)
+
+\end{verbatim}
+When adding P to the signature of QuickSpec however, the tool grinds to a complete halt. This is
+because, as we can see in (2), generating data where P holds implies generating two
+random expression which are equal, and generating two random strings which are also equal.
+
+The problem here is that \texttt{showTerm} and the partially applied append function are both injective.
+Predicates involving injective functions generaly don't fare well in a normal TE setting.
+
+One idea for how to deal with injective functions is to let the user specify that they suspect that 
+a function may be injective. Which would then let us write a generator that is more likely to generate
+equal data. One could even imagine having a generator which chooses between arbitrary data
+and data which is very likely to be equal, this way corner cases where the function is not injective may
+still be found.

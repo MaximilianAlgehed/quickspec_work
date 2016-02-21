@@ -25,3 +25,18 @@ All the work in this report concerns strategies and extensions to the way a user
 use QuickSpec. No changes have been made to the code of QuickSpec in order to
 achieve the results described here. This hints that the approach is general
 and may be applicable to tools with similar constraints as QuickSpec.
+
+The contributions of this report can be summarised as
+\begin{itemize}
+    \item We take the old idea of encoding predicates as types
+        in property based testing and show that it is usefull in
+        the context of testing based lemma discovery.
+
+    \item We show that encoding predicates as function in the context
+        of QuickSpec compares unfavorably to the laternative method
+        of using types.
+
+    \item We show that type encoded predicates can be employed to avoid 
+        the need for dependently typed shallow embaddings of a language
+        we want to investigate using QuickSpec.
+\end{itemize}
