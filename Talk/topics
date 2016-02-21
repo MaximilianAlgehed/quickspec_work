@@ -24,6 +24,7 @@ Topics for the talk
 
 4. Function encoding sounds good, is there a downside?
     4.1 The p or not p example
+        4.1.1 What would be a good semantics of when-functions?
     4.2 But at least they mean something... not... 
 
 5. Ok, so functions suck. Type encoding to the rescue!

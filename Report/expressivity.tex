@@ -21,7 +21,7 @@ whenLesser xs
     | otherwise = [-1]\end{verbatim}
 Given this QuickSpec will happily generate equations like
 \begin{verbatim}(whenLesser (whenGreater xs)) = [-1]\end{verbatim}
-which of course translates to the riddiculous\\
+which, if we take $whenP\circ whenQ$ to mean $P(x)\wedge Q(x)$,  translates to the riddiculous\\
 $\forall xs : List\; Integer.\; greater(xs)\wedge lesser(xs)\implies xs = Cons\; (-1)\; Nil$.
 Which is actually just\\$\forall xs : List\; Integer.\; False\implies xs = Cons\; (-1)\; Nil$,
 or put simply\\$p\vee \neg p$.
