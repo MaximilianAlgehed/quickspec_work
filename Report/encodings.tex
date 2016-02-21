@@ -22,19 +22,19 @@
         predicates as dependent types. More specifically
         it is saying that for a given predicate
         \begin{verbatim}
-            p :: (a, b, c, ... , x) -> Bool
+        p :: (a, b, c, ... , x) -> Bool
         \end{verbatim}
         there exists a dependent type
         \begin{verbatim}
-           Predicate p
+        Predicate p
         \end{verbatim}
         and a function 
         \begin{verbatim}
-            data :: Predicate p -> (a, b, c, ... , x)
+        data :: Predicate p -> (a, b, c, ... , x)
         \end{verbatim}
         such that 
         \begin{verbatim}
-            p . data = const True
+        p . data = const True
         \end{verbatim}
         This may seem odd when you consider that haskell is not a dependently types
         language. However, becuase QuickSpec uses QuickCheck which lets us define
@@ -44,7 +44,7 @@
         types are tested by QuickCheck the types behave as if they were dependent types.
         The equations involving predicate types are on the form:
         \begin{verbatim}
-            f (data p) = g (data p)
+        f (data p) = g (data p)
         \end{verbatim}
         which translates nicely to $p(x) \implies f(x) = g(x)$.
 
@@ -65,21 +65,21 @@
         predicates with functions. The idéa is best
         illustrated with an example.
         \begin{verbatim}
-            -- p is a predicate
-            p :: (a, b, c, ... , x) -> Bool
+        -- p is a predicate
+        p :: (a, b, c, ... , x) -> Bool
 
-            -- default is a value such that
-            p default = True
+        -- default is a value such that
+        p default = True
 
-            -- The predicate is encoded as
-            when_p :: (a, b, c, ... , x) -> (a, b, c, ... , x)
-            when_p input
-                | p input   = input
-                | otherwise = data default
+        -- The predicate is encoded as
+        when_p :: (a, b, c, ... , x) -> (a, b, c, ... , x)
+        when_p input
+            | p input   = input
+            | otherwise = data default
         \end{verbatim}
         In function encoding, an equation like
         \begin{verbatim}
-            g (when_p x) == f (when_p x)
+        g (when_p x) == f (when_p x)
         \end{verbatim}
         would be equivalent to the aformentioned $p(x) \implies f(x) = g(x)$.
         Some care needs to be taken when choosing the default value.
@@ -92,17 +92,17 @@
         encoding of the predicate. A combined encoding can be illustrated
         like this:
         \begin{verbatim}
-            -- p is a predicate
-            p :: (a, b, c, ..., x) -> Bool  
+        -- p is a predicate
+        p :: (a, b, c, ..., x) -> Bool  
 
-            -- when_p is a combined encoding of p
-            when_p :: Predicate p -> (a, b, c, ... , x) -> (a, b, c, ... , x)
-            when_p default input
-                | p input   = input
-                | otherwise = default
+        -- when_p is a combined encoding of p
+        when_p :: Predicate p -> (a, b, c, ... , x) -> (a, b, c, ... , x)
+        when_p default input
+            | p input   = input
+            | otherwise = default
         \end{verbatim}
         The encoding of $p(x) \implies f(x) = g(x)$ in combined encoding would look like
         this:
         \begin{verbatim}
-            f (when_p p x) == g (when_p p x)
+        f (when_p p x) == g (when_p p x)
         \end{verbatim}
