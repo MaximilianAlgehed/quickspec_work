@@ -7,7 +7,7 @@ the ability to generate conditional equations.
 
 All three methods described in section \ref{encodings}
 are capable of expressing conditional equations on the form
-\\$\forall x_0, x_1, ..., x_n. P_0(x_0) \wedge P_1(x_1) \wedge ... \wedge P_n(x_n) \implies f(x_j, x_k ...) = g(x_a, x_b, ...)$.\\
+\\$\forall x_0, x_1, ..., x_n, i, j,.\;(i \neq j \implies x_i \neq x_j)\wedge P_0(x_0) \wedge P_1(x_1) \wedge ... \wedge P_n(x_n) \implies f(x_j, x_k ...) = g(x_a, x_b, ...)$.\\
 This means that QuickSpec is now capable of finding several
 interesting conjectures.
 
@@ -65,4 +65,5 @@ interesting conjectures.
     \end{gather*}
     which are in fact the complete definition of insertion sort.
     When given the predicate $sorted$ QuickSpec is also finds
-    $\forall x:a,\; xs\;List\;a.\; sorted\; xs \implies sorted\; (insert\; x\; xs)$.
+    $\forall x:a,\; xs\;List\;a.\; sorted\; xs \implies sorted\; (insert\; x\; xs)$,
+    an important lemma needed to inductively prove the correctness of insertion sort.
