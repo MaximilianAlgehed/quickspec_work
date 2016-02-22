@@ -97,6 +97,10 @@ Topics for the talk
 
         6.2.2 It's ok, just run QS twice
 
+7. Future work
+    7.1 Implment the ideas for fixing injectivity
+    7.2 A good algorithm for conjunction generation
+
 Question to work out:
     How to introduce the "well this doesn't mean anything" - problem in FE
     without making it completely useless to talk about function encoding

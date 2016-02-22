@@ -8,15 +8,15 @@ P(e, f, s, t) => e = f && s = t (2)
 
 \end{verbatim}
 When adding P to the signature of QuickSpec however, the tool grinds to a complete halt. This is
-because, as we can see in (2), generating data where P holds implies generating two
+due to, as we can see in (2), generating data where P holds implies generating two
 random expression which are equal, and generating two random strings which are also equal.
 
 The problem here is that \texttt{showTerm} and the partially applied append function are both injective.
-Our experiments show that predicates involving equality and injective functions generaly don't
+Our experiments show that predicates involving equality and injective functions generaly do not
 fare well in a normal type encoding setting.
 
 One idea for how to deal with injective functions is to let the user specify that they suspect that 
-a function may be injective. Which would then let us write a generator that is more likely to generate
+a function may be injective. This would then let us write a generator that is more likely to generate
 equal data. One could even imagine having a generator which chooses between arbitrary data
-and data which is very likely to be equal, this way corner cases where the function is not injective may
+and data which is very likely to be equal. This way corner cases where the function is not injective may
 still be found.

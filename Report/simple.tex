@@ -13,16 +13,17 @@ interesting conjectures.
 
 \subsection{A gentle start} \label{bitvector}
     Bitvectors, expressed neatly as lists of booleans,
-    have the following nice property:
+    have the following nice property
     \begin{gather*}
         P(n:\mathbb{N},\;xs:List\;\mathbb{B}) = "first\;n\;values\;equal\;False"\\
         \forall n:\mathbb{N},\;xs:List\;\mathbb{B}.\;P(n,\;xs)\implies lsr\;n\;(lsl\;n\;xs)=xs
     \end{gather*}
-    Something which our extensions allow QuickSpec to conjecture.
+    Using either of the three encodings presented in section \ref{encodings} QuickSpec
+    is able to find this conjecture.
 
 \subsection{Lists, lists, and more lists...}
     There are many interesting conditional equations that
-    QuickSpec can discover about lists. Here is a subset of them:
+    QuickSpec can discover about lists. Here is a subset of them
     \begin{gather*}
         \forall n:\mathbb{N},\; xs:List\; a,\; is:List\; a.\\
         n \leq length\; xs \implies append\; (drop\; n\; xs)\; is\; =\; drop\; n\; (append\; xs\; is)\\\\
@@ -36,15 +37,15 @@ interesting conjectures.
     When exploring Hughes pretty printing DSL, %reference to pretty printing
     a task which QuickSpec has done well at before%reference?
     , we now find a law that QuickSpec
-    was not previously able to explicitly express:
+    was not previously able to explicitly express
     \begin{gather*}
         P(x:Document) = "x\; is\; not\; indented"\\
         \forall x:Document.\; P(x)\implies text\;Nil\diamond x=x
     \end{gather*}
     The fact that the equation\\
     $\forall x:Document.\; text\;Nil\diamond x = x$\\
-    was not in the output from QuickSpec tells us that there is something special
-    relating unindended documents to the $text$ function. In fact, this relationship
+    was not in the output from QuickSpec tells us that there is a special
+    relationship between unindended documents to the $text$ function. In fact, this relationship
     is that the partially applied $text\;Nil\;\diamond$ unindents any document it is applied to. 
 
 \subsection{A magic trick}
@@ -64,6 +65,6 @@ interesting conjectures.
         insertionSort\; (Cons\; x\; xs) = insert\; x\; (insertionSort\; xs)
     \end{gather*}
     which are in fact the complete definition of insertion sort.
-    When given the predicate $sorted$ QuickSpec is also finds
+    When given the predicate $sorted$ QuickSpec also finds
     $\forall x:a,\; xs\;List\;a.\; sorted\; xs \implies sorted\; (insert\; x\; xs)$,
     an important lemma needed to inductively prove the correctness of insertion sort.

@@ -6,14 +6,14 @@
     worth noting that these methods
     are general and could be used outside
     the context of QuickSpec. The
-    the idea of encoding conditionals
+    idea of encoding conditionals
     as types is something users of
     QuickCheck %QuickCheck reference
     will be very familiar with. This poor
     man's dependent typing is an old idea that has
-    been implemented in the QuickCheck.%reference and footnote
+    been implemented in QuickCheck.%reference and footnote
     This work presents two alternative methods
-    which hope to be more flexible and lightweight
+    which hope to be more flexible and light weight
     than the old idea of type encoding.
 
     \subsection{Type encoding}\label{TE}
@@ -37,33 +37,33 @@
         p . data = const True
         \end{verbatim}
         This may seem odd when you consider that haskell is not a dependently types
-        language. However, becuase QuickSpec uses QuickCheck which lets us define
-        custom generators for random data we can write a generator for 
-        the predicate type which behaves like a dependent type.
+        language. However, as QuickSpec uses QuickCheck, which lets us define
+        custom generators for random data, we can write a generator for 
+        the predicate type which makes the type behaves like a dependent type.
         This means that when equations involving these predicate
         types are tested by QuickCheck the types behave as if they were dependent types.
-        The equations involving predicate types are on the form:
+        The equations involving predicate types are on the form
         \begin{verbatim}
         f (data p) = g (data p)
         \end{verbatim}
         which translates nicely to $p(x) \implies f(x) = g(x)$.
 
-        In this encoding we would have to be explicit about things like conjunction
+        In this encoding we would have to be explicit about things such as conjunction
         of multiple predicates or predicates of mappings of data.
-        Because being explicit about these things induces more overhead
+        Being explicit about these things induces more overhead, therefore
         we want to find a light weight encoding scheme. Motivated by this
         we introduce function encoding.
 
-        Because we are looking for a general method for encoding predicates we need
+        As we are looking for a general method for encoding predicates we need
         a way to automatically generate the instances of the \texttt{Arbitrary} type class.
-        The naïve way of doing this is to simply use the \texttt{suchThat}%footnote here!
+        The naive way of doing this is to simply use the \texttt{suchThat} %footnote here!
         combinator. 
 
     \subsection{Function encoding}
 
         Function encoding is the idea of encoding 
-        predicates with functions. The idéa is best
-        illustrated with an example.
+        predicates with functions. The idea is best
+        illustrated with an example
         \begin{verbatim}
         -- p is a predicate
         p :: (a, b, c, ... , x) -> Bool
@@ -83,14 +83,14 @@
         \end{verbatim}
         would be equivalent to the aformentioned $p(x) \implies f(x) = g(x)$.
         Some care needs to be taken when choosing the default value.
-        With combined encoding we don't need to make that decision ourselves.
+        With combined encoding we do not need to make that decision ourselves.
 
      \subsection{Combined encoding}\label{combined_encoding}
         
         Combined encoding is the idea that we can let the
         default value of a function encoded predicate be a type
         encoding of the predicate. A combined encoding can be illustrated
-        like this:
+        like this
         \begin{verbatim}
         -- p is a predicate
         p :: (a, b, c, ..., x) -> Bool  
@@ -102,7 +102,7 @@
             | otherwise = default
         \end{verbatim}
         The encoding of $p(x) \implies f(x) = g(x)$ in combined encoding would look like
-        this:
+        this
         \begin{verbatim}
         f (when_p p x) == g (when_p p x)
         \end{verbatim}

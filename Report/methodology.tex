@@ -17,22 +17,21 @@ of QuickSpec both as a standalone theory exploration tool
 and as a component of other tools.
 
     \subsection{Soundness}
-    If QuickSpec generates unsound conjectures then systems that use QuickSpec
+    If QuickSpec generates unsound conjectures, systems that use QuickSpec
     need to spend resources trying to prove conjectures that are false. 
-    Considering some tools may call external theorem provers like z3 or Waldmeister %reference to HipsSpec paper
-    which may induce quite a lot of overhead per false conjecture.
 
     \subsection{Completeness}
-    Becuase the purpose of using QuickSpec in a theory exploration setting is to discover
-    new and interesting lemmas it is obvious that a more expressive QuickSpec means a more
+    As the purpose of using QuickSpec in a theory exploration setting is to discover
+    new and interesting lemmas, it is obvious that a more expressive QuickSpec means a more
     complete theory. %some reference on completeness or something...
-    Completeness is of interest for the reason pointed out in the first paper on QuickSpec that %QuickSpec 1 paper reference
-    missing equations teaches the user as much about the systems as the equations which are
-    present. For this reason the higher the degree of completeness the higher the usefullness
+    Completeness is of interest for the reason pointed out in the first paper on QuickSpec; %QuickSpec 1 paper reference
+    missing equations tell the user as much about the systems as the equations which are
+    present. For this reason, the higher the degree of completeness the higher the usefullness
     of QuickSpec as a stand-alone tool. 
 
     \subsection{Generality}
     Without a general method for generating the representation of conditionals
     it is hard to see how the functionality would be usefull in an automated setting.
-    Furthermore QuickSpec is meant to be a light weight tool, without a general method
-    the overhead for the user will be big and the feature is unlikely to be utilized.
+    Furthermore QuickSpec is meant as a light weight tool, without a general method
+    for conditional equations the overhead for the user will be big and the feature
+    is unlikely to be utilized.

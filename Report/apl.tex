@@ -2,8 +2,8 @@
 The programming language APL %apl reference
 is a language for processing arrays and tabular data.
 APL has very concise notation and semantics.
-To work with APL in haskell we implement a small
-algebra for haskell's vector type %reference to vector (?)
+To work with APL in Haskell we implement a small
+algebra for Haskell's vector type %reference to vector (?)
 that emulates the basic semantics of APL.
 Using conditionals in QuickSpec we are able to discover
 equations about APL in spite of some of the
@@ -13,9 +13,9 @@ behaves like a dependently typed duck.
 Partiality of shallow embeddings representing malformed expressions in the
 embedded language can be handled by conditional equations in QuickSpec.
 Take for an instance the unary operator $\iota$ in APL. The semantics
-of $\iota$ are that any dimension matrix which contains only one element which is also
-an integer the $\iota$ operator will produce the vector of all integers from 1 to that element.
-The implementation of the $\iota$ operator in a shallow embedding will be inherently partial,
+of $\iota$ are that for any dimension matrix which contains only one element, which is also
+an integer, the $\iota$ operator will produce the vector of all integers from 1 to that element.
+The implementation of the $\iota$ operator in a shallow embedding will be inherently partial
 but since we can deal with partial functions using our techniques we are still able to reason
 about equations involving $\iota$.
 
@@ -26,8 +26,8 @@ $\rho\circ\rho$ is a function that gives the dimension of the operand (scalars h
 A property of this operator is that it requires the operand to be homogenious.
 This means that in APL the operation $\rho$\texttt{[[1, 2], [1, 3, 2]]}
 would result in an error because the first and second sub-vector do not have the same shape.
-This property of $\rho$ becomes very relevant when we consider operators like $\times$, element wise
-multiplication. It turns out that in the special (but most common and obvious case)
+This property of $\rho$ becomes very relevant when we consider operators like $\times$ - element wise
+multiplication. In the special (but most common and obvious) case
 when the $\rho\circ\rho$ of the two operands agree the $\times$ operation
 is only defined if the two operands also have the same element-wise $\rho$. So, for two "well bahaved" matrices
 $x$ and $y$ we would expect the property $\rho(x \times y) = \rho x = \rho y$ to hold. Furthermore
