@@ -1,0 +1,24 @@
+\section{Partial functions}
+In their paper about Hipster Johansson et. al. 
+described a way of translating partial functions from
+Isabelle to haskell in which a partial function would
+have a default element to fall back on. The method is
+not inherently flawed but it, as a result of Isabelle's
+way of treating partial functions,
+fails to capture the essence of partial functions.
+As an example, any equation involving the function
+\begin{verbatim}head :: [a] -> a
+head (x:xs) = x
+\end{verbatim}
+can be expressed cleanly as a conditional equation
+over the predicate $not\circ null$.
+While this in theory circumvents the need for
+a default element it does so provided the
+argument to \texttt{head} is relatively simple,
+meaning it can be expressed as a type encoded value.
+One upside to the treatment of partial functions in QuickSpec
+is that any function $f$ can be turned in to the predicate
+$doesNotCrash \circ f$. This predicate then allows us to create
+a type encoding for dealing with the partial function without
+having to know anything about the function, this is nice as it means
+we can consider partial functions as black boxes that we don't know anything about.
