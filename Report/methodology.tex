@@ -1,5 +1,5 @@
 \section{Methodology}
-There are several qualities by which we measure the performance of our different methods.
+There are several factors by which we measure the quality of our different methods.
 The primary qualities are:
 
 \begin{itemize}
@@ -7,6 +7,7 @@ The primary qualities are:
     \item Soundness
     \item Completeness
     \item Generality
+    \item Opaque function symbols
 
 \end{itemize}
 
@@ -18,7 +19,10 @@ and as a component of other tools.
 
     \subsection{Soundness}
     If QuickSpec generates unsound conjectures, systems that use QuickSpec
-    need to spend resources trying to prove conjectures that are false. 
+    need to spend resources trying to prove conjectures that are false. Furthermore
+    a user using QuickSpec to infer knowledge about some library (like in the many
+    good examples from the case studies in the first paper on QuickSpec) could easily
+    be misled by false conjectures.
 
     \subsection{Completeness}
     As the purpose of using QuickSpec in a theory exploration setting is to discover
@@ -35,3 +39,13 @@ and as a component of other tools.
     Furthermore QuickSpec is meant as a light weight tool, without a general method
     for conditional equations the overhead for the user will be big and the feature
     is unlikely to be utilized.
+
+    \subsection{Opaque function symbols}
+    Working with the whole haskell language in QuickSpec quickly becomes unweildy.
+    If the haskell language can be sufficiently abstracted to predicates, types, and
+    equations this allows for several elegant solutions to common problems. One
+    example is the Knuth-Bendix completion used in the QuickSpec pruner, because
+    completion is based entierly on rewrite rules it does not have to consider
+    the semantic meaning of functions (unlike inductive provers). Furthermore
+    opaque function symbols would in theory allow QuickSpec to be used to test
+    pure C functions through haskell's foreign function interface.

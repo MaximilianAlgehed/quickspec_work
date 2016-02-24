@@ -1,5 +1,4 @@
 all:
-	pdflatex report.tex
-
+	latexmk -pdf report
 clean:
 	-rm *.pdf *.aux *.log

@@ -13,7 +13,9 @@ random expression which are equal, and generating two random strings which are a
 
 The problem here is that \texttt{showTerm} and the partially applied append function are both injective.
 Our experiments show that predicates involving equality and injective functions generaly do not
-fare well in a normal type encoding setting.
+fare well in a normal type encoding setting. The reason for this is that naive type encoding uses
+QuickCheck's \texttt{suchThat} combinator, which works by incrementing the size parameter of the QuickCheck
+generator and testing generated values untill the predicate holds.
 
 One idea for how to deal with injective functions is to let the user specify that they suspect that 
 a function may be injective. This would then let us write a generator that is more likely to generate
