@@ -12,6 +12,9 @@ Topics for the talk
     2.3 What we want
         2.3.1 A way of representing conditionals in an equational setting
         2.3.2 We want function symbols to be opaque
+            2.3.2.1 It's what we are currently doing
+            2.3.2.2 Knuth-Bendix Completion
+            2.3.2.3 We could, in theory, examine any pure C library
         2.3.3 Lightweight (!)
 
 3. Our way of doing it
