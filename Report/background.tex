@@ -1,0 +1,18 @@
+\section{Background}
+In this section we give a brief overview of
+QuickSpec.
+QuickSpec(2) is a powerfull conjuecture generation
+tool that takes as input a set of functions and constants
+and produces a set of probably equal terms.
+Function symbols in QuickSpec are opaque, the tool
+does not know anything about the definition of
+the functions other than their type signature.
+It employs a schema system and Knuth-Bendix
+completion and is based in spirit on the old
+tool QuickSpec\cite{Claessen2010}.
+The tool generates all terms up to a given
+size by enumarating generalized meta-terms called
+schemas. These schemas all represent
+equations. QuickSpec finds equations by instantiating
+schemas with variables and testing them for equality
+using the property testing tool QuickCheck\cite{Claessen2000}.
