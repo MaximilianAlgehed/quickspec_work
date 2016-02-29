@@ -7,7 +7,7 @@ at compile time, QuickSpec will not find equations
 that look like $P(f(x))\implies g\;x=h\;x$
 unless we have explicitly stated that we are interested
 in the extended predicate $P \circ f$. This property of type encoding
-(and, as it turns out of function. and by extension combined encoding too)
+(and, as it turns out of function and by extension combined encoding too)
 forces us to take in to consideration before running QuickSpec
 what functions we are interested in. %Here we need to write something about higher arity predicates and functions
 As this is tedious work one idea would be to simply have the user input the depth or size
@@ -30,9 +30,9 @@ isSorted :: (Ord a) => [a] -> [a] -> Bool
 Using this method and specifying maximum size of the extended predicates as 4
 we see that we all ready have a problem. Here are some of the more amusing predicates
 \begin{verbatim}
-(\xs -> (>=) (length xs) 0) -- Any list
-(\xs -> (>=) 0 (length xs)) -- The empty list
-(\xs -> isSorted (reverse (reverse xs))) -- isSorted
+\xs -> (>=) (length xs) 0 -- Any list
+\xs -> (>=) 0 (length xs) -- The empty list
+\xs -> isSorted (reverse (reverse xs)) -- isSorted
 \end{verbatim}
 In order to avoid this we can run QuickSpec once with only the standard signature (perhaps even with
 normal predicates) and then using the resulting theory we do not include an extended predicate
