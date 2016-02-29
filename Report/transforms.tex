@@ -9,8 +9,44 @@ unless we have explicitly stated that we are interested
 in the extended predicate $P \circ f$. This property of type encoding
 (and, as it turns out of function and by extension combined encoding too)
 forces us to take in to consideration before running QuickSpec
-what functions we are interested in. %Here we need to write something about higher arity predicates and functions
-As this is tedious work one idea would be to simply have the user input the depth or size
+what functions we are interested in. 
+Furthermore, to decrease the size of the resulting expressions we introduce
+a variant on type encoding where both the original argument(s) and the
+functions before the predicate are kept in the type
+\begin{verbatim}
+-- Function
+f :: A -> B
+-- Predicate
+p :: B -> Bool
+
+-- Variant on predicate type
+data PredicatePF = PF {x :: A, fx :: B}
+
+-- Arbitrary instance
+instance Arbitrary PredicatePF where
+    arbitrary = do
+                  x <- arbitrary `suchThat` (p . f)
+                  return (PF x (f x))
+
+\end{verbatim}
+This is primarily usefull for expressions like $P (f (g x))\implies h(f(g(x))) = t x$
+where we now represent $f(g(x))$ as $fg\;x$, which means QuickSpec is still able to
+deal with the function $f\circ g$ without the size of the expression growing.
+
+For predicates of higher arity we get
+\begin{verbatim}
+-- Functions
+f :: A -> B
+g :: C -> D
+
+-- Predicate
+P :: B -> D -> Bool
+
+data PredicatePFG = PFG {x :: A, fx :: B, y :: X, gy :: D}
+\end{verbatim}
+
+As it is tedious work to create these types one idea would be to
+simply have the user input the depth or size
 of the extended predicates and to generate every possible well typed
 extended predicate up to that depth or size. However, as one may expect
 this introduces some serious overhead, consider the small QuickSpec signature
