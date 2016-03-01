@@ -9,7 +9,7 @@
     2.3 We looked at function encoding too.
 
 3. More advanced topics
-    3.1 APL/Sets as lists/maps as lists, conjunction:
+    3.1 APL/Sets as lists/maps as lists, conjunction (D4.hs)
         3.1.1 `suchThat` is no longer going to work
         3.1.2 Jonas' work looks promising
 

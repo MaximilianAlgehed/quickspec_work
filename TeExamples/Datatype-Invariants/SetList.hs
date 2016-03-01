@@ -6,15 +6,12 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 module A where
+
 import Prelude hiding ((^^), lookup, insert)
 import QuickSpec hiding (insert)
 import Data.Coerce
 import Test.QuickCheck
 import TemplateDerivingPredicates
-
-(^^) :: Bool -> Bool -> Bool
-(^^) = (/=)
-
 
 disjointSets :: SetL -> SetL -> Bool
 disjointSets a@(SetL s0) b@(SetL s1) = isSet a && isSet b && (and [not (elem x s1) | x <- s0])
@@ -43,10 +40,7 @@ union (x:xs) ys = insert x (union xs ys)
 
 newtype SetL = SetL [Int] deriving (Ord, Eq, Arbitrary)
 
-$(mk_Predicates [
-                 [| isSet :: SetL -> Bool |],
-                 [| disjointSets :: SetL -> SetL -> Bool |]
-                ])
+$(mk_Predicates [[| isSet :: SetL -> Bool |], [| disjointSets :: SetL -> SetL -> Bool |]])
 
 sig =
     signature {

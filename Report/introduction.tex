@@ -18,17 +18,17 @@ equational terms for testing and as such is only capable of generating
 theorems that take the form of equations. 
 When using QuickSpec to generate lemmas about the functions
 \begin{verbatim}
-zip :: [a] -> [b] -> [(a, b)]
+zip     :: [a] -> [b] -> [(a, b)]
 reverse :: [a] -> [a]
-(++) :: [a] -> [a] -> [a]
-length :: [a] -> Int
+(++)    :: [a] -> [a] -> [a]
+length  :: [a] -> Int
 \end{verbatim}
 It returns (a superset of) these equations
 \begin{verbatim}
-zip is (reverse is ++ js) = zip is (reverse is)
+zip is (reverse is ++ js)   = zip is (reverse is)
 zip (is ++ js) (reverse is) = zip is (reverse is)
-zip is (js ++ (is ++ ks)) = zip is (js ++ is)
-zip (is ++ (js ++ ks)) js = zip (is ++ js) js
+zip is (js ++ (is ++ ks))   = zip is (js ++ is)
+zip (is ++ (js ++ ks)) js   = zip (is ++ js) js
 \end{verbatim}
 Here we see that QuickSpec finds equations that are true
 because of the way the length of the two lists given to zip relate
