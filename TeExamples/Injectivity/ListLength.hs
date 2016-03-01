@@ -31,7 +31,6 @@ sig =
                     constant ":" ((:) :: A -> [A] -> [A]),
                     constant "[]" ([] :: [A]),
                     constant "reverse" (reverse :: [A] -> [A]),
-                    constant "++" ((++) :: [Int] -> [Int] -> [Int]),
                     constant "xs" (coerce . a21 :: Peqlen -> [Int]),
                     constant "ys" (coerce . a22 :: Peqlen -> [Int]),
                     constant "++" ((++) :: [A] -> [A] -> [A])

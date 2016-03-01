@@ -1,5 +1,6 @@
 import QuickSpec
 
+-- QuickSpec signature
 sig =
     signature {
         maxTermSize = Just 7,
