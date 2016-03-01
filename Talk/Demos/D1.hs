@@ -26,8 +26,8 @@ sig =
                     ],
         constants = [
                     constant "zip" (zip :: [Int] -> [Int] -> [(Int, Int)]),
-                    constant "length" (length :: [Int] -> Int),
-                    constant "reverse" (reverse :: [Int] -> [Int]),
+                    constant "length" (length :: [A] -> Int),
+                    constant "reverse" (reverse :: [A] -> [A]),
                     constant "xs" (coerce . a21 :: Peqlen -> [Int]),
                     constant "ys" (coerce . a22 :: Peqlen -> [Int]),
                     constant "++" ((++) :: [Int] -> [Int] -> [Int])
