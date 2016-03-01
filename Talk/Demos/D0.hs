@@ -4,10 +4,9 @@ sig =
     signature {
         maxTermSize = Just 7,
         constants = [
-                    constant "zip" (zip :: [Int] -> [Int] -> [(Int, Int)]),
-                    constant "length" (length :: [A] -> Int),
+                    constant "zip"     (zip :: [A] -> [B] -> [(A, B)]),
                     constant "reverse" (reverse :: [A] -> [A]),
-                    constant "++" ((++) :: [Int] -> [Int] -> [Int])
+                    constant "++"      ((++) :: [A] -> [A] -> [A])
                     ]
     }
 

@@ -1,36 +1,29 @@
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE TypeSynonymInstances #-}
-{-# LANGUAGE FlexibleInstances #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-
 import Test.QuickCheck
 import QuickSpec
-import Data.Coerce
-import Data.Function
-import TemplateDerivingPredicates
 
-newtype Lst = Lst [Int] deriving (Arbitrary, Ord, Eq, Show)
+-- Type to represent pairs of lists of equal length
+data Peqlen = Peqlen {xs :: [Int], ys :: [Int]} deriving (Show, Eq, Ord)
 
-eqlen :: Lst -> Lst -> Bool
-eqlen (Lst xs) (Lst ys) = on (==) length xs ys
-
-$(mk_Predicates [[| eqlen :: Lst -> Lst -> Bool |]])
+instance Arbitrary Peqlen where
+    arbitrary = do
+                    l  <- arbitrary
+                    xs <- sequence $ replicate l arbitrary
+                    ys <- sequence $ replicate l arbitrary
+                    return (Peqlen xs ys)
 
 sig =
     signature {
         maxTermSize = Just 7,
-        instances = [baseType (undefined::Peqlen),
-                     names (NamesFor ["p"] :: NamesFor Peqlen)
+        instances = [
+                     baseType (undefined::(Peqlen)),
+                     names (NamesFor ["p"] :: NamesFor (Peqlen))
                     ],
         constants = [
                     constant "zip" (zip :: [Int] -> [Int] -> [(Int, Int)]),
-                    constant "length" (length :: [A] -> Int),
                     constant "reverse" (reverse :: [A] -> [A]),
-                    constant "xs" (coerce . a21 :: Peqlen -> [Int]),
-                    constant "ys" (coerce . a22 :: Peqlen -> [Int]),
-                    constant "++" ((++) :: [Int] -> [Int] -> [Int])
+                    constant "xs" (xs :: Peqlen -> [Int]),
+                    constant "ys" (ys :: Peqlen -> [Int]),
+                    constant "++" ((++) :: [A] -> [A] -> [A])
                     ]
     }
 
