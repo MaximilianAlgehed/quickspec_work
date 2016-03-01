@@ -4,6 +4,15 @@
     1.2 Here is what we get now (D1.hs)
 
 2. Our way of doing it
+    2.0 What was wrong with the old way of doing it
+        2.0.1 It would give us too many equations
+                P x => f y         = g x (1)
+                P x and Q y => f y = g x (2)
+              The old approach would give us both
+              (1) and (2). But as we see (2) follows
+              directly from (1). In the spirit of
+              QuickSpec2 we don't want to test equations
+              that will be pruned away.
     2.1 Type encoding, slide demonstrating how it works
     2.2 Automatic generation, let's look at some more examples (D2.hs, D3.hs)
     2.3 We looked at function encoding too.
