@@ -29,8 +29,8 @@
             isSorted :: (Ord a) => [a] -> [a] -> Bool
 
             -- some type encoded predicates of size 4
-            \xs -> (>=) (length xs) 0 -- Any list
-            \xs -> (>=) 0 (length xs) -- The empty list
+            \xs -> (>=) (length xs) 0              -- Any list
+            \xs -> (>=) 0 (length xs)              -- The empty list
             \xs -> isSorted (reverse (reverse xs)) -- isSorted
 
         3.2.2 We can run QuickSpec twice
