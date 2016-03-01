@@ -1,7 +1,7 @@
 \section{Introduction}
 Theory exploration tools are programs that
 explore a mathematical domain to aid users in
-understanding the domain. %something about usefullness  
+understanding some domain. %something about usefullness  
 These tools are primarily theorem provers with a focus
 on proving many theorems in a domain of discourse.
 Some theory exploration tools support automatically generating
@@ -16,6 +16,28 @@ QuickSpec generates equational conjectures and uses random testing via the tool 
 to find equations that may be valid. QuickSpec currently only generates
 equational terms for testing and as such is only capable of generating
 theorems that take the form of equations. 
+When using QuickSpec to generate lemmas about the functions
+\begin{verbatim}
+zip :: [a] -> [b] -> [(a, b)]
+reverse :: [a] -> [a]
+(++) :: [a] -> [a] -> [a]
+length :: [a] -> Int
+\end{verbatim}
+It returns (a superset of) these equations
+\begin{verbatim}
+zip is (reverse is ++ js) = zip is (reverse is)
+zip (is ++ js) (reverse is) = zip is (reverse is)
+zip is (js ++ (is ++ ks)) = zip is (js ++ is)
+zip (is ++ (js ++ ks)) js = zip (is ++ js) js
+\end{verbatim}
+Here we see that QuickSpec finds equations that are true
+because of the way the length of the two lists given to zip relate
+to each other. As an example, QuickSpec has generated the equation
+\begin{verbatim}zip (is ++ js) (reverse is) = zip is (reverse is)\end{verbatim}
+because zip has the property \begin{verbatim}length xs = length ys => zip xs (ys ++ is) = zip xs ys\end{verbatim}
+QuickSpec finds the weaker equations but fails to find the general form
+of these equations because it has no ability to reason about
+conditional equations.
 This work aims to compliment QuickSpec by introducing three different methods
 of encoding conditional conjectures as equational conjectures and comparing
 the usefullness of these three methods. QuickSpec can be used both as a standalone

@@ -9,7 +9,7 @@ algebras. Consider the bit-vector example from section
 \ref{bitvector}, the conditional equation
 \\$\forall n:\mathbb{N},\;xs:List\;\mathbb{B}.\;P(n,\;xs)\implies lsr\;n\;(lsl\;n\;xs)=xs$\\
 can be generalized to
-\\$\forall n,m:\mathbb{N},\;xs:List\;\mathbb{B}.\;(m\leq n)\wedge P(m,\;xs)\implies lsr\;n\;(lsl\;n\;xs)=xs$.
+\\$\forall n,m:\mathbb{N},\;xs:List\;\mathbb{B}.\;(m\leq n)\wedge P(n,\;xs)\implies lsr\;n\;(lsl\;n\;xs)=xs$.
 
 Conjunction is vital for expressing conditional equations after invariants.
 As evidenced by section \ref{apl}, where we find that one predicate, "is well shaped",

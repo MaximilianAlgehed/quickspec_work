@@ -1,85 +1,20 @@
-Topics for the talk
+1. Here is QuickSpec
+    1.1 Here is what it can do now (D0.hs)
+        1.1.1 We want to see (The problem)
+    1.2 Here is what we get now (D1.hs)
 
-1. The big picture, why is this relevant?
-    1.1 Hipster/Hipspec/Emna
-    1.2 This will save your life one day, no seriously...
-        1.2.1 Software has bugs, let's fix that...
+2. Our way of doing it
+    2.1 Type encoding, slide demonstrating how it works
+    2.2 Automatic generation, let's look at some more examples (D2.hs, D3.hs)
+    2.3 We looked at function encoding too.
 
-2. The problem
-    2.1 Conditional equations (!)
-        2.1.1 QuickSpec only supports equational schemas
-    2.2 Old QuickSpec's way of doing it
-    2.3 What we want
-        2.3.1 A way of representing conditionals in an equational setting
-        2.3.2 We want function symbols to be opaque
-            2.3.2.1 It's what we are currently doing
-            2.3.2.2 Knuth-Bendix Completion
-            2.3.2.3 We could, in theory, examine any pure C library
-        2.3.3 Lightweight (!)
+3. More advanced topics
+    3.1 APL/Sets as lists/maps as lists, conjunction:
+        3.1.1 `suchThat` is no longer going to work
+        3.1.2 Jonas' work looks promising
 
-3. Our way of doing it
-    3.1 Type encoding
-    3.2 Function encoding
-        3.2.1 That time I used unsafePerformIO...
-        3.2.2 Soundness issues -> Combined encoding
-        3.2.3 Function encoding looks like it's more "dynamic"
-    3.3 What can we do now, some examples
-
-4. Function encoding sounds good, is there a downside?
-    4.1 The p or not p example
-        4.1.1 What would be a good semantics of when-functions?
-    4.2 But at least they mean something... not... 
-
-5. Ok, so functions suck. Type encoding to the rescue!
-    5.1 APL/Sets as lists, oh crap conjunction:
-        
-            We want to represent APL in haskell.
-            The ⍴ function has this simplified dependent type:
-
-                ⍴ :: {lst : [[a]] | P⍴ lst } -> [Int]
-                    where
-                        P⍴ lst = Exists y. Forall x. x ∊ lst => length x = y
-
-            We can't represent this in haskell, because dependent type...
-            But we can do it with a partial definition of ⍴.
-            So now we need the predicate in the type.
-
-            Furthermore we have the operator for element wise equality
-
-                eq :: {xs : [[a]] | P⍴' xs ys} -> {ys : [[a]] | P⍴' xs ys} -> [[Int]] -- APL represents bools as ints
-                    where
-                        P⍴' xs ys = ⍴' xs == ⍴' ys
-                        ⍴'        = map length
-
-            So now we have two predicates:
-
-                P⍴ and P⍴'
-
-            And we get the property
-
-                (P⍴ xs) & (P⍴ ys) & (P⍴' xs ys) =>  ⍴ (xs `eq` ys) = ⍴ xs
-
-        5.1.1 Yeah sure, `suchThat` is slow. But it works. Not for conjunction!
-        5.1.2 Ok, Jonas' work looks promising
-
-6. But what about P compose f?
-    6.1 Function encoding looks like it's almost got it down
-        6.1.1 No it hasn't:
-
-            -- Function encoding of sorted lists
-            whenSorted :: [Integer] -> Bool
-            whenSorted xs
-                | sorted xs = xs
-                | otherwise = []
-
-            let xs = [2, 2, 1, 3]
-
-            -- Now we get the following
-            sort xs = [1, 2, 2, 3]
-            insert (head xs) (whenSorted (tail xs)) = [2]
-
-    6.2 Okay, type encoding would let us do it, I suppose
-        6.2.1 Hilarious results, lots of redundant predicates:
+    3.2 P compose f
+        3.2.1 Lots of redundant predicates:
 
             -- Functions
             reverse :: [a] -> [a]
@@ -98,27 +33,9 @@ Topics for the talk
             (\xs -> (>=) 0 (length xs)) -- The empty list
             (\xs -> isSorted (reverse (reverse xs))) -- isSorted
 
-        6.2.2 It's ok, just run QS twice
+        3.2.2 We can run QuickSpec twice
 
-7. Future work
-    7.1 Implment the ideas for fixing injectivity
-    7.2 A good algorithm for conjunction generation
-
-Question to work out:
-    How to introduce the "well this doesn't mean anything" - problem in FE
-    without making it completely useless to talk about function encoding
-    in the context of transforms (how it can't do it... the sorted example)?
-
-    There is a path from function encoding to type encoding, you start with function
-    encoding, and then you look at "P compose f" and you get the type signature
-        whenP :: a -> (a, b)
-    and then after that you look at how whenP can appear anywhere:
-        f (fst (whenP x)) + g x = h y (snd (whenP y))
-    and you realize that we can fix this with a type a' that just wraps the a and
-    makes it unique. So now you have:
-        whenP :: a' -> (a, b)
-    which means we more or less have a type encoding of the predicate "P compose f".
-    The question is, is this the story you want to tell about function encoding?
-
-    Why do we want function symbols to be opaque? I have this feeling that it's nice
-    but I can't put my finger on WHY it's important.
+4. Future work
+    4.1 Implement the ideas for fixing injectivity
+    4.2 Implement the ideas for working with P compose f
+    4.3 A good algorithm for conjunction generation
