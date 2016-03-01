@@ -5,6 +5,7 @@
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
 import Prelude hiding (lookup, insert)
 import QuickSpec hiding (insert)
 import Data.Coerce
@@ -12,6 +13,7 @@ import Test.QuickCheck
 import TemplateDerivingPredicates
 
 newtype QueueI = Q ([Integer],[Integer]) deriving (Arbitrary, Eq, Show, Ord)
+
 emptyI = Q ([],[])
 addI x (Q (f,b)) = flipQ (f,x:b)
 isEmptyI (Q (f,b)) = null f
@@ -33,16 +35,14 @@ add x q = q ++ [x]
 nisEmptyI :: QueueI -> Bool
 nisEmptyI = not . isEmptyI
 
-$(mk_Predicates [[| nisEmptyI :: QueueI -> Bool |],[| isEmptyI :: QueueI -> Bool |], [| invariant :: QueueI -> Bool |]])
+$(mk_Predicates [[| nisEmptyI :: QueueI -> Bool |], [| invariant :: QueueI -> Bool |]])
 
 sig =
     signature {
-        maxTermSize = Just 10,
+        maxTermSize = Just 5,
         instances = [
                     baseType (undefined::Pinvariant),
                     names (NamesFor ["p"] :: NamesFor Pinvariant),
-                    baseType (undefined::PisEmptyI),
-                    names (NamesFor ["q"] :: NamesFor PisEmptyI),
                     baseType (undefined::PnisEmptyI),
                     names (NamesFor ["nq"] :: NamesFor PnisEmptyI),
                     baseType (undefined::QueueI),
@@ -61,8 +61,7 @@ sig =
                     constant ":" ((:) :: A -> [A] -> [A]),
                     constant "[]" ([] :: [A]),
                     constant "x" (coerce . a11 :: Pinvariant -> QueueI),
-                    constant "x" (coerce . a11 :: PisEmptyI -> QueueI),
-                    constant "x" (coerce . a11 :: PnisEmptyI -> QueueI)
+                    constant "x'" (coerce . a11 :: PnisEmptyI -> QueueI)
                     ]
     }
 

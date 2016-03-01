@@ -10,8 +10,7 @@ import Data.Coerce
 import Test.QuickCheck
 import TemplateDerivingPredicates
 
-newtype SetL = SetL [Int] deriving (Ord, Eq, Arbitrary)
-
+-- Generate template haskell
 $(mk_Predicates [[| isSet :: SetL -> Bool |], [| disjointSets :: SetL -> SetL -> Bool |]])
 
 sig =
@@ -29,9 +28,7 @@ sig =
                         constant "union" (union :: [Int] -> [Int] -> [Int]),
                         constant "x" (coerce . a11 :: PisSet -> [Int]),
                         constant "a" (coerce . a21 :: PdisjointSets -> [Int]),
-                        constant "b" (coerce . a22 :: PdisjointSets -> [Int]),
-                        constant "size" (length :: [A] -> Int),
-                        constant "+" ((+) :: Int -> Int -> Int)
+                        constant "b" (coerce . a22 :: PdisjointSets -> [Int])
                     ]
     }
 
