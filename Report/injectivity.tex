@@ -44,5 +44,7 @@ However, this generator suffers from the issue that if the predicate does not re
 of show for expression was buggy, it is possible to only generate equal data as the cornercase would never be found.
 For expressions it is possible that the \texttt{show} function is not injective, but that there is a subtle bug
 somewhere in the function that causes two very similar (but not identical) expressions to print to the same thing.
+Take for example if the \texttt{show} function omits parentheses for chained additions, QuickSpec still finds
+the conjecture above but the conjecture is now false.
 We can create a generator which is less likely to have this issue as both \texttt{Expression}
 and \texttt{String} are algebraic datatypes.
