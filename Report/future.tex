@@ -1,7 +1,19 @@
 \section{Future work}
-We plan to use the work of Claessen et. al. \cite{Claessen2014generating}
+We plan to use the work of Claessen et. al.
+\cite{Claessen2014generating} and
+Duregård \cite{Duregard}
 to develop more efficient random
 generators for type encodings.
+We have a concrete plan for how to do 
+so which we will present here.
+We can use functional enumeration
+to generate a stream of constrained
+data. The \texttt{sized} function from
+QuickCheck would then let us
+take any item from index $0$ to $size-1$
+of this stream and use it as our arbitrary
+data. One problem with this technique is
+that it is limited to algebraic datatypes.
 
 Furthermore we also plan to use the
 results from that and related work to

@@ -22,15 +22,14 @@ mutate :: Expression -> Gen Expression
 mutate e = transformM doMutate e
     where
         doMutate e@(a :+: (b :+: c)) = oneof [return e, return ((a :+: b) :+: c)]
-        doMutate e                   = return e 
+        doMutate e                   = return e
 
 instance Arbitrary PshowAppJunk where
-    
     arbitrary = arb `suchThat` (\p -> showAppJunk (a41 p) (a42 p) (a43 p) (a44 p))
                 where
                     arb = do
                             e <- arbitrary
-                            e' <- oneof $ [return e, arbitrary, mutate e]
+                            e' <- oneof $ [return e, mutate e, arbitrary]
                             s <- arbitrary
                             s' <- oneof $ [return s, arbitrary]
                             return (Ps e e' s s')
@@ -45,7 +44,6 @@ sig =
                     names (NamesFor ["e", "f", "g"] :: NamesFor Expression)
                     ],
         constants = [
-                    constant "&&" (&&),
                     constant "v" (coerce . a41 :: PshowAppJunk -> Expression),
                     constant "w" (coerce . a42 :: PshowAppJunk -> Expression),
                     constant "s" (coerce . a43 :: PshowAppJunk -> String),
