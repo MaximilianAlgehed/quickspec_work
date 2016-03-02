@@ -38,7 +38,14 @@ because zip has the property \begin{verbatim}length xs = length ys => zip xs (ys
 QuickSpec finds the weaker equations but fails to find the general form
 of these equations because it has no ability to reason about
 conditional equations.
-This work aims to compliment QuickSpec by introducing three different methods
+Using our contributions we are able to generate (a superset of) the following conditional
+equations in the above example
+\begin{verbatim}
+length xs = length ys => zip (xs ++ is) ys   = zip xs ys
+length xs = length ys => zip ys (xs ++ is)   = zip ys xs
+length xs = length ys => reverse (zip xs ys) = zip (reverse xs) (reverse ys)
+\end{verbatim}
+This work compliments QuickSpec by introducing three different methods
 of encoding conditional conjectures as equational conjectures and comparing
 the usefullness of these three methods. QuickSpec can be used both as a standalone
 system allowing the user to investigate a set of combinators and datatypes in the
