@@ -5,3 +5,16 @@ This work improves on that approach by integrating the
 discovery of conditional equations in to the tool
 in the way suggested in the upcoming paper about
 QuickSpec.
+The old method for condtionals in QuickSpec can 
+not take advantage of QuickSpec's schema system.
+The method would generate equations like
+\begin{equation}\label{eq:old1}
+    \forall x, y.\;P(x)\implies f(x) = g(y)\\
+\end{equation}
+\begin{equation}\label{eq:old2}
+    \forall x, y.\;P(x)\wedge\;Q(y)\implies f(x) = g(y)
+\end{equation}
+As (\ref{eq:old2}) follows from the $\forall y$ in (\ref{eq:old1})
+the schema system would not specialize (\ref{eq:old1}) to
+(\ref{eq:old2}), which is a clear advantage of
+our current method to the previous one.
