@@ -5,7 +5,7 @@
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-import Expression
+import DemoExpression
 import Test.QuickCheck
 import TemplateDerivingPredicates
 import QuickSpec hiding (insert)

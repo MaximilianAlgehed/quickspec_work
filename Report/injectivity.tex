@@ -18,7 +18,31 @@ QuickCheck's \texttt{suchThat} combinator, which works by incrementing the size 
 generator and testing generated values untill the predicate holds.
 
 One idea for how to deal with injective functions is to let the user specify that they suspect that 
-a function may be injective. This would then let us write a generator that is more likely to generate
-equal data. One could even imagine having a generator which chooses between arbitrary data
-and data which is very likely to be equal. This way corner cases where the function is not injective may
-still be found.
+a function may be injective. This lets us create a generator that is more likely to generate
+equal data. One naive generator for the predicate in the above example is the following
+\begin{verbatim}
+predicate :: Expression -> Expression -> String -> String -> Bool
+predicate v w s t = show v ++ s == show w ++ t
+
+data P = P {a41 :: Expression,
+            a42 :: Expression,
+            a43 :: String,
+            a44 :: String}
+
+instance Arbitrary P where
+    arbitrary = arb `suchThat` (\p -> predicate (a41 p) (a42 p) (a43 p) (a44 p))
+                where
+                    arb = do
+                            e <- arbitrary
+                            e' <- oneof $ [return e, arbitrary]
+                            s <- arbitrary
+                            s' <- oneof $ [return s, arbitrary]
+                            return (Ps e e' s s')
+\end{verbatim}
+With this generator QuickSpec finds the equation.
+However, this generator suffers from the issue that if the predicate does not require injectivity, or the implementation
+of show for expression was buggy, it is possible to only generate equal data as the cornercase would never be found.
+For expressions it is possible that the \texttt{show} function is not injective, but that there is a subtle bug
+somewhere in the function that causes two very similar (but not identical) expressions to print to the same thing.
+We can create a generator which is less likely to have this issue as both \texttt{Expression}
+and \texttt{String} are algebraic datatypes.
