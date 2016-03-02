@@ -18,3 +18,24 @@ As (\ref{eq:old2}) follows from the $\forall y$ in (\ref{eq:old1})
 the schema system would not specialize (\ref{eq:old1}) to
 (\ref{eq:old2}), which is a clear advantage of
 our current method to the previous one.
+
+Other theory exploration and lemma
+discovery tools, like the one described in
+\cite{Buchberger2001} which uses static rules
+to generate new conjectures from existing
+lemmas, or \cite{heras2013} which uses
+machine learning to do the same thing, 
+commonly rely on the existence of old lemmas
+to generate new conditions. These tools generally
+are not limited to equational reasoning in the way that QuickSpec
+is and as such are able to generate conditional lemmas.
+However, they are dependent on the existance of
+previous lemmas. QuickSpec does not have this dependency.
+
+The schema system in QuickSpec is based on the 
+work on IsaCosy described in \cite{Johansson2011}. One advantage
+QuickSpec has over IsaCosy is speed, our approach brings
+conditional conjectures to QuickSpec without incurring
+a very large runtime overhead. QuickSpec is still orders of
+magnitude faster than IsaCosy with the most naive (machine generated)
+type encodings described in this report.
