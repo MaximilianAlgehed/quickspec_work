@@ -64,7 +64,7 @@ evalFun (a :/: b) x = do
 showexp :: Expression -> String
 showexp X         = "x"
 showexp (V d)     = show d
-showexp (a :+: b) = paren $ (showexp a) ++ " + " ++ (showexp b)
+showexp (a :+: b) = (showexp a) ++ " + " ++ (showexp b)
 showexp (a :-: b) = paren $ (showexp a) ++ " - " ++ (showexp b)
 showexp (a :*: b) = paren $ (showexp a) ++ " * " ++ (showexp b)
 showexp (a :/: b) = paren $ (showexp a) ++ " / " ++ (showexp b)

@@ -16,7 +16,11 @@ Partiality of shallow embeddings representing malformed expressions in the
 embedded language can be handled by conditional equations in QuickSpec.
 Take for an instance the unary operator $\iota$ in APL. The semantics
 of $\iota$ are that for any dimension matrix which contains only one element, which is also
-an integer, the $\iota$ operator will produce the vector of all integers from 1 to that element.
+an integer, the $\iota$ operator will produce the vector of all integers from 1 to that element
+\begin{gather*}
+    \iota 9 = (1\;2\;3\;4\;5\;6\;7\;8\;9)\\
+    \iota ((3)) = (1\;2\;3)
+\end{gather*}
 The implementation of the $\iota$ operator in a shallow embedding will be inherently partial
 but since we can deal with partial functions using our techniques we are still able to reason
 about equations involving $\iota$.

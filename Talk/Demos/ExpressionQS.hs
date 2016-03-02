@@ -37,7 +37,6 @@ sig =
                     names (NamesFor ["e", "f", "g"] :: NamesFor Expression)
                     ],
         constants = [
-                    constant "&&" (&&),
                     constant "v" (coerce . a41 :: PshowAppJunk -> Expression),
                     constant "w" (coerce . a42 :: PshowAppJunk -> Expression),
                     constant "s" (coerce . a43 :: PshowAppJunk -> String),
