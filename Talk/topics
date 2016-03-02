@@ -43,6 +43,9 @@
             \xs -> isSorted (reverse (reverse xs)) -- isSorted
 
         3.2.2 We can run QuickSpec twice
+    
+    3.3 Injectivity
+        3.3.1 Show the problem with showExpr 
 
 4. Future work
     4.1 Implement the ideas for fixing injectivity

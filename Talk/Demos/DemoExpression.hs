@@ -1,15 +1,20 @@
-{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE DeriveDataTypeable,
+             FlexibleInstances,
+             GeneralizedNewtypeDeriving,
+             DeriveAnyClass #-}
+
 module DemoExpression where
 
 import Control.Monad (guard)
 import Test.QuickCheck
+import Data.Data
 
 data Expression = Expression :+: Expression
                 | Expression :-: Expression
                 | Expression :*: Expression
                 | Expression :/: Expression
                 | V Int
-                | X deriving (Eq, Ord)
+                | X deriving (Eq, Ord, Data, Typeable)
 
 x = X
 
