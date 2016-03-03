@@ -43,7 +43,7 @@
 \author{Maximilian Algehed} % Your name
 \institute[CTH] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
 {
-Chalmers Tekniska Högskola \\ % Your institution for the title page
+Chalmers University of Technology \\ % Your institution for the title page
 \medskip
 \textit{m.algehed@gmail.com} % Your email address
 }
@@ -52,30 +52,17 @@ Chalmers Tekniska Högskola \\ % Your institution for the title page
 \begin{document}
 
 \begin{frame}
-\titlepage % Print the title page as the first slide
+    \titlepage % Print the title page as the first slide
 \end{frame}
-
-%\begin{frame}
-%\frametitle{Overview} % Table of contents slide, comment this block out to remove it
-%\tableofcontents % Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
-%\end{frame}
-
-%----------------------------------------------------------------------------------------
-%	PRESENTATION SLIDES
-%----------------------------------------------------------------------------------------
-
-%------------------------------------------------
-\section{Introduction} % Sections can be created in order to organize your presentation into discrete blocks, all sections and subsections are automatically printed in the table of contents as an overview of the talk
-%------------------------------------------------
 
 \begin{frame}
     \frametitle{What is QuickSpec?}
-    \Large{\centerline{Functions in, equations out!}}
+        \Large{\centerline{Functions in, equations out!}}
 \end{frame}
 
 \begin{frame}
     \frametitle{Demo!}
-    \Huge{\centerline{Demo!}}
+        \Huge{\centerline{Demo!}}
 \end{frame}
 
 \begin{frame}
@@ -92,17 +79,17 @@ Chalmers Tekniska Högskola \\ % Your institution for the title page
 
 \begin{frame}
     \frametitle{What's this?}
-    \Large{\centerline{\texttt{zip is (is ++ js) = zip is is}}}
+        \Large{\centerline{\texttt{zip is (is ++ js) = zip is is}}}
 \end{frame}
 
 \begin{frame}
     \frametitle{What we'd like}
-    \centerline{\texttt{length xs = length ys => zip xs (ys ++ js) = zip xs ys}}
+        \centerline{\texttt{length xs = length ys => zip xs (ys ++ js) = zip xs ys}}
 \end{frame}
 
 \begin{frame}
     \frametitle{Demo!}
-    \Huge{\centerline{Demo!}}
+        \Huge{\centerline{Demo!}}
 \end{frame}
 
 \begin{frame}
@@ -123,81 +110,81 @@ Chalmers Tekniska Högskola \\ % Your institution for the title page
                 \texttt{P x => f y         = g x}\\
                 \texttt{P x and Q y => f y = g x}
         \end{itemize}
+        Only used in Hipster (and HipSpec).
 \end{frame}
 
 \begin{frame}[fragile]
     \frametitle{How does it work?}
-    \begin{verbatim}
-    data Peqlen = Peqlen {xs :: [Int],
-                          ys :: [Int]}
-                  deriving (Show, Eq, Ord)
+        \begin{verbatim}
+        data Peqlen = Peqlen {xs :: [Int],
+                              ys :: [Int]}
 
-    instance Arbitrary Peqlen where
-        arbitrary = do
-                        l  <- arbitrary 
-                        xs <- sequence $
-                            replicate l arbitrary
-                        ys <- sequence $
-                            replicate l arbitrary
-                        return (Peqlen xs ys)
-    \end{verbatim}
+        instance Arbitrary Peqlen where
+            arbitrary = do
+                            l  <- arbitrary 
+                            xs <- sequence $
+                                replicate l arbitrary
+                            ys <- sequence $
+                                replicate l arbitrary
+                            return (Peqlen xs ys)
+        \end{verbatim}
 \end{frame}
 
 \begin{frame}
     \frametitle{How does it work?}
-    \centerline{\texttt{length xs = length ys => zip xs (ys ++ is) = zip xs ys}}
-    \centerline{}
-    \centerline{becomes}
-    \centerline{}
-    \centerline{\texttt{zip (xs p) (ys p ++ is) = zip (xs p) (ys p)}}
-    \pause
-    \centerline{}
-    \centerline{\texttt{zip (ys p) (xs p ++ is) = zip (ys p) (xs p)}}
-    \centerline{}
-    \centerline{(\texttt{length} is a cornercase)}
+        \centerline{\texttt{length xs = length ys => zip xs (ys ++ is) = zip xs ys}}
+        \centerline{}
+        \centerline{becomes}
+        \centerline{}
+        \centerline{\texttt{zip (xs p) (ys p ++ is) = zip (xs p) (ys p)}}
+        \pause
+        \centerline{}
+        \centerline{\texttt{zip (ys p) (xs p ++ is) = zip (ys p) (xs p)}}
+        \centerline{}
+        \centerline{(\texttt{length} is a cornercase)}
 \end{frame}
 
 \begin{frame}
     \frametitle{So what about redundancy?}
-    \Large{\centerline{\texttt{f z = g (x p)}}}
-    \centerline{}
-    \centerline{more general than}
-    \centerline{}
-    \Large{\centerline{\texttt{f (y q) = g (x p)}}}
+        \Large{\centerline{\texttt{f z = g (x p)}}}
+        \centerline{}
+        \centerline{more general than}
+        \centerline{}
+        \Large{\centerline{\texttt{f (y q) = g (x p)}}}
 \end{frame}
 
 \begin{frame}[fragile]
     \frametitle{Generalising}
-    \begin{verbatim}
-    arbitrary = arbitrary `suchThat`
-        (\(xs, ys) -> length xs == length ys) >>=
-        return . (uncurry Peqlen) 
-    \end{verbatim}   
+        \begin{verbatim}
+        arbitrary = arbitrary `suchThat`
+            (\(xs, ys) -> length xs == length ys) >>=
+            return . (uncurry Peqlen) 
+        \end{verbatim}   
 \end{frame}
 
 \begin{frame}
     \frametitle{Demo!}
-    \Large{\centerline{Some more examples}}
+        \Large{\centerline{Some more examples}}
 \end{frame}
 
 \begin{frame}
     \frametitle{Something more interesting}
-    In APL, the $\rho$ operator gets the shape of a value.\\
-    \begin{align*}
-    \rho\;\begin{pmatrix} 0 & 2 \end{pmatrix}\; &= \begin{pmatrix}4\end{pmatrix}\\\\
-    \rho \begin{pmatrix} 2 & 1 \\ 3 & 4 \end{pmatrix} &= \begin{pmatrix} 2 & 2\end{pmatrix}\\\\
-    \rho \begin{pmatrix} 2 & 1 \\ 1 \end{pmatrix} &= crash...
-    \end{align*}
+        In APL, the $\rho$ operator gets the shape of a value.\\
+        \begin{align*}
+            \rho\;\begin{pmatrix} 0 & 2 \end{pmatrix}\; &= \begin{pmatrix}4\end{pmatrix}\\\\
+            \rho \begin{pmatrix} 2 & 1 \\ 3 & 4 \end{pmatrix} &= \begin{pmatrix} 2 & 2\end{pmatrix}\\\\
+            \rho \begin{pmatrix} 2 & 1 \\ 1 \end{pmatrix} &= crash...
+        \end{align*}
 \end{frame}
 
 \begin{frame}
     \frametitle{Something more interesting}
-    The $\times$ operator does element wise multiplication.\\
-    \begin{align*}
-    \begin{pmatrix} 1 & 2\\3 & 4\end{pmatrix} \times \begin{pmatrix} 2 & 3\\6 & 2\end{pmatrix} &=
-    \begin{pmatrix} 2 & 6\\18 & 2\end{pmatrix}\\\\
-    \begin{pmatrix} 1 & 4 & 3 \end{pmatrix} \times \begin{pmatrix}1 & 0 & 0 & 1 \end{pmatrix} &= crash...
-    \end{align*}
+        The $\times$ operator does element wise multiplication.\\
+        \begin{align*}
+            \begin{pmatrix} 1 & 2\\3 & 4\end{pmatrix} \times \begin{pmatrix} 2 & 3\\6 & 2\end{pmatrix} &=
+            \begin{pmatrix} 2 & 6\\18 & 2\end{pmatrix}\\\\
+            \begin{pmatrix} 1 & 4 & 3 \end{pmatrix} \times \begin{pmatrix}1 & 0 & 0 & 1 \end{pmatrix} &= crash...
+        \end{align*}
 \end{frame}
 
 \begin{frame}
@@ -206,47 +193,32 @@ Chalmers Tekniska Högskola \\ % Your institution for the title page
     \begin{equation*}
         \rho (x \times y) = \rho x = \rho y
     \end{equation*}
+    \centerline{}
     \centerline{for all well behaved x and y...}
 \end{frame}
-%------------------------------------------------
 
 \begin{frame}
-\frametitle{Blocks of Highlighted Text}
-\begin{block}{Block 1}
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
-\end{block}
-
-\begin{block}{Block 2}
-Pellentesque sed tellus purus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Vestibulum quis magna at risus dictum tempor eu vitae velit.
-\end{block}
-
-\begin{block}{Block 3}
-Suspendisse tincidunt sagittis gravida. Curabitur condimentum, enim sed venenatis rutrum, ipsum neque consectetur orci, sed blandit justo nisi ac lacus.
-\end{block}
-\end{frame}
-
-%------------------------------------------------
-
-\begin{frame}
-\frametitle{Multiple Columns}
-\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
-
-\column{.45\textwidth} % Left column and width
-\textbf{Heading}
-\begin{enumerate}
-\item Statement
-\item Explanation
-\item Example
-\end{enumerate}
-
-\column{.5\textwidth} % Right column and width
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
-
-\end{columns}
+    \frametitle{Being well behaved}
+    \begin{columns}
+        \column{.5\textwidth}
+            \begin{itemize}
+                \item $\rho$ of $x$ does not crash
+                \item $\rho$ of $y$ does not crash
+                \item $\rho x = \rho y$
+            \end{itemize}
+        \column{.5\textwidth}
+            \pause
+            \centerline{\texttt{suchThat} won't cut it}
+    \end{columns}
 \end{frame}
 
 \begin{frame}
-\Huge{\centerline{Questions?}}
+    \frametitle{Demo!}
+    \Huge{\centerline{Demo!}}
+\end{frame}
+
+\begin{frame}
+    \Huge{\centerline{Questions?}}
 \end{frame}
 
 \end{document} 

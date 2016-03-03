@@ -23,12 +23,12 @@ an integer, the $\iota$ operator will produce the vector of all integers from 1 
 \end{gather*}
 The implementation of the $\iota$ operator in a shallow embedding will be inherently partial
 but since we can deal with partial functions using type encoding we are still able to reason
-about equations involving $\iota$.
+about equations involving $\iota$ in QuickSpec.
 
-The unary $\rho$ operator in APL takes the shape of it's operand,
-so $\rho$ of a scalar is \texttt{[]} 
+The unary $\rho$ operator in APL takes the shape of it's operand.
+For example $\rho$ of a scalar is \texttt{[]} 
 and $\rho$\texttt{[0, 1, 3] = [3]} and
-$\rho\circ\rho$ is a function that gives the dimension of the operand (scalars having dimension 0).
+$\rho\circ\rho$ gives the dimension of the operand (scalars having dimension 0).
 A property of this operator is that it requires the operand to be homogenious.
 This means that in APL the operation $\rho((1\;2)\;(1\;2\;3))$
 would result in an error because the first and second sub-vector do not have the same shape.
