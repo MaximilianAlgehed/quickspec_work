@@ -40,11 +40,18 @@ instance Arbitrary P where
                             return (Ps e e' s s')
 \end{verbatim}
 With this generator QuickSpec finds the equation.
-However, this generator suffers from the issue that if the predicate does not require injectivity, or the implementation
-of show for expression was buggy, it is possible to only generate equal data as the cornercase would never be found.
-For expressions it is possible that the \texttt{show} function is not injective, but that there is a subtle bug
-somewhere in the function that causes two very similar (but not identical) expressions to print to the same thing.
-Take for example if the \texttt{show} function omits parentheses for chained additions, QuickSpec still finds
-the conjecture above but the conjecture is now false.
-We can create a generator which is less likely to have this issue as both \texttt{Expression}
-and \texttt{String} are algebraic datatypes.
+
+However, this is only part of the truth. If we load the expression module in to ghci and
+play around with it we find
+\begin{verbatim}
+ghci> show (X :+: (X :+: X))
+    "x + x + x"
+ghci> show ((X :+: X) :+: X)
+    "x + x + x"
+\end{verbatim}
+So \texttt{show} is not at all injective, QuickSpec was wrong. Why did this happen?
+The problem is that the type for expressions is very big, and generating the exact pathological
+example that breaks \texttt{show} randomly is highly unlikely. Since in this example we are testing
+for bugs in the \texttt{show} function one might expect that if there are bugs in the code then
+they will manifest when we do small mutations to the abstract syntax tree of expressions, such as
+reassociating \texttt{X :+: (X :+: X)}.

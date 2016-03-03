@@ -22,7 +22,7 @@ an integer, the $\iota$ operator will produce the vector of all integers from 1 
     \iota ((3)) = (1\;2\;3)
 \end{gather*}
 The implementation of the $\iota$ operator in a shallow embedding will be inherently partial
-but since we can deal with partial functions using our techniques we are still able to reason
+but since we can deal with partial functions using type encoding we are still able to reason
 about equations involving $\iota$.
 
 The unary $\rho$ operator in APL takes the shape of it's operand,
@@ -30,7 +30,7 @@ so $\rho$ of a scalar is \texttt{[]}
 and $\rho$\texttt{[0, 1, 3] = [3]} and
 $\rho\circ\rho$ is a function that gives the dimension of the operand (scalars having dimension 0).
 A property of this operator is that it requires the operand to be homogenious.
-This means that in APL the operation $\rho$\texttt{[[1, 2], [1, 3, 2]]}
+This means that in APL the operation $\rho((1\;2)\;(1\;2\;3))$
 would result in an error because the first and second sub-vector do not have the same shape.
 This property of $\rho$ becomes very relevant when we consider operators like $\times$ - element wise
 multiplication. In the special (but most common and obvious) case
