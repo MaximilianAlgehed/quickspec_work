@@ -13,10 +13,10 @@ import TemplateDerivingPredicates
 import QuickSpec hiding (insert)
 import Data.Coerce
 
-showAppJunk :: Expression -> Expression -> String -> String -> Bool
-showAppJunk v w s t = show v ++ s == show w ++ t
+pshow :: Expression -> Expression -> Bool
+pshow v w = show v == show w
 
-data PshowAppJunk = Ps {a41 :: Expression, a42 :: Expression, a43 :: String, a44 :: String} deriving (Ord, Eq, Show)
+data Ppshow = Ps {a41 :: Expression, a42 :: Expression} deriving (Ord, Eq, Show)
 
 mutate :: Expression -> Gen Expression
 mutate e = transformM doMutate e
@@ -24,30 +24,27 @@ mutate e = transformM doMutate e
         doMutate e@(a :+: (b :+: c)) = oneof [return e, return ((a :+: b) :+: c)]
         doMutate e                   = return e
 
-instance Arbitrary PshowAppJunk where
-    arbitrary = arb `suchThat` (\p -> showAppJunk (a41 p) (a42 p) (a43 p) (a44 p))
+instance Arbitrary Ppshow where
+    
+    arbitrary = arb `suchThat` (\p -> pshow (a41 p) (a42 p))
                 where
                     arb = do
                             e <- arbitrary
                             e' <- oneof $ [return e, mutate e, arbitrary]
-                            s <- arbitrary
-                            s' <- oneof $ [return s, arbitrary]
-                            return (Ps e e' s s')
+                            return (Ps e e')
 
 sig =
     signature {
         maxTermSize = Just 5,
         instances = [
-                    baseType (undefined::PshowAppJunk),
-                    names (NamesFor ["p"] :: NamesFor PshowAppJunk),
+                    baseType (undefined::Ppshow),
+                    names (NamesFor ["p"] :: NamesFor Ppshow),
                     baseType (undefined::Expression),
                     names (NamesFor ["e", "f", "g"] :: NamesFor Expression)
                     ],
         constants = [
-                    constant "v" (coerce . a41 :: PshowAppJunk -> Expression),
-                    constant "w" (coerce . a42 :: PshowAppJunk -> Expression),
-                    constant "s" (coerce . a43 :: PshowAppJunk -> String),
-                    constant "t" (coerce . a44 :: PshowAppJunk -> String)
+                    constant "v" (coerce . a41 :: Ppshow -> Expression),
+                    constant "w" (coerce . a42 :: Ppshow -> Expression)
                     ]
     }
 
