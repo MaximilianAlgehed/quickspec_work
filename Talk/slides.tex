@@ -36,7 +36,32 @@ Chalmers University of Technology \\ % Your institution for the title page
 
 \begin{frame}
     \frametitle{What is QuickSpec?}
-        \Large{\centerline{Functions in, equations out!}}
+    \begin{columns}
+        \column{0.15\textwidth}
+        \begin{block}{}
+            Functions\\
+            Datatypes\\
+            Constants\\
+        \end{block}
+
+        \column{0.1\textwidth}
+        \\
+        \centerline{\Large{$\implies$}}
+
+        \column{0.15\textwidth}
+        \begin{block}{}
+            QuickSpec
+        \end{block}
+        
+        \column{0.1\textwidth}
+        \\
+        \centerline{\Large{$\implies$}}
+
+        \column{0.15\textwidth}
+        \begin{block}{}
+            Equations
+        \end{block}
+    \end{columns}
 \end{frame}
 
 \begin{frame}
@@ -229,14 +254,23 @@ Chalmers University of Technology \\ % Your institution for the title page
             \item laziness - \texttt{Generating constrained random data}
             \item constraint solving - \texttt{Making our own luck}
         \end{itemize}
-        Writing predicate $\iff$ Writing generator
+        Writing predicate $\iff$ Writing generator\\
+        \centerline{}
+        Order of generation
+        \begin{itemize}
+            \item order by importance
+            \item weighted random order
+        \end{itemize}
 \end{frame}
 
 \begin{frame}
     \frametitle{Injectivity}
         \begin{block}{Injectivity}
-            $f$ is injective if
-            $f\;x=f\;y\implies x = y$
+            \centerline{"$f$ is injective"}
+            \centerline{$\iff$}
+            \centerline{$f\;x=f\;y\implies x = y$}
+            \centerline{$\iff$}
+            \centerline{$x \neq y \implies f\;x\neq f\;y$}
         \end{block}
 \end{frame}
 
@@ -252,6 +286,40 @@ Chalmers University of Technology \\ % Your institution for the title page
     showexp (a :+: b) = (showexp a) ++ " + " ++ (showexp b)
     ...
     \end{verbatim}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Demo!}
+    \Huge{\centerline{Demo!}}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Oh dear, what a mess!}
+    \begin{itemize}
+        \item Hand written generator
+        \item \texttt{mutate}...
+        \item Need to be specific
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{The other way}
+    \centerline{$x \neq y \implies f\;x\neq f\;y$} 
+\end{frame}
+
+\begin{frame}
+    \frametitle{Demo!}
+    \Huge{\centerline{Demo!}}
+\end{frame}
+
+\begin{frame}
+    \frametitle{YAY!}
+    \centerline{It found the bug, right?}
+    \pause
+    \centerline{}
+    \centerline{\texttt{xs /= show e = True} $\implies$ \texttt{show (e p) /= show (f p) = True}}
+    \centerline{}
+    \centerline{We don't know if it found the bug, because it never tested for the bug}
 \end{frame}
 
 \begin{frame}

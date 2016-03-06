@@ -1,4 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE TypeOperators #-}
 {-# LANGUAGE ImplicitParams #-}
@@ -18,7 +19,7 @@ $(mk_Predicates [[| neq :: Expression -> Expression -> Bool |]])
 
 sig =
     signature {
-        maxTermSize = Just 5,
+        maxTermSize = Just 10,
         instances = [
                     baseType (undefined::Pneq),
                     names (NamesFor ["p"] :: NamesFor Pneq),
@@ -28,8 +29,15 @@ sig =
         constants = [
                     constant "v" (coerce . a21 :: Pneq -> Expression),
                     constant "w" (coerce . a22 :: Pneq -> Expression),
-                    constant "show" (show :: Expression -> String)
+                    constant "show" (show :: Expression -> String),
+                    constant "/=" ((/=) :: String -> String -> Bool),
+                    constant "True" True
                     ]
     }
+
+deriving instance Show TneqExpression
+
+prop :: Pneq -> Bool
+prop p = show ((coerce . a21) p :: Expression) /= show ((coerce . a22) p :: Expression)
 
 main = quickSpec sig
