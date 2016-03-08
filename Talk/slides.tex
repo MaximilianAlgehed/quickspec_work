@@ -9,6 +9,7 @@
 \setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
 }
 
+\usepackage{minted}
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \usepackage[utf8]{inputenc}
@@ -119,7 +120,7 @@ Chalmers University of Technology \\ % Your institution for the title page
 
 \begin{frame}[fragile]
     \frametitle{How does it work?}
-        \begin{verbatim}
+    \begin{minted}{haskell}
         data Peqlen = Peqlen {xs :: [Int],
                               ys :: [Int]}
 
@@ -131,7 +132,7 @@ Chalmers University of Technology \\ % Your institution for the title page
                             ys <- sequence $
                                 replicate l arbitrary
                             return (Peqlen xs ys)
-        \end{verbatim}
+        \end{minted}
 \end{frame}
 
 \begin{frame}
@@ -173,11 +174,11 @@ Chalmers University of Technology \\ % Your institution for the title page
 
 \begin{frame}[fragile]
     \frametitle{Generalising}
-        \begin{verbatim}
+    \begin{minted}{haskell}
         arbitrary = arbitrary `suchThat`
             (\(xs, ys) -> length xs == length ys) >>=
             return . (uncurry Peqlen) 
-        \end{verbatim}   
+        \end{minted}   
 \end{frame}
 
 \begin{frame}
@@ -276,7 +277,7 @@ Chalmers University of Technology \\ % Your institution for the title page
 
 \begin{frame}[fragile]
     \frametitle{Algebraic expressions}
-    \begin{verbatim}
+    \begin{minted}{haskell}
     data Expression = Expression :+: Expression
                     ...
                     | X
@@ -285,7 +286,7 @@ Chalmers University of Technology \\ % Your institution for the title page
     ...
     showexp (a :+: b) = (showexp a) ++ " + " ++ (showexp b)
     ...
-    \end{verbatim}
+    \end{minted}
 \end{frame}
 
 \begin{frame}
