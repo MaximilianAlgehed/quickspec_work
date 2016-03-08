@@ -42,14 +42,21 @@
         the predicate type which makes the type behaves like a dependent type.
         This means that when equations involving these predicate
         types are tested by QuickCheck the types behave as if they were dependent types.
+        An example of a predicate type is the one that encodes \texttt{Int}'s greater than zero
+        \begin{verbatim}
+        newtype PredicateType = PredicateType {x :: Int}
+
+        instance Arbitrary PredicateType where
+            arbtrary = fmap abs arbitrary
+        \end{verbatim}
         The equations involving predicate types are on the form
         \begin{verbatim}
         f (data p) = g (data p)
         \end{verbatim}
         which translates to $p(x) \implies f(x) = g(x)$.
 
-        In this encoding we would have to be explicit about things such as conjunction
-        of multiple predicates or predicates of mappings of data.
+        In this encoding we need to be explicit about things such as conjunction
+        of multiple predicates or predicates like $P\circ f$.
         Being explicit about these things induces more overhead, therefore
         we want to find a light weight encoding scheme. Motivated by this
         we introduce function encoding.
