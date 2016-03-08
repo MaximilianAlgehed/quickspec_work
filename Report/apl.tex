@@ -1,43 +1,27 @@
 \section{A programming language}\label{apl}
-The APL programming language \cite{Iverson1962}\cite{APLdic}
+The APL programming language\cite{Iverson1962}\cite{APLdic}
 is a language for processing array and tabular data.
-As a language specialized for this task it has a set of very powerfull
-operators which are interesting to study and understand.
 To work with APL in Haskell we implement a small
 set of combinators for Haskell's vector
 type\footnote{\texttt{http://hackage.haskell.org/package/yi-0.7.0/docs/Data-Vector.html}}
 that emulates the basic semantics of APL.
-Using conditionals in QuickSpec we are able to discover
-equations about APL in spite of some of the
-difficulties of modelling a dynamically typed language
-in which some operators can be modelled with dependent types.
-
-Partiality of shallow embeddings representing malformed expressions in the
-embedded language can be handled by conditional equations in QuickSpec.
-Take for an instance the unary operator $\iota$ in APL. The semantics
-of $\iota$ are that for any dimension matrix which contains only one element, which is also
-an integer, the $\iota$ operator will produce the vector of all integers from 1 to that element
-\begin{gather*}
-    \iota 9 = (1\;2\;3\;4\;5\;6\;7\;8\;9)\\
-    \iota ((3)) = (1\;2\;3)
-\end{gather*}
-The implementation of the $\iota$ operator in a shallow embedding will be inherently partial
-but since we can deal with partial functions using type encoding we are still able to reason
-about equations involving $\iota$ in QuickSpec.
+Using conditional equations in QuickSpec we are able to discover
+equations about APL which QuickSpec would not
+normally find as a lot of functions in our
+shallow embedding of APL are partial\cite{Claessen2010}.
 
 The unary $\rho$ operator in APL takes the shape of it's operand.
-For example $\rho$ of a scalar is \texttt{[]} 
-and $\rho$\texttt{[0, 1, 3] = [3]} and
-$\rho\circ\rho$ gives the dimension of the operand (scalars having dimension 0).
+For example \\$\rho$\texttt{[1, 2]} is \texttt{[2]} and
+$\rho$\texttt{[[0], [1], [3]] = [3, 1]}.
+$\rho\circ\rho$ gives the dimension of the operand (scalars have dimension 0).
 A property of this operator is that it requires the operand to be homogenious.
-This means that in APL the operation $\rho((1\;2)\;(1\;2\;3))$
-would result in an error because the first and second sub-vector do not have the same shape.
-This property of $\rho$ becomes very relevant when we consider operators like $\times$ - element wise
-multiplication. In the special (but most common and obvious) case
-when the $\rho\circ\rho$ of the two operands agree the $\times$ operation
-is only defined if the two operands also have the same element-wise $\rho$. So, for two "well bahaved" matrices
+This means that in APL the operation $\rho$\texttt{[[1, 2], [1, 2, 3]]}
+would result in an error because the first and second sub-vector do not have the same length.
+This property of $\rho$ is relevant when considering operators like $\times$ - element wise
+multiplication, $\times$ requires the two operands to have the same shape
+However $\rho$ does not need to be defined for the operands. For two "well bahaved" matrices
 $x$ and $y$ we would expect the property $\rho(x \times y) = \rho x = \rho y$ to hold. Furthermore
 we would expect this property to hold for many operations like element wise subtraction, addition, equality etc..
-The good news is that QuickSpec is able to find these (conditional!) equations using type encoding. However,
-as discussed in section \ref{conjunction} we need to define a custom generator for these predicate types
+QuickSpec is able to find these equations using type encoding. However, as discussed
+in section \ref{conjunction} we need to define a custom generator for these predicate types
 and as such they are not very general.
