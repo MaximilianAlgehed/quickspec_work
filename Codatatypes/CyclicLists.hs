@@ -60,8 +60,14 @@ pairEq (xs, []) (ys, (z:_)) = P.False
 pairEq (xs, []) (ys, [])    = xs P.== ys
 pairEq (xs, ys) (zs, ws)
     | P.length xs P.== P.length zs = (xs P.== zs) P.&& (areInfEqual ys ws)
-    | P.length xs P.>= P.length zs = (zs P.== (P.take (P.length zs) xs)) P.&& P.undefined
-    | P.length xs P.<= P.length zs = (xs P.== (P.take (P.length xs) zs)) P.&& P.undefined
+    | P.length xs P.>= P.length zs = (zs P.== (P.take (P.length zs) xs)) P.&&
+                                     areInfEqual ((P.drop (P.length zs) xs) P.++
+                                                  (P.take ((P.length ys) P.- ((P.length xs) P.- (P.length zs))) ys))
+                                                  ws
+    | P.length xs P.<= P.length zs = (xs P.== (P.take (P.length xs) zs)) P.&&
+                                     areInfEqual ((P.drop (P.length xs) zs) P.++
+                                                  (P.take ((P.length ws) P.- ((P.length zs) P.- (P.length xs))) ws))
+                                                  ys
 
 -- Are two cycles directly equal
 areInfEqual :: (P.Eq a) => [a] -> [a] -> P.Bool
