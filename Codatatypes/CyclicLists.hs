@@ -24,9 +24,9 @@ fromList :: [a] -> CList a
 fromList xs     = CL xs []
 
 -- Append a cyclic list to another cyclic list
-append :: CList a -> CList a -> CList a
-append (CL xs []) (CL ys zs) = CL (xs P.++ ys) zs
-append xs _                  = xs
+(++) :: CList a -> CList a -> CList a
+(++) (CL xs []) (CL ys zs) = CL (xs P.++ ys) zs
+(++) xs _                  = xs
 
 -- Repeat
 repeat :: a -> CList a
@@ -101,7 +101,7 @@ instance (P.Eq a) => P.Eq (CList a) where
 instance (Arbitrary a) => Arbitrary (CList a) where
     arbitrary = do
         xs <- arbitrary
-        ys <- arbitrary `suchThat` (P.not P.. P.null)
+        ys <- arbitrary
         P.return (CL xs ys)
 
 -- Non-cyclic cyclic lists
@@ -113,9 +113,19 @@ instance (Arbitrary a) => Arbitrary (NC a) where
         xs <- arbitrary
         P.return (NC (CL xs []))
 
+-- Cyclic cyclic lists
+newtype DC a = DC (CList a) deriving (P.Ord, P.Eq, P.Show)
+
+-- Arbitrary non-cyclic lists are just lists
+instance (Arbitrary a) => Arbitrary (DC a) where
+    arbitrary = do
+        xs <- arbitrary
+        ys <- arbitrary `suchThat` (P.not P.. P.null)
+        P.return (DC (CL xs ys))
+
 -- Some properties
 prop_take_drop :: P.Int -> CList P.Int -> P.Bool
-prop_take_drop i xs = (take i xs) `append` (drop i xs) P.== xs
+prop_take_drop i xs = (take i xs) ++ (drop i xs) P.== xs
 
 prop_drop :: P.Int -> P.Int -> CList P.Int -> P.Bool
 prop_drop i j xs = (drop i (drop j xs)) P.== (drop j (drop i xs))
@@ -125,3 +135,6 @@ prop_weird xs (NC ys) i = P.not P.$ xs P.== (cons i ys)
 
 prop_cyclic :: CList P.Int -> CList P.Int -> P.Int -> P.Bool
 prop_cyclic xs ys i = ((cons i xs) P.== ys) P.== ((cons i ys) P.== xs)
+
+prop_fsk :: CList P.Int -> DC P.Int -> P.Bool
+prop_fsk xs (DC ys) = (xs P.== ys) P.== P.False
