@@ -55,10 +55,22 @@ specialToList = accToList ([], [])
 
 -- Equality of pairs representing cyclic lists
 pairEq :: (P.Eq a) => ([a], [a]) -> ([a], [a]) -> P.Bool
-pairEq (xs, ys) (zs, []) = P.False
-pairEq (xs, []) (ys, zs) = P.False
-pairEq (xs, []) (ys, []) = xs P.== ys
-pairEq (xs, ys) (zs, ws) = undefined -- To do
+pairEq (xs, (y:_)) (zs, []) = P.False
+pairEq (xs, []) (ys, (z:_)) = P.False
+pairEq (xs, []) (ys, [])    = xs P.== ys
+pairEq (xs, ys) (zs, ws)
+    | P.length xs P.== P.length zs = (xs P.== zs) P.&& (areInfEqual ys ws)
+    | P.length xs P.>= P.length zs = (zs P.== (P.take (P.length zs) xs)) P.&& P.undefined
+    | P.length xs P.<= P.length zs = (xs P.== (P.take (P.length xs) zs)) P.&& P.undefined
+
+-- Are two cycles directly equal
+areInfEqual :: (P.Eq a) => [a] -> [a] -> P.Bool
+areInfEqual xs ys
+    | P.length xs P.== P.length ys = xs P.== ys
+    | P.length xs P.>= P.length ys = ((P.take (P.length ys) xs) P.== ys) P.&&
+                                     (areInfEqual (P.drop (P.length ys) xs) ys)
+    | P.length ys P.>= P.length xs = ((P.take (P.length xs) ys) P.== xs) P.&&
+                                     (areInfEqual (P.drop (P.length xs) ys) xs)
 
 -- Equality over cyclic lists
 instance (P.Eq a) => P.Eq (CList a) where
