@@ -135,6 +135,3 @@ prop_weird xs (NC ys) i = P.not P.$ xs P.== (cons i ys)
 
 prop_cyclic :: CList P.Int -> CList P.Int -> P.Int -> P.Bool
 prop_cyclic xs ys i = ((cons i xs) P.== ys) P.== ((cons i ys) P.== xs)
-
-prop_fsk :: CList P.Int -> DC P.Int -> P.Bool
-prop_fsk xs (DC ys) = (xs P.== ys) P.== P.False
