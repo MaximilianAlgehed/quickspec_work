@@ -116,12 +116,21 @@ instance (Arbitrary a) => Arbitrary (NC a) where
 -- Cyclic cyclic lists
 newtype DC a = DC (CList a) deriving (P.Ord, P.Eq, P.Show)
 
--- Arbitrary non-cyclic lists are just lists
+-- Arbitrary cyclic-cyclic lists are just lists
 instance (Arbitrary a) => Arbitrary (DC a) where
     arbitrary = do
         xs <- arbitrary
         ys <- arbitrary `suchThat` (P.not P.. P.null)
         P.return (DC (CL xs ys))
+
+-- Just cyclic cyclic lists
+newtype JC a = JC (CList a) deriving (P.Ord, P.Eq, P.Show)
+
+-- Arbitrary just cyclic lists are just lists
+instance (Arbitrary a) => Arbitrary (JC a) where
+    arbitrary = do
+        ys <- arbitrary 
+        P.return (JC (CL [] ys))
 
 -- Some properties
 prop_take_drop :: P.Int -> CList P.Int -> P.Bool
@@ -129,9 +138,3 @@ prop_take_drop i xs = (take i xs) ++ (drop i xs) P.== xs
 
 prop_drop :: P.Int -> P.Int -> CList P.Int -> P.Bool
 prop_drop i j xs = (drop i (drop j xs)) P.== (drop j (drop i xs))
-
-prop_weird :: CList P.Int -> (NC P.Int) -> P.Int -> P.Bool
-prop_weird xs (NC ys) i = P.not P.$ xs P.== (cons i ys)
-
-prop_cyclic :: CList P.Int -> CList P.Int -> P.Int -> P.Bool
-prop_cyclic xs ys i = ((cons i xs) P.== ys) P.== ((cons i ys) P.== xs)
