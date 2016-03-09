@@ -1,3 +1,4 @@
+module CyclicLists where
 import qualified Data.List as L
 import qualified Prelude as P
 
