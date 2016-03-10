@@ -1,0 +1,38 @@
+\section{Pruning}
+QuickSpec uses a pruner to determine if
+it is going to test an equation or if the equations
+can be proved from the equations it allready knows.
+The normal QuickSpec pruner can not handle type encoding.
+To see why consider the following example
+\begin{verbatim}
+-- Type encoding of sorted list
+data Psorted a = P {xs :: [a]}
+
+-- Signature
+sorted :: (Ord a) => [a] -> Bool
+insert :: (Ord a) => a -> [a] -> [a]
+isort  :: (Ord a) => [a] -> [a]
+
+-- Tested, true, equations
+sorted (xs p) = True
+sorted (isort as) = True
+sorted (insert a (xs p)) = True
+sorted (insert a (isort as)) = True
+\end{verbatim}
+Here we see that QuickSpec has tested the term
+\\\texttt{sorted (insert a (isort as))} (\texttt{= True} omitted)
+even though we can deduce it from
+\\\texttt{sorted (isort as)},
+\texttt{sorted (insert a (xs p))} and
+\texttt{sorted (xs p)}. As it does not follow
+equationally. However, if we introduce
+a rule to the QuickSpec pruner that says;
+whenever there is a term like \\\texttt{sorted as},
+add the following equation to the theory
+\texttt{xs (toP as) = as}. This now gives us
+the equation \texttt{xs (toP (isort as)) = isort as},
+where \texttt{toP} is an undefined function with type
+\texttt{toP :: [a] -> PSorted a} that is only used to aid the proof,
+which gives us, through \texttt{sorted (insert a (xs p))},
+the term \texttt{sorted (insert a (isort as))} without
+having to test it.
