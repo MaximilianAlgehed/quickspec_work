@@ -50,9 +50,9 @@ ghci> show (X :+: (X :+: X))
 ghci> show ((X :+: X) :+: X)
     "x + x + x"
 \end{verbatim}
-So \texttt{show} is not at all injective, QuickSpec was wrong. Why did this happen?
+So \texttt{show} is not at all injective, QuickSpec was wrong! Why did this happen?
 The problem is that the type for expressions is very big, and generating the exact pathological
 example that breaks \texttt{show} randomly is highly unlikely. Since in this example we are testing
 for bugs in the \texttt{show} function one might expect that if there are bugs in the code then
 they will manifest when we do small mutations to the abstract syntax tree of expressions, such as
-reassociating \texttt{X :+: (X :+: X)}.
+reassociating \texttt{X :+: (X :+: X)} to \texttt{(X :+: X) :+: X}.
