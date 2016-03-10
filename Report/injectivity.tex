@@ -2,14 +2,18 @@
 When trying to prove injectivity of a pretty printer for arithemtic expressions one
 finds oneself needing the following predicate (1) and associated lemma (2):
 \begin{verbatim}
-
-P(e, f, s, t) := showTerm e ++ s = showTerm f ++ t (1)
+P(e, f, s, t) := show e ++ s = show f ++ t (1)
 P(e, f, s, t) => e = f && s = t (2)
-
 \end{verbatim}
 When adding P to the signature of QuickSpec however, the tool grinds to a complete halt. This is
 due to, as we can see in (2), generating data where P holds implies generating two
 random expression which are equal, and generating two random strings which are also equal.
+
+For the sake of simplicity we consider only
+\begin{verbatim}
+P(e, f) := show e = show f
+P(e, f) => e = f
+\end{verbatim}
 
 The problem here is that \texttt{showTerm} and the partially applied append function are both injective.
 Our experiments show that predicates involving equality and injective functions generaly do not
@@ -21,25 +25,22 @@ One idea for how to deal with injective functions is to let the user specify tha
 a function may be injective. This lets us create a generator that is more likely to generate
 equal data. One naive generator for the predicate in the above example is the following
 \begin{verbatim}
-predicate :: Expression -> Expression -> String -> String -> Bool
-predicate v w s t = show v ++ s == show w ++ t
+predicate :: Expression -> Expression -> Bool
+predicate v w = show v == show w
 
-data P = P {a41 :: Expression,
-            a42 :: Expression,
-            a43 :: String,
-            a44 :: String}
+data P = P {a21 :: Expression,
+            a22 :: Expression
+           }
 
 instance Arbitrary P where
-    arbitrary = arb `suchThat` (\p -> predicate (a41 p) (a42 p) (a43 p) (a44 p))
+    arbitrary = arb `suchThat` (\p -> predicate (a21 p) (a22 p))
                 where
                     arb = do
                             e <- arbitrary
                             e' <- oneof $ [return e, arbitrary]
-                            s <- arbitrary
-                            s' <- oneof $ [return s, arbitrary]
-                            return (Ps e e' s s')
+                            return (Ps e e')
 \end{verbatim}
-With this generator QuickSpec finds the equation.
+With this generator QuickSpec finds the equation \texttt{P(e, f) => e = f}.
 
 However, this is only part of the truth. If we load the expression module in to ghci and
 play around with it we find
