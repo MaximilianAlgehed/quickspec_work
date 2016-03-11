@@ -36,3 +36,18 @@ where \texttt{toP} is an undefined function with type
 which gives us, through \texttt{sorted (insert a (xs p))},
 the term \texttt{sorted (insert a (isort as))} without
 having to test it.
+
+The method can be generalized to higher arity predicates.
+One such predicate is \texttt{p xs ys = length xs == length ys}.
+With normal type encoding without any support for pruning
+conditional equations QuickSpec would test both
+\\\texttt{zip (xs p) (ys p ++ zs) = zip (xs p) (ys p)}\\
+and \texttt{zip (ys p) (xs p ++ zs) = zip (ys p) (xs p)}, and find
+both to be valid.
+QuickSpec will also find \texttt{length (xs p) = length (ys p)},
+Enhancing QuickSpec's pruner in this case would be introducing
+the rule that\\\texttt{length as = length bs} means we can add the equations
+\\\texttt{xs (toP as bs) = as} and \texttt{ys (toP as bs) = bs},\\
+which are enough to conclude\\
+\texttt{zip (xs p) (ys p ++ zs) = zip (xs p) (ys p)}$\implies$
+\\\texttt{zip (ys p) (xs p ++ zs) = zip (ys p) (xs p ++ zs)}.
