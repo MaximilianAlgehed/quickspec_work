@@ -51,3 +51,15 @@ the rule that\\\texttt{length as = length bs} means we can add the equations
 which are enough to conclude\\
 \texttt{zip (xs p) (ys p ++ zs) = zip (xs p) (ys p)}$\implies$
 \\\texttt{zip (ys p) (xs p ++ zs) = zip (ys p) (xs p ++ zs)}.
+
+The method can be generalized to any arity predicate.
+Take any predicate,\\\texttt{p :: T1 -> ... -> TN -> Bool},
+it has the corresponding predicate type
+\\\texttt{data P = P \{x1 :: T1, ..., xn :: TN\}},
+thus the rules we can introduce to the pruner are
+\\\texttt{
+p a1 ... an =>\\
+x1 (toP a1 ... an) = a1\\
+...\\
+xn (toP a1 ... an) = an\\
+}
