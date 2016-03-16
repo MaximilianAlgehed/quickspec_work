@@ -197,6 +197,21 @@ Chalmers University of Technology \\ % Your institution for the title page
 \end{frame}
 
 \begin{frame}
+    \frametitle{APL}
+    \begin{columns}
+        \column{.5\textwidth}
+            Problem: I don't understand APL\\
+
+        \pause
+
+        \column{.5\textwidth}
+            Solution: I understand haskell...\\
+            Deep embedding? NO!\\
+            Shallow embedding
+    \end{columns}
+\end{frame}
+
+\begin{frame}
     \frametitle{Something more interesting}
         In APL, the $\rho$ operator gets the shape of a value.\\
         \begin{align*}
@@ -285,6 +300,27 @@ Chalmers University of Technology \\ % Your institution for the title page
 
     showexp :: Expression -> String
     ...
+    showexp (a :+: b) = "(" ++
+                         (showexp a) ++ " + " ++ (showexp b)
+                         ++ ")"
+    ...
+    \end{minted}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Demo!}
+        \Huge{\centerline{Demo!}}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{April's fools!}
+    \begin{minted}{haskell}
+    data Expression = Expression :+: Expression
+                    ...
+                    | X
+
+    showexp :: Expression -> String
+    ...
     showexp (a :+: b) = (showexp a) ++ " + " ++ (showexp b)
     ...
     \end{minted}
@@ -292,7 +328,7 @@ Chalmers University of Technology \\ % Your institution for the title page
 
 \begin{frame}
     \frametitle{Demo!}
-    \Huge{\centerline{Demo!}}
+        \Huge{\centerline{Demo!}}
 \end{frame}
 
 \begin{frame}
@@ -311,7 +347,7 @@ Chalmers University of Technology \\ % Your institution for the title page
 
 \begin{frame}
     \frametitle{Demo!}
-    \Huge{\centerline{Demo!}}
+        \Huge{\centerline{Demo!}}
 \end{frame}
 
 \begin{frame}
