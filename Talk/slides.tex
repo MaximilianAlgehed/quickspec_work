@@ -9,7 +9,7 @@
 \setbeamertemplate{navigation symbols}{} % To remove the navigation symbols from the bottom of all slides uncomment this line
 }
 
-\usepackage{minted}
+\usepackage{minted} % syntax highlighting for haskell expressions
 \usepackage{graphicx} % Allows including images
 \usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
 \usepackage[utf8]{inputenc}
@@ -160,16 +160,38 @@ Chalmers University of Technology \\ % Your institution for the title page
 
 \begin{frame}
     \frametitle{Theory exploration intermission}
-    \begin{itemize}
-        \item{Functions and definitions in to Isabelle}
-        \item{Pass them on to Hipster}
-        \item{Pass them on to QuickSpec}
-        \item{QuickSpec passes conjectures to Hipster}
-        \item{Hipster tries to prove conjectures inductivly}
-        \item{Hipster gives lemmas back to Isabelle}
-        \item{Isabelle uses lemmas for proving more "stuff"}
-    \end{itemize}
-    Clearly we need a general solution
+    \begin{columns}
+        \column{0.15\textwidth}
+        \begin{block}{Isabelle}
+            \small{Need lemmas to prove target}
+        \end{block}
+
+        \column{0.1\textwidth}
+        \\
+        \centerline{Definitions}
+        \centerline{\Large{$\implies$}}
+        \centerline{\Large{$\impliedby$}}
+        \centerline{Lemmas}
+
+        \column{0.15\textwidth}
+        \begin{block}{Hipster}
+            \small{Prove conjectures inductively}
+        \end{block}
+        
+        \column{0.1\textwidth}
+        \\
+        \centerline{Definitions}
+        \centerline{\Large{$\implies$}}
+        \centerline{\Large{$\impliedby$}}
+        \centerline{Conjectures}
+
+        \column{0.2\textwidth}
+        \begin{block}{QuickSpec}
+            \small{Conjecture conjectures
+            \\(we are here)}
+        \end{block}
+
+    \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]
