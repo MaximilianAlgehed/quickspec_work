@@ -20,7 +20,6 @@ $(mk_Predicates [[| neq :: Expression -> Expression -> Bool |]])
 sig =
     signature {
         maxTermSize = Just 10,
-        maxTests = Just 100000,
         instances = [
                     baseType (undefined::Pneq),
                     names (NamesFor ["p"] :: NamesFor Pneq),
