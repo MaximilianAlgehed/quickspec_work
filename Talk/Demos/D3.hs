@@ -1,46 +1,52 @@
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE DeriveDataTypeable #-}
+{-# LANGUAGE TypeOperators #-}
+{-# LANGUAGE ImplicitParams #-}
+{-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-import TemplateDerivingPredicates
-import Test.QuickCheck
-import QuickSpec
+
+import Prelude hiding (lookup, insert)
+import QuickSpec hiding (insert)
 import Data.Coerce
+import Test.QuickCheck
+import TemplateDerivingPredicates
+import DemoQueue
 
--- For Template Haskell
-gt :: Int -> Int -> Bool
-gt = (>)
+-- Predicates
+invariant :: QueueI -> Bool
+invariant (Q (f,b)) = not (null f) || null b
 
--- Automatically create the type encoding
-$(mk_Predicates [[| gt :: Int -> Int -> Bool |]])
+nisEmptyI :: QueueI -> Bool
+nisEmptyI = not . isEmptyI
 
--- Insert
-isert :: Int -> [Int] -> [Int]
-isert x [] = [x]
-isert x (y:ys) 
-    | x > y     = y:(isert x ys)
-    | otherwise = x:y:ys
+$(mk_Predicates [[| nisEmptyI :: QueueI -> Bool |], [| invariant :: QueueI -> Bool |]])
 
--- Insetion sort
-isort :: [Int] -> [Int]
-isort []     = []
-isort (x:xs) = isert x (isort xs)
-
--- QuickSpec signature
 sig =
-      signature {
-        maxTermSize = Just 9,
+    signature {
+        maxTermSize = Just 5,
         instances = [
-                     baseType (undefined::Pgt),
-                     names (NamesFor ["p"] :: NamesFor Pgt)
+                    baseType (undefined::Pinvariant),
+                    names (NamesFor ["p"] :: NamesFor Pinvariant),
+                    baseType (undefined::PnisEmptyI),
+                    names (NamesFor ["q"] :: NamesFor PnisEmptyI),
+                    baseType (undefined::QueueI),
+                    names (NamesFor ["Q"] :: NamesFor QueueI)
                     ],
         constants = [
-           constant "isort" (isort :: [Int] -> [Int]),
-           constant "isert" (isert :: Int -> [Int] -> [Int]),
-           constant "[]" ([] :: [A]),
-           constant ":" ((:) :: A -> [A] -> [A]),
-           constant "x" (coerce . a21 :: Pgt -> Int),
-           constant "y"  (coerce . a22 :: Pgt -> Int)
-        ]
-       }
+                    constant "null" (null :: [A] -> Bool),
+                    constant "invariant" invariant,
+                    constant "isEmpty" isEmptyI,
+                    constant "empty" emptyI, 
+                    constant "add" addI,
+                    constant "front" frontI,
+                    constant "remove" removeI,
+                    constant "retrieve" retrieve,
+                    constant ":" ((:) :: A -> [A] -> [A]),
+                    constant "[]" ([] :: [A]),
+                    constant "x" (coerce . a11 :: Pinvariant -> QueueI),
+                    constant "x" (coerce . a11 :: PnisEmptyI -> QueueI)
+                    ]
+    }
 
 main = quickSpec sig

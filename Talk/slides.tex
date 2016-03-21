@@ -73,12 +73,10 @@ Chalmers University of Technology \\ % Your institution for the title page
 \begin{frame}
     \frametitle{How does it do this?}
         \begin{itemize}
-            \item Generate schemas\\\texttt{? ++ (? ++ ?)}
-            \item Instantiate schemas\\\texttt{xs ++ (ys ++ zs)}
-            \item Test schemas against each other\\\texttt{xs ++ (ys ++ zs) = (xs ++ ys) ++ zs}
-            \item QuickSpec tests the most general schemas first\\
+            \item Test terms against each other\\\texttt{xs ++ (ys ++ zs) = (xs ++ ys) ++ zs}
+            \item QuickSpec tests the most general terms first\\
                 \texttt{xs ++ (ys ++ zs) = (xs ++ ys) ++ zs}\\implies\\\texttt{xs ++ (xs ++ xs) = (xs ++ xs) ++ xs}
-            \item Uses Knuth-Bendix completion to determine if it needs to test a term at all
+            \item Uses fast equational reasoning to determine if it needs to test a term at all
         \end{itemize}
 \end{frame}
 
@@ -89,33 +87,13 @@ Chalmers University of Technology \\ % Your institution for the title page
 
 \begin{frame}
     \frametitle{What we'd like}
-        \centerline{\texttt{length xs = length ys => zip xs (ys ++ js) = zip xs ys}}
+    \Large{\centerline{\texttt{length xs = length ys =>}}
+    \centerline{\texttt{zip xs (ys ++ js) = zip xs ys}}}
 \end{frame}
 
 \begin{frame}
     \frametitle{Demo!}
         \Huge{\centerline{Demo!}}
-\end{frame}
-
-\begin{frame}
-    \frametitle{How does it work?}
-        What old QuickSpec does
-        \begin{itemize}
-            \item Run QuickSpec with the normal signature 
-            \item Run QuickSpec once more for every condition 
-        \end{itemize}
-\end{frame}
-
-\begin{frame}
-    \frametitle{How does it work?}
-        What old QuickSpec is
-        \begin{itemize}
-            \item Slow
-            \item Noisy\\
-                \texttt{P x => f y         = g x}\\
-                \texttt{P x and Q y => f y = g x}
-        \end{itemize}
-        Only used in Hipster (and HipSpec).
 \end{frame}
 
 \begin{frame}[fragile]
@@ -137,11 +115,12 @@ Chalmers University of Technology \\ % Your institution for the title page
 
 \begin{frame}
     \frametitle{How does it work?}
-        \centerline{\texttt{length xs = length ys => zip xs (ys ++ is) = zip xs ys}}
+    \Large{\centerline{\texttt{length xs = length ys =>}}}
+    \Large{\centerline{\texttt{zip xs (ys ++ is) = zip xs ys}}}
         \centerline{}
         \centerline{becomes}
         \centerline{}
-        \centerline{\texttt{zip (xs p) (ys p ++ is) = zip (xs p) (ys p)}}
+        \Large{\centerline{\texttt{zip (xs p) (ys p ++ is) = zip (xs p) (ys p)}}}
         \pause
         \centerline{}
         \centerline{\texttt{zip (ys p) (xs p ++ is) = zip (ys p) (xs p)}}
@@ -198,9 +177,10 @@ Chalmers University of Technology \\ % Your institution for the title page
     \frametitle{Generalising}
     \centerline{The naive way}
     \begin{minted}{haskell}
-        arbitrary = arbitrary `suchThat`
-            (\(xs, ys) -> length xs == length ys) >>=
-            return . (uncurry Peqlen) 
+        arbitrary = do
+            (xs, ys) <- arbitrary `suchThat`
+                        (\(xs, ys) -> length xs == length ys)
+            return $ Peqlen xs ys
         \end{minted}   
 \end{frame}
 
@@ -237,7 +217,7 @@ Chalmers University of Technology \\ % Your institution for the title page
     \frametitle{Something more interesting}
         In APL, the $\rho$ operator gets the shape of a value.\\
         \begin{align*}
-            \rho\;\begin{pmatrix} 0 & 2 \end{pmatrix}\; &= \begin{pmatrix}4\end{pmatrix}\\\\
+        \rho\;\begin{pmatrix} 0 & 2 & 1 \end{pmatrix}\; &= \begin{pmatrix}3\end{pmatrix}\\\\
             \rho \begin{pmatrix} 2 & 1 \\ 3 & 4 \end{pmatrix} &= \begin{pmatrix} 2 & 2\end{pmatrix}\\\\
             \rho \begin{pmatrix} 2 & 1 \\ 1 \end{pmatrix} &= crash...
         \end{align*}
@@ -291,6 +271,7 @@ Chalmers University of Technology \\ % Your institution for the title page
         \begin{itemize}
             \item enumeration - \texttt{FEAT}
             \item laziness - \texttt{Generating constrained random data}
+            \item laziness \& enumeration - \texttt{Lazy SmallCheck}
             \item constraint solving - \texttt{Making our own luck}
         \end{itemize}
         Writing predicate $\iff$ Writing generator\\

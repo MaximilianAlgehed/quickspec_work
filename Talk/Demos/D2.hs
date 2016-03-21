@@ -3,32 +3,44 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 import TemplateDerivingPredicates
 import Test.QuickCheck
-import BitstringDemo
 import QuickSpec
 import Data.Coerce
 
--- Predicate
-bitsNZero :: Int -> Bitstring -> Bool
-bitsNZero n (B bits) = (not . or) (take n bits)
+-- For Template Haskell
+gt :: Int -> Int -> Bool
+gt = (>)
 
--- Generate the type
-$(mk_Predicates [[| bitsNZero :: Int -> Bitstring -> Bool |]])
+-- Automatically create the type encoding
+$(mk_Predicates [[| gt :: Int -> Int -> Bool |]])
 
+-- Insert
+isert :: Int -> [Int] -> [Int]
+isert x [] = [x]
+isert x (y:ys) 
+    | x > y     = y:(isert x ys)
+    | otherwise = x:y:ys
+
+-- Insetion sort
+isort :: [Int] -> [Int]
+isort []     = []
+isort (x:xs) = isert x (isort xs)
+
+-- QuickSpec signature
 sig =
-    signature {
-        maxTermSize = Just 8,
+      signature {
+        maxTermSize = Just 9,
         instances = [
-                     baseType (undefined::Bitstring),
-                     names (NamesFor ["b"] :: NamesFor Bitstring),
-                     baseType (undefined::PbitsNZero),
-                     names (NamesFor ["p"] :: NamesFor PbitsNZero)
+                     baseType (undefined::Pgt),
+                     names (NamesFor ["p"] :: NamesFor Pgt)
                     ],
         constants = [
-                    constant "lsl" lsl,
-                    constant "lsr" lsr,
-                    constant "b" (coerce . a22 :: PbitsNZero -> Bitstring),
-                    constant "n" (coerce . a21 :: PbitsNZero -> Int)
+           constant "isort" (isort :: [Int] -> [Int]),
+           constant "isert" (isert :: Int -> [Int] -> [Int]),
+           constant "[]" ([] :: [A]),
+           constant ":" ((:) :: A -> [A] -> [A]),
+           constant "x" (coerce . a21 :: Pgt -> Int),
+           constant "y"  (coerce . a22 :: Pgt -> Int)
         ]
-    }
+       }
 
 main = quickSpec sig
