@@ -99,18 +99,19 @@ Chalmers University of Technology \\ % Your institution for the title page
 \begin{frame}[fragile]
     \frametitle{How does it work?}
     \begin{minted}{haskell}
-        data Peqlen = Peqlen {xs :: [Int],
-                              ys :: [Int]}
+data Peqlen = Peqlen {xs :: [Int],
+                      ys :: [Int]}
 
-        instance Arbitrary Peqlen where
-            arbitrary = do
-                            l  <- arbitrary 
-                            xs <- sequence $
-                                replicate l arbitrary
-                            ys <- sequence $
-                                replicate l arbitrary
-                            return (Peqlen xs ys)
+instance Arbitrary Peqlen where
+    arbitrary = do
+                    l  <- arbitrary 
+                    xs <- sequence $
+                        replicate l arbitrary
+                    ys <- sequence $
+                        replicate l arbitrary
+                    return (Peqlen xs ys)
         \end{minted}
+
 \end{frame}
 
 \begin{frame}
