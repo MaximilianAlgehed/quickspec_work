@@ -1,5 +1,6 @@
 import Test.QuickCheck
 import QuickSpec
+import QuickSpec.PrintConditionally
 
 -- Type to represent pairs of lists of equal length
 data Peqlen = Peqlen {xs :: [Int], ys :: [Int]} deriving (Show, Eq, Ord)
@@ -18,6 +19,10 @@ instance Arbitrary Peqlen where
 
                     return (Peqlen xs ys)
 
+constXS = constant "xs" (xs :: Peqlen -> [Int])
+constYS = constant "ys" (ys :: Peqlen -> [Int])
+constEqlen = constant "eqLength" ((\xs ys -> length xs == length ys) :: [Int] -> [Int] -> Bool)
+
 -- QuickSpec signature
 sig =
     signature {
@@ -35,4 +40,6 @@ sig =
                     ]
     }
 
-main = quickSpec sig
+main = do
+        thy <- quickSpec sig
+        printConditionally [(constEqlen, [constXS, constYS])] thy       
