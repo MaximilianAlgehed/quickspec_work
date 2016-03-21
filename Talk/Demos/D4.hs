@@ -21,31 +21,41 @@ invariant (Q (f,b)) = not (null f) || null b
 notEmpty :: Queue -> Bool
 notEmpty = not . isEmpty
 
-$(mk_Predicates [[| invariant :: Queue -> Bool |]])
+$(mk_Predicates [[| notEmpty :: Queue -> Bool |], [| invariant :: Queue -> Bool |]])
 
 sig =
     signature {
         maxTermSize = Just 5,
         instances = [
+                    baseType (undefined::Pinvariant),
+                    names (NamesFor ["p"] :: NamesFor Pinvariant),
+                    baseType (undefined::PnotEmpty),
+                    names (NamesFor ["p"] :: NamesFor PnotEmpty),
                     baseType (undefined::Queue),
                     names (NamesFor ["q"] :: NamesFor Queue)
                     ],
         constants = [
                     constant "True" True,
+                    constant "False" False,
                     constant "null" (null :: [A] -> Bool),
                     constant "invariant" invariant,
-                    constant "isEmpty" isEmpty,
                     constant "notEmpty" notEmpty,
+                    constant "isEmpty" isEmpty,
                     constant "empty" empty, 
                     constant "add" add,
                     constant "front" front,
                     constant "remove" remove,
                     constant "retrieve" retrieve,
                     constant ":" ((:) :: A -> [A] -> [A]),
-                    constant "[]" ([] :: [A])
+                    constant "[]" ([] :: [A]),
+                    constant "q" (coerce . a11 :: Pinvariant -> Queue),
+                    constant "q" (coerce . a11 :: PnotEmpty -> Queue)
                     ]
     }
 
 main = do
         thy <- quickSpec sig
-        printConditionally [(constant "invariant" invariant, [constant "q" (coerce . a11 :: Pinvariant -> Queue)])] thy
+        printConditionally [
+            (constant "invariant" invariant, [constant "q" (coerce . a11 :: Pinvariant -> Queue)]),
+            (constant "notEmpty" notEmpty, [constant "q" (coerce . a11 :: PnotEmpty -> Queue)])
+            ] thy

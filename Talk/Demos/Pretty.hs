@@ -14,9 +14,14 @@ loop b = do
                         loop $ not b
                 xs -> if not b then
                         do
-                            putStrLn xs
+                            putStrLn $ filterOutTrue xs
                             loop b
                       else
                         loop b
     else
         return ()
+
+filterOutTrue xs = if reverse (take (length (" = True")) (reverse xs)) == " = True" then
+                    (take (length xs - (length " = True")) xs)
+                   else
+                    xs 

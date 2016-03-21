@@ -2,6 +2,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 import TemplateDerivingPredicates
+import QuickSpec.PrintConditionally
 import Test.QuickCheck
 import QuickSpec
 import Data.Coerce
@@ -43,4 +44,6 @@ sig =
         ]
        }
 
-main = quickSpec sig
+main = do
+        thy <- quickSpec sig
+        printConditionally [(constant ">" ((>) :: Int -> Int -> Bool), [constant "x" (coerce . a21 :: Pgt -> Int), constant "y"  (coerce . a22 :: Pgt -> Int)])] thy
