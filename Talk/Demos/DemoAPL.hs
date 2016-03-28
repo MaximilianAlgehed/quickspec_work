@@ -134,6 +134,12 @@ instance MIotable a => MIotable (V.Vector a) where
         apl_or 0 0 = 0
         apl_or _ _ = 1
 
+cross :: APLDyadic a => a -> a -> a
+cross = apl_zip apl_cross
+    where
+        apl_cross :: Int -> Int -> Int
+        apl_cross = (*)
+
 tilde :: APLMonadic a => a -> a
 tilde = apl_map apl_tilde
     where

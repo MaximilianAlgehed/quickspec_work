@@ -14,7 +14,6 @@ import Test.QuickCheck
 import TemplateDerivingPredicates
 import DemoQueue
 
--- Predicates
 invariant :: Queue -> Bool
 invariant (Q (f,b)) = not (null f) || null b
 
@@ -48,4 +47,5 @@ sig =
 
 main = do
         thy <- quickSpec sig
+        putStrLn "==Laws=="
         printConditionally [(constant "invariant" invariant, [constant "q" (coerce . a11 :: Pinvariant -> Queue)])] thy

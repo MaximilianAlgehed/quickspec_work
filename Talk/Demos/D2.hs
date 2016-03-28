@@ -41,6 +41,7 @@ sig =
 
 main = do
         thy <- quickSpec sig
+        putStrLn "==Laws=="
         printConditionally [(constant ">" ((>) :: Int -> Int -> Bool),
                             [constant "x" (coerce . a21 :: Pgt -> Int), constant "y"  (coerce . a22 :: Pgt -> Int)])
                            ] thy

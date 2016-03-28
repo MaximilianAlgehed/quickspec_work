@@ -33,4 +33,5 @@ sig =
 
 main = do
         thy <- quickSpec sig
+        putStrLn "==Laws=="
         printConditionally [(constEqlen, [constXS, constYS])] thy       

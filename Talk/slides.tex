@@ -76,13 +76,13 @@ Chalmers University of Technology \\ % Your institution for the title page
             \item Test terms against each other\\\texttt{xs ++ (ys ++ zs) = (xs ++ ys) ++ zs}
             \item QuickSpec tests the most general terms first\\
                 \texttt{xs ++ (ys ++ zs) = (xs ++ ys) ++ zs}\\implies\\\texttt{xs ++ (xs ++ xs) = (xs ++ xs) ++ xs}
-            \item Uses fast equational reasoning to determine if it needs to test a term at all
+            \item Uses fast equational reasoning to determine\\if it needs to test a term at all
         \end{itemize}
 \end{frame}
 
 \begin{frame}
     \frametitle{What's this?}
-        \Large{\centerline{\texttt{zip is (is ++ js) = zip is is}}}
+        \Large{\centerline{\texttt{zip xs (xs ++ ys) = zip xs xs}}}
 \end{frame}
 
 \begin{frame}
@@ -360,6 +360,15 @@ instance Arbitrary Peqlen where
     \centerline{\texttt{xs /= show e = True} $\implies$ \texttt{show (e p) /= show (f p) = True}}
     \centerline{}
     \centerline{We don't know if it found the bug, because it never tested for the bug}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Summary}
+    \begin{itemize}
+        \item QuickSpec only supports equations
+        \item Types with invariants introduce conditionals
+        \item We need fast generation of constrained random data
+    \end{itemize}
 \end{frame}
 
 \begin{frame}

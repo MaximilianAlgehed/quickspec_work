@@ -1,20 +1,21 @@
 \section{Introduction}
-Theory exploration tools are programs that
-explore a mathematical domain to aid users in
-understanding and to provide a background theory
-for proving some particular theorem\cite{Johansson2014}. 
-These tools are primarily theorem provers with a focus
-on proving many theorems in a domain of discourse.
-Some theory exploration tools support automatically generating
-interesting conjectures for the prover to try to prove correct,
+Types with invariants are the key to
+introducing conditional conjectures to
+the theory exploration tool QuickSpec.
+Theory exploration is the process of
+finding plausible conjectures for use in
+automated theory provers\cite{Johansson2014}. 
+Theory exploration tools support automatically generating
+conjectures for the prover to try to prove correct,
 these systems also commonly employ some form of lemma discovery proces\cite{heras2013}.
-This work builds on the work of Johansson et. al. \cite{Johansson2014}
+This work builds on the work of \cite{Johansson2014} and \cite{Claessen2010}
 by providing a theoretical framework for introducing conditional
 equations in the light weight theory exploration tool QuickSpec\cite{Claessen2010}.
 QuickSpec generates equational conjectures and uses random testing via the tool QuickCheck\cite{Claessen2000}
-to find equations that may be valid. QuickSpec currently only generates
-equational terms for testing and as such is only capable of generating
-theorems that take the form of equations. 
+to find equations that may be valid. It uses testing
+to find equivalent haskell terms. Because terms are
+tested for equivalence it only finds equational conjectures.
+
 When using QuickSpec to generate lemmas about the functions
 \begin{verbatim}
 zip     :: [a] -> [b] -> [(a, b)]

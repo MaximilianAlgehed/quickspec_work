@@ -19,45 +19,43 @@
     \subsection{Type encoding}\label{TE}
 
         Type encoding is the idea of encoding
-        predicates as dependent types. More specifically
+        predicates as a type with an invariant.
+        More specifically
         it is saying that for a given predicate
         \begin{verbatim}
-        p :: (a, b, c, ... , x) -> Bool
+        p :: A -> B -> ... -> X -> Bool
         \end{verbatim}
-        there exists a dependent type
+        a type can be constructed
         \begin{verbatim}
-        Predicate p
-        \end{verbatim}
-        and a function 
-        \begin{verbatim}
-        data :: Predicate p -> (a, b, c, ... , x)
+        data Predicate_p = Predicate_p {a :: A, b :: B, ..., x :: X}
         \end{verbatim}
         such that 
         \begin{verbatim}
-        p . data = const True
+        t :: Predicate_p
+        p (a t) (b t) ... (x t) = True
         \end{verbatim}
-        This may seem odd when you consider that haskell is not a dependently types
-        language. However, as QuickSpec uses QuickCheck, which lets us define
+        As QuickSpec uses QuickCheck, which lets us define
         custom generators for random data, we can write a generator for 
-        the predicate type which makes the type behaves like a dependent type.
-        This means that when equations involving these predicate
-        types are tested by QuickCheck the types behave as if they were dependent types.
+        the predicate type which generates random instances that obey the invariant.
         An example of a predicate type is the one that encodes \texttt{Int}'s greater than zero
         \begin{verbatim}
         newtype PredicateType = PredicateType {x :: Int}
 
         instance Arbitrary PredicateType where
-            arbtrary = fmap abs arbitrary
+            arbtrary = fmap ((1+) . abs) arbitrary
         \end{verbatim}
         The equations involving predicate types are on the form
         \begin{verbatim}
-        f (data p) = g (data p)
+        p :: PredicateType
+
+        abs (x p) = x p
+
         \end{verbatim}
-        which translates to $p(x) \implies f(x) = g(x)$.
+        which translates to $x > 0 \implies abs(x) = x$.
 
         In this encoding we need to be explicit about things such as conjunction
         of multiple predicates or predicates like $P\circ f$.
-        Being explicit about these things induces more overhead, therefore
+        Being explicit about these things introduces more overhead, therefore
         we want to find a light weight encoding scheme. Motivated by this
         we introduce function encoding.
 
@@ -87,9 +85,15 @@
         \end{verbatim}
         In function encoding, an equation like
         \begin{verbatim}
-        g (when_p x) == f (when_p x)
+        when_pos :: Int -> Int
+        when_pos x
+            | x > 0 = x
+            | otherwise = 1
+
+        abs (when_pos x) == when_pos x
+
         \end{verbatim}
-        would be equivalent to the aformentioned $p(x) \implies f(x) = g(x)$.
+        would be equivalent to the aformentioned $x > 0 \implies abs x = x$.
         Some care needs to be taken when choosing the default value.
         With combined encoding we do not need to make that decision ourselves.
 
@@ -104,13 +108,13 @@
         p :: (a, b, c, ..., x) -> Bool  
 
         -- when_p is a combined encoding of p
-        when_p :: Predicate p -> (a, b, c, ... , x) -> (a, b, c, ... , x)
+        when_p :: Predicate_p -> (a, b, c, ... , x) -> (a, b, c, ... , x)
         when_p default input
             | p input   = input
             | otherwise = default
         \end{verbatim}
-        The encoding of $p(x) \implies f(x) = g(x)$ in combined encoding would look like
+        The encoding of $x > 0 \implies abs x = x$ in combined encoding would look like
         this
         \begin{verbatim}
-        f (when_p p x) == g (when_p p x)
+        abs (when_pos p x) = when_pos p x
         \end{verbatim}
