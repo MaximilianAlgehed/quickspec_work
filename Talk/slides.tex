@@ -175,19 +175,18 @@ instance Arbitrary Peqlen where
 \end{frame}
 
 \begin{frame}[fragile]
-    \frametitle{Generalising}
-    \centerline{The naive way}
+    \frametitle{Generalizing, the naive way}
     \begin{minted}{haskell}
-        arbitrary = do
-            (xs, ys) <- arbitrary `suchThat`
-                        (\(xs, ys) -> length xs == length ys)
-            return $ Peqlen xs ys
+arbitrary = do
+    (xs, ys) <- arbitrary `suchThat`
+                (\(xs, ys) -> length xs == length ys)
+    return $ Peqlen xs ys
         \end{minted}   
 \end{frame}
 
 \begin{frame}
     \frametitle{Demo!}
-        \Huge{\centerline{Lot's of Demos!}}
+        \Huge{\centerline{Demo time!}}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -229,7 +228,7 @@ instance Arbitrary Peqlen where
         The $\times$ operator does element wise multiplication.\\
         \begin{align*}
             \begin{pmatrix} 1 & 2\\3 & 4\end{pmatrix} \times \begin{pmatrix} 2 & 3\\6 & 2\end{pmatrix} &=
-            \begin{pmatrix} 2 & 6\\18 & 2\end{pmatrix}\\\\
+            \begin{pmatrix} 2 & 6\\18 & 8\end{pmatrix}\\\\
             \begin{pmatrix} 1 & 4 & 3 \end{pmatrix} \times \begin{pmatrix}1 & 0 & 0 & 1 \end{pmatrix} &= crash...
         \end{align*}
 \end{frame}
