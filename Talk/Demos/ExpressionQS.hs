@@ -9,16 +9,17 @@ import DemoExpression
 import Test.QuickCheck
 import TemplateDerivingPredicates
 import QuickSpec hiding (insert)
+import QuickSpec.PrintConditionally
 import Data.Coerce
 
 pshow :: Expression -> Expression -> Bool
 pshow v w = show v == show w
 
-data Ppshow = Ps {a41 :: Expression, a42 :: Expression} deriving (Ord, Eq, Show)
+data Ppshow = Ps {a21 :: Expression, a22 :: Expression} deriving (Ord, Eq, Show)
 
 instance Arbitrary Ppshow where
     
-    arbitrary = arb `suchThat` (\p -> pshow (a41 p) (a42 p))
+    arbitrary = arb `suchThat` (\p -> pshow (a21 p) (a22 p))
                 where
                     arb = do
                             e <- arbitrary
@@ -35,9 +36,13 @@ sig =
                     names (NamesFor ["e", "f", "g"] :: NamesFor Expression)
                     ],
         constants = [
-                    constant "v" (coerce . a41 :: Ppshow -> Expression),
-                    constant "w" (coerce . a42 :: Ppshow -> Expression)
+                    constant "v" a21,
+                    constant "w" a22
                     ]
     }
 
-main = quickSpec sig
+main = do
+         thy <- quickSpec sig
+         putStrLn "==Laws=="
+         printConditionally [(constant "eqShow" pshow, [constant "v" a21,
+                                                        constant "w" a22])] thy

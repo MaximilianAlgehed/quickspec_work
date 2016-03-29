@@ -1,3 +1,4 @@
+{-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE DeriveDataTypeable #-}
 {-# LANGUAGE TypeOperators #-}
@@ -5,57 +6,37 @@
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-
-import Prelude hiding (lookup, insert)
+import Prelude hiding ((^^), lookup, insert)
 import QuickSpec hiding (insert)
-import QuickSpec.PrintConditionally
 import Data.Coerce
 import Test.QuickCheck
 import TemplateDerivingPredicates
-import DemoQueue
+import QuickSpec.PrintConditionally
+import SetList
 
-invariant :: Queue -> Bool
-invariant (Q (f,b)) = not (null f) || null b
+isSet :: SetL -> Bool
+isSet (SetL xs) = isSorted xs
 
-notEmpty :: Queue -> Bool
-notEmpty = not . isEmpty
+newtype SetL = SetL [Integer] deriving (Ord, Eq, Arbitrary, Show)
 
-$(mk_Predicates [[| notEmpty :: Queue -> Bool |], [| invariant :: Queue -> Bool |]])
+$(mk_Predicates [[| isSet :: SetL -> Bool |]])
 
 sig =
     signature {
-        maxTermSize = Just 5,
+        maxTermSize = Just 7,
         instances = [
-                    baseType (undefined::Pinvariant),
-                    names (NamesFor ["p"] :: NamesFor Pinvariant),
-                    baseType (undefined::PnotEmpty),
-                    names (NamesFor ["p"] :: NamesFor PnotEmpty),
-                    baseType (undefined::Queue),
-                    names (NamesFor ["q"] :: NamesFor Queue)
+                        baseType (undefined::PisSet),
+                        names (NamesFor ["m", "n"] :: NamesFor PisSet)
                     ],
         constants = [
-                    constant "True" True,
-                    constant "False" False,
-                    constant "null" (null :: [A] -> Bool),
-                    constant "invariant" invariant,
-                    constant "notEmpty" notEmpty,
-                    constant "isEmpty" isEmpty,
-                    constant "empty" empty, 
-                    constant "add" add,
-                    constant "front" front,
-                    constant "remove" remove,
-                    constant "retrieve" retrieve,
-                    constant ":" ((:) :: A -> [A] -> [A]),
-                    constant "[]" ([] :: [A]),
-                    constant "q" (coerce . a11 :: Pinvariant -> Queue),
-                    constant "q" (coerce . a11 :: PnotEmpty -> Queue)
+                        constant "True" True,
+                        constant "member" (member :: Integer -> [Integer] -> Bool),
+                        constant "insert" (insert :: Integer -> [Integer] -> [Integer]),
+                        constant "union" (union :: [Integer] -> [Integer] -> [Integer]),
+                        constant "x" (coerce . a11 :: PisSet -> [Integer])
                     ]
     }
 
 main = do
         thy <- quickSpec sig
-        putStrLn "==Laws=="
-        printConditionally [
-            (constant "invariant" invariant, [constant "q" (coerce . a11 :: Pinvariant -> Queue)]),
-            (constant "notEmpty" notEmpty, [constant "q" (coerce . a11 :: PnotEmpty -> Queue)])
-            ] thy
+        printConditionally [((constant "invariant" isSet), [constant "x" (coerce . a11 :: PisSet -> [Integer])])] thy

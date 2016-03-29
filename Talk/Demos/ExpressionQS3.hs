@@ -10,6 +10,7 @@ import DemoExpression
 import Test.QuickCheck
 import TemplateDerivingPredicates
 import QuickSpec hiding (insert)
+import QuickSpec.PrintConditionally
 import Data.Coerce
 
 neq :: Expression -> Expression -> Bool
@@ -35,9 +36,9 @@ sig =
                     ]
     }
 
-deriving instance Show TneqExpression
-
-prop :: Pneq -> Bool
-prop p = show ((coerce . a21) p :: Expression) /= show ((coerce . a22) p :: Expression)
-
-main = quickSpec sig
+main = do
+         thy <- quickSpec sig
+         putStrLn "==Laws=="
+         printConditionally [(constant "/=" ((/=) :: Expression -> Expression -> Bool), [constant "v" (coerce . a21 :: Pneq -> Expression),
+                                                        constant "w" (coerce . a22 :: Pneq -> Expression)
+                                                        ])] thy
