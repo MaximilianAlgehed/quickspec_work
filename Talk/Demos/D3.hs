@@ -1,17 +1,6 @@
-{-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE TypeOperators #-}
-{-# LANGUAGE ImplicitParams #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-import Prelude hiding ((^^), lookup, insert)
+import Prelude hiding (insert)
 import QuickSpec hiding (insert)
-import Data.Coerce
 import Test.QuickCheck
-import TemplateDerivingPredicates
-import QuickSpec.PrintConditionally
 import SetList
 
 sig =

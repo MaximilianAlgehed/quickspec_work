@@ -11,10 +11,6 @@ instance Arbitrary Peqlen where
                     ys <- sequence $ replicate l arbitrary
                     return (Peqlen xs ys)
 
-constXS = constant "xs" (xs :: Peqlen -> [Int])
-constYS = constant "ys" (ys :: Peqlen -> [Int])
-constEqlen = constant "eqLength" ((\xs ys -> length xs == length ys) :: [Int] -> [Int] -> Bool)
-
 sig =
     signature {
         maxTermSize = Just 7,
@@ -23,15 +19,20 @@ sig =
                      names (NamesFor ["p"] :: NamesFor Peqlen)
                     ],
         constants = [
-                    constant "zip" (zip :: [Int] -> [Int] -> [(Int, Int)]),
+                    constant "zip"     (zip :: [Int] -> [Int] -> [(Int, Int)]),
                     constant "reverse" (reverse :: [A] -> [A]),
-                    constant "xs" (xs :: Peqlen -> [Int]),
-                    constant "ys" (ys :: Peqlen -> [Int]),
-                    constant "++" ((++) :: [A] -> [A] -> [A])
+                    constant "xs"      (xs :: Peqlen -> [Int]),
+                    constant "ys"      (ys :: Peqlen -> [Int]),
+                    constant "++"      ((++) :: [A] -> [A] -> [A])
                     ]
     }
 
 main = do
         thy <- quickSpec sig
-        putStrLn "==Laws=="
+        putStrLn "== Laws =="
         printConditionally [(constEqlen, [constXS, constYS])] thy       
+
+constXS = constant "xs" (xs :: Peqlen -> [Int])
+constYS = constant "ys" (ys :: Peqlen -> [Int])
+constEqlen = constant "equalLength"
+            ((\xs ys -> length xs == length ys) :: [Int] -> [Int] -> Bool)

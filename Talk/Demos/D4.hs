@@ -1,12 +1,6 @@
-{-# LANGUAGE StandaloneDeriving #-}
 {-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE TypeOperators #-}
-{-# LANGUAGE ImplicitParams #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
-import Prelude hiding ((^^), lookup, insert)
+import Prelude hiding (insert)
 import QuickSpec hiding (insert)
 import Data.Coerce
 import Test.QuickCheck
@@ -18,8 +12,6 @@ isSet :: SetL -> Bool
 isSet (SetL xs) = isSorted xs
 
 newtype SetL = SetL [Integer] deriving (Ord, Eq, Arbitrary, Show)
-
-$(mk_Predicates [[| isSet :: SetL -> Bool |]])
 
 sig =
     signature {
@@ -39,4 +31,7 @@ sig =
 
 main = do
         thy <- quickSpec sig
+        putStrLn "== Laws =="
         printConditionally [((constant "invariant" isSet), [constant "x" (coerce . a11 :: PisSet -> [Integer])])] thy
+
+$(mk_Predicates [[| isSet :: SetL -> Bool |]])

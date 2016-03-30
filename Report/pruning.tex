@@ -50,7 +50,17 @@ the rule that\\\texttt{length as = length bs} means we can add the equations
 \\\texttt{xs (toP as bs) = as} and \texttt{ys (toP as bs) = bs},\\
 which are enough to conclude\\
 \texttt{zip (xs p) (ys p ++ zs) = zip (xs p) (ys p)}$\implies$
-\\\texttt{zip (ys p) (xs p ++ zs) = zip (ys p) (xs p ++ zs)}.
+\\\texttt{zip (ys p) (xs p ++ zs) = zip (ys p) (xs p)}.\\As can be
+seen below
+
+\texttt{forall p, zs.}\\
+\texttt{length (ys p) = length (xs p)}$\implies$\\
+\texttt{xs (toP (ys p) (xs p)) = ys p}\\
+\texttt{ys (toP (ys p) (xs p)) = xs p}\\\\
+\texttt{let q = toP (ys p) (xs p)}\\\\
+\texttt{zip (xs p) (ys p ++ zs) = zip (xs p) (ys p)}$\implies$\\
+\texttt{zip (xs q) (ys q ++ zs) = zip (xs q) (ys q)}$\implies$\\
+\texttt{zip (ys p) (xs p ++ zs) = zip (ys p) (xs p)}
 
 The method can be generalized to any arity predicate.
 Take any predicate,\\\texttt{p :: T1 -> ... -> TN -> Bool},
