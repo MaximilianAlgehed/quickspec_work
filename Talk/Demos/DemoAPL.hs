@@ -3,6 +3,7 @@
 module DemoAPL where
 
 import Data.Vector as V
+import Test.QuickCheck
 
 class APLValue a where
     
@@ -160,3 +161,6 @@ v `iota_d` w = V.map (iota_index v) w
         iota_index v a = case findIndex (apl_eq a) v of
                             Just i  -> i+1
                             Nothing -> (V.length v)+1
+
+instance Arbitrary a => Arbitrary (V.Vector a) where
+    arbitrary = fmap V.fromList arbitrary

@@ -1,9 +1,4 @@
 {-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE StandaloneDeriving #-}
-{-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE TypeOperators #-}
-{-# LANGUAGE ImplicitParams #-}
-{-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 import DemoExpression
@@ -38,7 +33,8 @@ sig =
 
 main = do
          thy <- quickSpec sig
-         putStrLn "==Laws=="
-         printConditionally [(constant "/=" ((/=) :: Expression -> Expression -> Bool), [constant "v" (coerce . a21 :: Pneq -> Expression),
-                                                        constant "w" (coerce . a22 :: Pneq -> Expression)
-                                                        ])] thy
+         putStrLn "== Laws =="
+         printConditionally [(constant "/=" ((/=) :: Expression -> Expression -> Bool),
+                             [constant "v" (coerce . a21 :: Pneq -> Expression),
+                              constant "w" (coerce . a22 :: Pneq -> Expression)
+                             ])] thy

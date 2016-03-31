@@ -7,6 +7,11 @@ import Test.QuickCheck
 import QuickSpec
 import Data.Coerce
 
+gt :: Int -> Int -> Bool
+gt = (>)
+
+$(mk_Predicates [[| gt :: Int -> Int -> Bool |]])
+
 isert :: Int -> [Int] -> [Int]
 isert x [] = [x]
 isert x (y:ys) 
@@ -45,7 +50,4 @@ constLt = constant ">" ((>) :: Int -> Int -> Bool)
 constX  = constant "x" (coerce . a21 :: Pgt -> Int)
 constY  = constant "y" (coerce . a22 :: Pgt -> Int)
 
-gt :: Int -> Int -> Bool
-gt = (>)
 
-$(mk_Predicates [[| gt :: Int -> Int -> Bool |]])

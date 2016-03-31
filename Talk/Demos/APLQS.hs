@@ -4,17 +4,14 @@ import Test.QuickCheck
 import qualified Data.Vector as V
 import QuickSpec.PrintConditionally
 
-instance Arbitrary a => Arbitrary (V.Vector a) where
-    arbitrary = fmap V.fromList arbitrary
-
 type VV = V.Vector (V.Vector Int) 
 
 isWellShaped :: VV -> Bool
-isWellShaped v
+isWellShaped v 
     | V.null v  = True
-    | otherwise =
-        V.all (\x -> x == (V.length (V.head v))
-              ) (V.map V.length v)
+    | otherwise = let l = V.length (V.head v) in
+        V.all (==l)
+              (V.map V.length v)
 
 erws :: V.Vector (V.Vector Int) -> V.Vector (V.Vector Int) -> Bool
 erws a b = (isWellShaped a) && (isWellShaped b) && ((roh_m a) == (roh_m b))
@@ -24,12 +21,9 @@ data Perws = Perws {p21 :: V.Vector (V.Vector Int), p22 :: V.Vector (V.Vector In
 instance Arbitrary Perws where
 
     arbitrary = sized (\s ->
-                        if s == 0 then
-                            return (Perws V.empty V.empty)
-                        else
                         do
-                            n <- oneof (map return [1..s])
-                            m <- oneof (map return [1..s])
+                            n <- oneof (map return [0..s])
+                            m <- oneof (map return [0..s])
                             a <- genVectorLen (genVectorLen arbitrary m) n
                             b <- genVectorLen (genVectorLen arbitrary m) n
                             return (Perws a b)

@@ -1,10 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE DeriveDataTypeable #-}
-{-# LANGUAGE TypeOperators #-}
-{-# LANGUAGE ImplicitParams #-}
-{-# LANGUAGE RankNTypes #-}
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
 import DemoExpression
 import Data.Generics.Uniplate.Data
 import Data.Generics.SYB
@@ -51,6 +44,6 @@ sig =
 
 main = do
          thy <- quickSpec sig
-         putStrLn "==Laws=="
+         putStrLn "== Laws =="
          printConditionally [(constant "eqShow" pshow, [constant "v" a21,
                                                         constant "w" a22])] thy

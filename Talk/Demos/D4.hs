@@ -13,6 +13,8 @@ isSet (SetL xs) = isSorted xs
 
 newtype SetL = SetL [Integer] deriving (Ord, Eq, Arbitrary, Show)
 
+$(mk_Predicates [[| isSet :: SetL -> Bool |]])
+
 sig =
     signature {
         maxTermSize = Just 7,
@@ -34,4 +36,3 @@ main = do
         putStrLn "== Laws =="
         printConditionally [((constant "invariant" isSet), [constant "x" (coerce . a11 :: PisSet -> [Integer])])] thy
 
-$(mk_Predicates [[| isSet :: SetL -> Bool |]])

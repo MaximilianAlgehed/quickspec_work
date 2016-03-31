@@ -125,8 +125,6 @@ instance Arbitrary Peqlen where
         \pause
         \centerline{}
         \centerline{\texttt{zip (ys p) (xs p ++ is) = zip (ys p) (xs p)}}
-        \centerline{}
-        \centerline{(We have a fix for this in the pipeline!)}
 \end{frame}
 
 \begin{frame}
@@ -186,7 +184,7 @@ arbitrary = do
 
 \begin{frame}
     \frametitle{Demo!}
-        \Huge{\centerline{Demo time!}}
+        \Huge{\centerline{Demo!}}
 \end{frame}
 
 \begin{frame}[fragile]
@@ -215,7 +213,7 @@ arbitrary = do
 
 \begin{frame}
     \frametitle{Something more interesting}
-        In APL, the $\rho$ operator gets the shape of a value.\\
+        In APL, the $\rho$ operator gets the shape of a matrix or vector.\\
         \begin{align*}
         \rho\;\begin{pmatrix} 0 & 2 & 1 \end{pmatrix}\; &= \begin{pmatrix}3\end{pmatrix}\\\\
             \rho \begin{pmatrix} 2 & 1 \\ 3 & 4 \end{pmatrix} &= \begin{pmatrix} 2 & 2\end{pmatrix}\\\\
