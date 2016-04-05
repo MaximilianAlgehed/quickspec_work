@@ -1,12 +1,16 @@
 \section{Conclusion}
-In this report we have presented three
+In this report we have presented two 
 alternative methods for encoding predicates
 in the theory exploration tool QuickSpec.
 When considering the relative strengths and weaknesses
-of these three methods. We found that function, and by extension
-conbined, encoding has
+of these two methods. We found that function encoding has
 some fundamental problems in that there are no clear
 semantics for interperting equations which function encodings.
+Furthermore function encoding sufffers probmens with efficiency,
+as can be seen in section \ref{results} it is up to xxx\% slower
+than hand crafted type encoding. The reason for this is that 
+function encoding produces a set of laws that use the predicate
+functions but can't be read as conditional equations.
 For this reason we argued that type encoding is surperior
 to function encoding. We proceded to show how function encoding
 can handle several situations like domain specific languages

@@ -1,10 +1,10 @@
 \section{Finding simple conjectures}
 This section aims to convey the results which
-all three methods have in common and serves as an overview
+both  methods have in common and serves as an overview
 of the things QuickSpec is capable of doing when augmented with
 the ability to generate conditional equations.
 
-All three methods described in section \ref{encodings}
+Both methods described in section \ref{encodings}
 are capable of expressing conditional equations on the form
 \\$\forall x_0, x_1, ..., x_n, i, j,.\;(i \neq j \implies x_i \neq x_j)\wedge P_0(x_0) \wedge P_1(x_1) \wedge ... \wedge P_n(x_n) \implies f(x_j, x_k ...) = g(x_a, x_b, ...)$.\\
 This means that QuickSpec is now capable of finding several
@@ -17,7 +17,7 @@ conjectures which it was previously unable to discover.
         P(n:\mathbb{N},\;xs:List\;\mathbb{B}) = "first\;n\;values\;equal\;False"\\
         \forall n:\mathbb{N},\;xs:List\;\mathbb{B}.\;P(n,\;xs)\implies lsr\;n\;(lsl\;n\;xs)=xs
     \end{gather*}
-    Using either of the three encodings presented in section \ref{encodings} QuickSpec
+    Using either of the two encodings presented in section \ref{encodings} QuickSpec
     is able to find this conjecture.
 
 \subsection{Lists, lists, and more lists...}

@@ -7,7 +7,7 @@ finding plausible conjectures for use in
 automated theory provers\cite{Johansson2014}. 
 Theory exploration tools support automatically generating
 conjectures for the prover to try to prove correct,
-these systems also commonly employ some form of lemma discovery proces\cite{heras2013}.
+these systems also commonly employ some form of lemma discovery process\cite{heras2013}.
 This work builds on the work of \cite{Johansson2014} and \cite{Claessen2010}
 by providing a theoretical framework for introducing conditional
 equations in the light weight theory exploration tool QuickSpec\cite{Claessen2010}.
@@ -45,9 +45,10 @@ length xs = length ys => zip (xs ++ is) ys   = zip xs ys
 length xs = length ys => zip ys (xs ++ is)   = zip ys xs
 length xs = length ys => reverse (zip xs ys) = zip (reverse xs) (reverse ys)
 \end{verbatim}
-This work compliments QuickSpec by introducing three different methods
-of encoding conditional conjectures as equational conjectures and comparing
-the usefullness of these three methods. QuickSpec can be used both as a standalone
+This work compliments QuickSpec by introducing two different methods
+of encoding conditional conjectures as equational conjectures showing that
+the method of encoding predicates as types with invariants is more efficient
+and applicable than the two alternatives. QuickSpec can be used both as a standalone
 system allowing the user to investigate a set of combinators and datatypes in the
 purely functional lazy programming language Haskell and as a component of other tools %haskell reference
 like TIP\cite{Rosen2015} and HipSpec\cite{Claessen2013}. 
@@ -66,7 +67,7 @@ The contributions of this report are
         of QuickSpec compares unfavorably to the laternative method
         of using types.
 
-    \item We show that type encoded predicates can be employed to avoid 
-        the need for dependently typed shallow embedding of a language
+    \item We show that type encoded predicates can be employed handle
+        patrial functions that appear in a shallow embedding of a language
         we want to investigate using QuickSpec.
 \end{itemize}

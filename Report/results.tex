@@ -1,0 +1,19 @@
+\section{Results}\label{results}
+
+In order to compare the performance of the different methods
+a set of benchmarks have been established. The benchmarks favour
+large signatures to even out the effects of randomness on runtime.
+
+\begin{tabular}{|l|l|l|}
+    \hline
+    Benchmark                       & Integer arithmetic & Lists \\ \hline
+    TE hand $\mu$                   & xxx                & 10.5s \\ \hline
+    TE hand $\sigma^2$              & xxx                & 0.3s  \\ \hline
+    TE \texttt{suchThat} $\mu$      & xxx                & 10.5s \\ \hline
+    TE \texttt{suchThat} $\sigma^2$ & xxx                & 0.3s  \\ \hline
+    FE $\mu$                        & $>$30m             & 22.4s \\ \hline
+    FE $\sigma^2$                   & N/A                & 1.2s  \\ \hline
+\end{tabular}
+
+At 30 minuites function encoding still had
+40 000 equations left to test or prune in the Integer arithmetic benchmark.
